@@ -1,0 +1,88 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.container {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+.container2 {
+    position: relative;
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#datetime {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.button-group button {
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #0078D7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-group button:hover {
+  background-color: #005a9e;
+}
+.indicadores {
+  position: relative;
+  width: 100%; /* o un ancho fijo si prefieres */
+  height: 300px; /* ajusta según lo que necesites */
+  border: 1px solid white; /* opcional, para visualizar el área */
+}
+
+
+.indicador {
+  position: absolute;
+  width: 100px; /* ajusta según tu diseño */
+  text-align: center;
+}
+
+
+.cuadro {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  background-color: gray;
+  border: 2px solid #999;
+
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+/* Colores personalizados */
+.rojo { background-color: red; }
+.verde { background-color: green; }
+.gris  { background-color: gray; }
+.azul  { background-color: blue; }
