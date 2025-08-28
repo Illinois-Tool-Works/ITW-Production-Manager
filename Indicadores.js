@@ -25,7 +25,7 @@
 //   console.log('Dato enviado: corriendo');
 // });
 
-// Función para aplicar el color visualmente
+// Función para aplicar el color visualmente al cuadro
 function cambiarColor(select, id) {
   const color = select.value;
   const div = document.getElementById(id);
