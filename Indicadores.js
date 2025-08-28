@@ -33,27 +33,27 @@ function cambiarColor(select, id) {
     div.style.backgroundColor = color;
   }
 }
-// Referencia al select del indicador 100
-document.addEventListener("DOMContentLoaded", () => {
-  const select = document.querySelector('#indicador100 select');
+// // Referencia al select del indicador 100
+// document.addEventListener("DOMContentLoaded", () => {
+//   const select = document.querySelector('#indicador100 select');
 
-  // Leer estado desde Firebase
-  onValue(ref(db, 'indicadores/indicador100'), (snapshot) => {
-    const valor = snapshot.val();
-    if (valor && select) {
-      select.value = valor;
-      cambiarColor(select, 'indicador100');
-    }
-  });
+//   // Leer estado desde Firebase
+//   onValue(ref(db, 'indicadores/indicador100'), (snapshot) => {
+//     const valor = snapshot.val();
+//     if (valor && select) {
+//       select.value = valor;
+//       cambiarColor(select, 'indicador100');
+//     }
+//   });
 
-  // Guardar estado cuando cambie
-  if (select) {
-    select.addEventListener("change", () => {
-      const valor = select.value;
-      set(ref(db, 'indicadores/indicador100'), valor);
-      cambiarColor(select, 'indicador100');
-    });
-  }
-});
+//   // Guardar estado cuando cambie
+//   if (select) {
+//     select.addEventListener("change", () => {
+//       const valor = select.value;
+//       set(ref(db, 'indicadores/indicador100'), valor);
+//       cambiarColor(select, 'indicador100');
+//     });
+//   }
+// });
 
 
