@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const contenedor = document.querySelector('.indicadores');
   const selects = contenedor.querySelectorAll('.indicador select');
 
-  // Leer los datos una sola vez 1
+  // Leer los datos una sola vez
   get(child(ref(db), 'indicadores')).then((snapshot) => {
     if (snapshot.exists()) {
       const estados = snapshot.val();
