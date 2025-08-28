@@ -44,23 +44,22 @@ function inicializarIndicadores(estados) {
   }
 }
 
-// Leer estados desde Firebase 1
-// onValue(ref(db, 'indicadores'), (snapshot) => {
-//   const estados = snapshot.val();
-//   inicializarIndicadores(estados); // Crear si no existen
+//Leer estados desde Firebase 1
+onValue(ref(db, 'indicadores'), (snapshot) => {
+  const estados = snapshot.val();
+  if (!estados) return; // evita errores si aún no hay datos
 
-//   if (estados) {
-//     const contenedor = document.querySelector('.indicadores');
-//     const selects = contenedor.querySelectorAll('.indicador select');
-//     selects.forEach(select => {
-//       const id = select.closest('.indicador').id;
-//       if (estados[id]) {
-//         select.value = estados[id];
-//         cambiarColor(select, id);
-//       }
-//     });
-//   }
-// });
+  const contenedor = document.querySelector('.indicadores');
+  const selects = contenedor.querySelectorAll('.indicador select');
+  selects.forEach(select => {
+    const id = select.closest('.indicador').id;
+    if (estados[id]) {
+      select.value = estados[id];
+      cambiarColor(select, id);
+    }
+  });
+});
+
 
 // Detectar cambios y guardar en Firebase
 document.addEventListener("DOMContentLoaded", () => {
