@@ -60,40 +60,29 @@ function cambiarColor(select, id) {
 document.addEventListener("DOMContentLoaded", () => {
   const contenedor = document.querySelector('.indicadores');
   const selects = contenedor.querySelectorAll('.indicador select');
-  const comentarios = contenedor.querySelectorAll('.indicador .comentario');
 
-  // Guardar estado al cambiar el select
+  // Guardar cambios al seleccionar
   selects.forEach(select => {
     const id = select.closest('.indicador').id;
     select.addEventListener("change", () => {
-      const comentario = document.querySelector(`#${id} .comentario`).value;
-      const estado = select.value;
-      const horaComentario = new Date().toISOString();
-      set(ref(db, `indicadores/${id}`), { estado, comentario, horaComentario });
+      const valor = select.value;
+      set(ref(db, `indicadores/${id}`), valor);
       cambiarColor(select, id);
     });
   });
 
-  // Guardar comentario al escribir
-  comentarios.forEach(textarea => {
-    const id = textarea.closest('.indicador').id;
-    textarea.addEventListener("input", () => {
-      const estado = document.querySelector(`#${id} select`).value;
-      const comentario = textarea.value;
-      const horaComentario = new Date().toISOString();
-      set(ref(db, `indicadores/${id}`), { estado, comentario, horaComentario });
+  // 🔄 Escuchar cambios en tiempo real
+  onValue(ref(db, 'indicadores'), (snapshot) => {
+    const estados = snapshot.val();
+    if (!estados) return;
+
+    selects.forEach(select => {
+      const id = select.closest('.indicador').id;
+      if (estados[id]) {
+        select.value = estados[id];
+        cambiarColor(select, id);
+      }
     });
   });
-  onValue(ref(db, 'indicadores/indicador102'), (snapshot) => {
-  const datos = snapshot.val();
-  const estado = datos?.estado;
-  const cuadro = document.querySelector('#indicador102 .cuadro');
-
-  if (cuadro && estado) {
-    cuadro.classList.remove('rojo', 'verde', 'gris', 'azul');
-    cuadro.classList.add(estado);
-  }
-});
-
 });
 
