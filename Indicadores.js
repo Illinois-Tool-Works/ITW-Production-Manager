@@ -38,7 +38,7 @@ function cambiarColor(select, id) {
 
 // Inicializar los primeros 10 indicadores si no existen
 function inicializarIndicadores(estados) {
-  for (let i = 100; i <= 110; i++) {
+  for (let i = 100; i <= 130; i++) {
     const id = `indicador${i}`;
     if (!estados || !estados[id]) {
       set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
