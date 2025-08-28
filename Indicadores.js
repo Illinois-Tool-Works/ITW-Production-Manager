@@ -35,35 +35,45 @@ function cambiarColor(select, id) {
   }
 }
 
-// Al cargar la página, leer los estados desde Firebase
+// Función para aplicar el color visualmente
+function cambiarColor(select, id) {
+  const color = select.value;
+  const div = document.getElementById(id);
+  if (div) {
+    div.style.backgroundColor = color;
+  }
+}
+
+// Leer estados desde Firebase al cargar
 onValue(ref(db, 'indicadores'), (snapshot) => {
   const estados = snapshot.val();
   if (estados) {
-    for (let i = 100; i <= 110; i++) {
-      const id = `indicador${i}`;
-      const select = document.querySelector(`#${id} select`);
-      if (select && estados[id]) {
+    const contenedor = document.querySelector('.indicadores');
+    const selects = contenedor.querySelectorAll('.indicador select');
+    selects.forEach(select => {
+      const id = select.closest('.indicador').id;
+      if (estados[id]) {
         select.value = estados[id];
         cambiarColor(select, id);
       }
-    }
+    });
   }
 });
 
 // Detectar cambios y guardar en Firebase
 document.addEventListener("DOMContentLoaded", () => {
-  for (let i = 100; i <= 110; i++) {
-    const id = `indicador${i}`;
-    const select = document.querySelector(`#${id} select`);
-    if (select) {
-      select.addEventListener("change", () => {
-        const valor = select.value;
-        set(ref(db, `indicadores/${id}`), valor);
-        cambiarColor(select, id);
-      });
- }
-  }
+  const contenedor = document.querySelector('.indicadores');
+  const selects = contenedor.querySelectorAll('.indicador select');
+  selects.forEach(select => {
+    const id = select.closest('.indicador').id;
+    select.addEventListener("change", () => {
+      const valor = select.value;
+      set(ref(db, `indicadores/${id}`), valor);
+      cambiarColor(select, id);
+    });
+  });
 });
+
 
 
 
