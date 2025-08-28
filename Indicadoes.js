@@ -31,7 +31,13 @@ onValue(ref(db, 'indicadores'), (snapshot) => {
     });
   }
 });
-
+function cambiarColor(select, id) {
+  const color = select.value;
+  const div = document.getElementById(id);
+  if (div) {
+    div.style.backgroundColor = color;
+  }
+}
 // 📤 Guardar estado cuando cambie el select
 document.addEventListener("DOMContentLoaded", () => {
   const selects = document.querySelectorAll('.indicador select');
