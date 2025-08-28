@@ -25,15 +25,6 @@
 //   console.log('Dato enviado: corriendo');
 // });
 
-
-// Función para aplicar el color visualmente
-function cambiarColor(select, id) {
-  const color = select.value;
-  const div = document.getElementById(id);
-  if (div) {
-    div.style.backgroundColor = color;
-  }
-}
  
 // Leer estados desde Firebase al cargar
 onValue(ref(db, 'indicadores'), (snapshot) => {
