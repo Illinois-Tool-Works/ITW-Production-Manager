@@ -18,30 +18,28 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-import { set, ref } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
-
-set(ref(db, 'prueba'), 'Hola Firebase');
-
-    // 🔄 Leer todos los indicadores al cargar
+// 🔄 Leer todos los estados al cargar
 onValue(ref(db, 'indicadores'), (snapshot) => {
   const estados = snapshot.val();
   if (estados) {
     Object.keys(estados).forEach(id => {
-      const checkbox = document.getElementById(id);
-      if (checkbox) checkbox.checked = estados[id];
+      const select = document.querySelector(`#${id} select`);
+      if (select) {
+        select.value = estados[id];
+        cambiarColor(select, id); // Aplica el color visualmente
+      }
     });
   }
 });
 
-// 📤 Guardar estado cuando cambie cualquier indicador
+// 📤 Guardar estado cuando cambie el select
 document.addEventListener("DOMContentLoaded", () => {
-  for (let i = 100; i <= 110; i++) {
-    const id = `indicador${i}`;
-    const checkbox = document.getElementById(id);
-    if (checkbox) {
-      checkbox.addEventListener("change", () => {
-        set(ref(db, `indicadores/${id}`), checkbox.checked);
-      });
-    }
-  }
+  const selects = document.querySelectorAll('.indicador select');
+  selects.forEach(select => {
+    const id = select.closest('.indicador').id;
+    select.addEventListener("change", () => {
+      set(ref(db, `indicadores/${id}`), select.value);
+    });
+  });
 });
+
