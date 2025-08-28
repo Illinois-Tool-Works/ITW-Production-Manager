@@ -25,11 +25,30 @@
 //   console.log('Dato enviado: corriendo');
 // });
 
- console.log("Intentando leer indicadores.. ..");
+// Función para aplicar el color visualmente
+function cambiarColor(select, id) {
+  const color = select.value;
+  const div = document.getElementById(id);
+  if (div) {
+    div.style.backgroundColor = color;
+  }
+}
 
-// Leer estados desde Firebase al cargar
+// Inicializar los primeros 10 indicadores si no existen
+function inicializarIndicadores(estados) {
+  for (let i = 100; i <= 110; i++) {
+    const id = `indicador${i}`;
+    if (!estados || !estados[id]) {
+      set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
+    }
+  }
+}
+
+// Leer estados desde Firebase
 onValue(ref(db, 'indicadores'), (snapshot) => {
   const estados = snapshot.val();
+  inicializarIndicadores(estados); // Crear si no existen
+
   if (estados) {
     const contenedor = document.querySelector('.indicadores');
     const selects = contenedor.querySelectorAll('.indicador select');
@@ -56,7 +75,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
-
-
-
