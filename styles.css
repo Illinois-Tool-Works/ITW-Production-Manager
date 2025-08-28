@@ -107,13 +107,25 @@ h1 {
   border-radius: 6px;
   resize: vertical;
   margin-bottom: 8px;
+  display: none;
+
 }
 
 .hora-comentario {
   font-size: 0.85em;
   color: #666;
   text-align: right;
+  display: none;
+
 }
+.comentario-container {
+  display: none;
+}
+
+.cuadro:hover + .tooltip + .comentario-container {
+  display: block;
+}
+
 
 /* Colores personalizados */
 .rojo { background-color: red; }
