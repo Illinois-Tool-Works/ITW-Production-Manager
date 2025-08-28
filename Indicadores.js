@@ -84,4 +84,20 @@ document.addEventListener("DOMContentLoaded", () => {
       set(ref(db, `indicadores/${id}`), { estado, comentario, horaComentario });
     });
   });
+  onValue(ref(db, 'indicadores'), (snapshot) => {
+    const estados = snapshot.val();
+    if (!estados) return;
+
+    selects.forEach(select => {
+      const id = select.closest('.indicador').id;
+      if (estados[id]) {
+        select.value = estados[id].estado;
+        cambiarColor(select, id);
+        const textarea = document.querySelector(`#${id} .comentario`);
+        if (textarea) textarea.value = estados[id].comentario || '';
+        actualizarTimestamp(id, estados[id].horaComentario);
+      }
+    });
+  });
 });
+
