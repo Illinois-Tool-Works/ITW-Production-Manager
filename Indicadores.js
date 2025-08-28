@@ -44,7 +44,7 @@ function inicializarIndicadores(estados) {
   }
 }
 
-// Leer estados desde Firebase
+// Leer estados desde Firebase 1
 // onValue(ref(db, 'indicadores'), (snapshot) => {
 //   const estados = snapshot.val();
 //   inicializarIndicadores(estados); // Crear si no existen
