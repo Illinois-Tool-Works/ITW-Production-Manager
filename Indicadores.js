@@ -100,4 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+  const horaDiv = document.querySelector(`#${id} .hora-comentario`);
+if (horaDiv && estados[id].horaComentario) {
+  const fecha = new Date(estados[id].horaComentario).toLocaleString("es-MX", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+  horaDiv.textContent = `Última actualización: ${fecha}`;
+}
+
 });
