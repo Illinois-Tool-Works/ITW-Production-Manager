@@ -18,6 +18,9 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+import { set, ref } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
+set(ref(db, 'prueba'), 'Hola Firebase');
 
     // 🔄 Leer todos los indicadores al cargar
 onValue(ref(db, 'indicadores'), (snapshot) => {
