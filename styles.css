@@ -80,6 +80,22 @@ h1 {
   align-items: center;
 
 }
+.comentario {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  margin-bottom: 8px;
+}
+
+.hora-comentario {
+  font-size: 0.85em;
+  color: #666;
+  text-align: right;
+}
 
 /* Colores personalizados */
 .rojo { background-color: red; }
