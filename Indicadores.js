@@ -84,20 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
       set(ref(db, `indicadores/${id}`), { estado, comentario, horaComentario });
     });
   });
-  onValue(ref(db, 'indicadores'), (snapshot) => {
-    const estados = snapshot.val();
-    if (!estados) return;
+  onValue(ref(db, 'indicadores/indicador102'), (snapshot) => {
+  const datos = snapshot.val();
+  const estado = datos?.estado;
+  const cuadro = document.querySelector('#indicador102 .cuadro');
 
-    selects.forEach(select => {
-      const id = select.closest('.indicador').id;
-      if (estados[id]) {
-        select.value = estados[id].estado;
-        cambiarColor(select, id);
-        const textarea = document.querySelector(`#${id} .comentario`);
-        if (textarea) textarea.value = estados[id].comentario || '';
-        actualizarTimestamp(id, estados[id].horaComentario);
-      }
-    });
-  });
+  if (cuadro && estado) {
+    cuadro.classList.remove('rojo', 'verde', 'gris', 'azul');
+    cuadro.classList.add(estado);
+  }
+});
+
 });
 
