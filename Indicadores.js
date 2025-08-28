@@ -25,7 +25,8 @@
 //   console.log('Dato enviado: corriendo');
 // });
 
- 
+ console.log("Intentando leer indicadores...");
+
 // Leer estados desde Firebase al cargar
 onValue(ref(db, 'indicadores'), (snapshot) => {
   const estados = snapshot.val();
