@@ -29,10 +29,12 @@
 function cambiarColor(select, id) {
   const color = select.value;
   const div = document.getElementById(id);
-  if (div) {
-    div.style.backgroundColor = color;
+  const cuadro = div.querySelector('.cuadro');
+  if (cuadro) {
+    cuadro.className = `cuadro ${color}`;
   }
 }
+
 
 // Inicializar los primeros 10 indicadores si no existen
 function inicializarIndicadores(estados) {
