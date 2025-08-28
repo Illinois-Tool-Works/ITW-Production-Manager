@@ -100,29 +100,17 @@ document.addEventListener("DOMContentLoaded", () => {
       // Actualizar select y color
       select.value = estado;
       cambiarColor(select, id);
+const textarea = document.querySelector(`#${id} .comentario`);
+      if (textarea) textarea.value = comentario;
 
-      // Actualizar cuadro color
-      const cuadro = document.querySelector(`#${id} .cuadro`);
-      if (cuadro) {
-        cuadro.classList.remove('rojo', 'verde', 'gris', 'azul');
-        cuadro.classList.add(estado);
-      }
-
-      // Actualizar comentario y hora dentro del contenedor ocultable
-      const comentarioContainer = document.querySelector(`#${id} .comentario-container`);
-      if (comentarioContainer) {
-        const textarea = comentarioContainer.querySelector('.comentario');
-        const horaDiv = comentarioContainer.querySelector('.hora-comentario');
-
-        if (textarea) textarea.value = comentario;
-
-        if (horaDiv && horaComentario) {
-          const fecha = new Date(horaComentario).toLocaleString("es-MX", {
-            dateStyle: "medium",
-            timeStyle: "short"
-          });
-          horaDiv.textContent = `Última actualización: ${fecha}`;
-        }
+      // Actualizar hora visible
+      const horaDiv = document.querySelector(`#${id} .hora-comentario`);
+      if (horaDiv && horaComentario) {
+        const fecha = new Date(horaComentario).toLocaleString("es-MX", {
+          dateStyle: "medium",
+          timeStyle: "short"
+        });
+        horaDiv.textContent = `Última actualización: ${fecha}`;
       }
 
       // Actualizar tooltip
