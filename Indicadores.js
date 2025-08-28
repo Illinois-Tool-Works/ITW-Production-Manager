@@ -97,10 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const comentario = estados[id].comentario || '';
       const horaComentario = estados[id].horaComentario;
 
-      // Actualizar select y color
+      // Actualizar select y textarea
       select.value = estado;
       cambiarColor(select, id);
-const textarea = document.querySelector(`#${id} .comentario`);
+      const textarea = document.querySelector(`#${id} .comentario`);
       if (textarea) textarea.value = comentario;
 
       // Actualizar hora visible
@@ -127,4 +127,4 @@ const textarea = document.querySelector(`#${id} .comentario`);
     }
   });
 });
-});
+  });
