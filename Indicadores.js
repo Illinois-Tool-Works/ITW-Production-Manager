@@ -50,8 +50,7 @@ import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-d
 
 function cambiarColor(select, id) {
   const color = select.value;
-  const div = document.getElementById(id);
-  const cuadro = div.querySelector('.cuadro');
+  const cuadro = document.querySelector(`#${id} .cuadro`);
   if (cuadro) {
     cuadro.style.backgroundColor = color;
   }
@@ -61,17 +60,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const contenedor = document.querySelector('.indicadores');
   const selects = contenedor.querySelectorAll('.indicador select');
 
-  // Guardar cambios al seleccionar
+  // Guardar estado al cambiar
   selects.forEach(select => {
     const id = select.closest('.indicador').id;
     select.addEventListener("change", () => {
-      const valor = select.value;
-      set(ref(db, `indicadores/${id}`), valor);
+      const estado = select.value;
+      set(ref(db, `indicadores/${id}`), estado);
       cambiarColor(select, id);
     });
   });
 
-  // 🔄 Escuchar cambios en tiempo real
+  // Escuchar cambios en tiempo real
   onValue(ref(db, 'indicadores'), (snapshot) => {
     const estados = snapshot.val();
     if (!estados) return;
@@ -85,4 +84,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-
+  // Inicializar indicadores al cargar la página
+  get(child(ref(db), 'indicadores')).then((snapshot) => {
+    const estados = snapshot.val();
+    inicializarIndicadores(estados);
+  }).catch((error) => {
+    console.error(error);
+  });
