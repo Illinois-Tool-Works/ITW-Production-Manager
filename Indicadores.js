@@ -20,34 +20,39 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+  document.addEventListener("DOMContentLoaded", () => {
+  set(ref(db, 'pruebaEstado'), 'corriendo');
+  console.log('Dato enviado: corriendo');
+});
+
 // 🔄 Leer todos los estados al cargar
-onValue(ref(db, 'indicadores'), (snapshot) => {
-  const estados = snapshot.val();
-  if (estados) {
-    Object.keys(estados).forEach(id => {
-      const select = document.querySelector(`#${id} select`);
-      if (select) {
-        select.value = estados[id];
-        cambiarColor(select, id); // Aplica el color visualmente
-      }
-    });
-  }
-});
-function cambiarColor(select, id) {
-  const color = select.value;
-  const div = document.getElementById(id);
-  if (div) {
-    div.style.backgroundColor = color;
-  }
-}
-// 📤 Guardar estado cuando cambie el select
-document.addEventListener("DOMContentLoaded", () => {
-  const selects = document.querySelectorAll('.indicador select');
-  selects.forEach(select => {
-    const id = select.closest('.indicador').id;
-    select.addEventListener("change", () => {
-      set(ref(db, `indicadores/${id}`), select.value);
-    });
-  });
-});
+// onValue(ref(db, 'indicadores'), (snapshot) => {
+//   const estados = snapshot.val();
+//   if (estados) {
+//     Object.keys(estados).forEach(id => {
+//       const select = document.querySelector(`#${id} select`);
+//       if (select) {
+//         select.value = estados[id];
+//         cambiarColor(select, id); // Aplica el color visualmente
+//       }
+//     });
+//   }
+// });
+// function cambiarColor(select, id) {
+//   const color = select.value;
+//   const div = document.getElementById(id);
+//   if (div) {
+//     div.style.backgroundColor = color;
+//   }
+// }
+// // 📤 Guardar estado cuando cambie el select
+// document.addEventListener("DOMContentLoaded", () => {
+//   const selects = document.querySelectorAll('.indicador select');
+//   selects.forEach(select => {
+//     const id = select.closest('.indicador').id;
+//     select.addEventListener("change", () => {
+//       set(ref(db, `indicadores/${id}`), select.value);
+//     });
+//   });
+// });
 
