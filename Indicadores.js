@@ -84,47 +84,4 @@ document.addEventListener("DOMContentLoaded", () => {
       set(ref(db, `indicadores/${id}`), { estado, comentario, horaComentario });
     });
   });
-
-  // Escuchar cambios en tiempo real
-  onValue(ref(db, 'indicadores'), (snapshot) => {
-  const estados = snapshot.val();
-  if (!estados) return;
-
-  selects.forEach(select => {
-    const id = select.closest('.indicador').id;
-    if (estados[id]) {
-      const estado = estados[id].estado;
-      const comentario = estados[id].comentario || '';
-      const horaComentario = estados[id].horaComentario;
-
-      // Actualizar select y textarea
-      select.value = estado;
-      cambiarColor(select, id);
-      const textarea = document.querySelector(`#${id} .comentario`);
-      if (textarea) textarea.value = comentario;
-
-      // Actualizar hora visible
-      const horaDiv = document.querySelector(`#${id} .hora-comentario`);
-      if (horaDiv && horaComentario) {
-        const fecha = new Date(horaComentario).toLocaleString("es-MX", {
-          dateStyle: "medium",
-          timeStyle: "short"
-        });
-        horaDiv.textContent = `Última actualización: ${fecha}`;
-      }
-
-      // Actualizar tooltip
-      const tooltip = document.querySelector(`#${id} .tooltip`);
-      if (tooltip) {
-        tooltip.textContent =
-          `Comentario: ${comentario}\n` +
-          `Estado: ${estado}\n` +
-          `Hora: ${new Date(horaComentario).toLocaleString("es-MX", {
-            dateStyle: "medium",
-            timeStyle: "short"
-          })}`;
-      }
-    }
-  });
 });
-  });
