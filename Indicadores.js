@@ -52,22 +52,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const contenedor = document.querySelector('.indicadores');
   const selects = contenedor.querySelectorAll('.indicador select');
 
-  // Leer los datos una sola vez
-  get(child(ref(db), 'indicadores')).then((snapshot) => {
-    if (snapshot.exists()) {
-      const estados = snapshot.val();
-      selects.forEach(select => {
-        const id = select.closest('.indicador').id;
-        if (estados[id]) {
-          select.value = estados[id];
-          cambiarColor(select, id);
-        }
-      });
-    } else {
-      console.log("No hay datos en 'indicadores'");
-    }
-  }).catch((error) => {
-    console.error("Error al leer datos:", error);
+  // Guardar cambios al seleccionar
+  selects.forEach(select => {
+    const id = select.closest('.indicador').id;
+    select.addEventListener("change", () => {
+      const valor = select.value;
+      set(ref(db, `indicadores/${id}`), valor);
+      cambiarColor(select, id);
+    });
+  });
+
+  // 🔄 Aquí es donde agregas la lectura en tiempo real
+  onValue(ref(db, 'indicadores'), (snapshot) => {
+    const estados = snapshot.val();
+    if (!estados) return;
+
+    selects.forEach(select => {
+      const id = select.closest('.indicador').id;
+      if (estados[id]) {
+        select.value = estados[id];
+        cambiarColor(select, id);
+      }
+    });
   });
 
   // Guardar cambios al seleccionar
