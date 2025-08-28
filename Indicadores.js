@@ -26,6 +26,7 @@
 // });
 
 
+// Función para aplicar el color visualmente
 function cambiarColor(select, id) {
   const color = select.value;
   const div = document.getElementById(id);
@@ -33,27 +34,36 @@ function cambiarColor(select, id) {
     div.style.backgroundColor = color;
   }
 }
-// // Referencia al select del indicador 100
-// document.addEventListener("DOMContentLoaded", () => {
-//   const select = document.querySelector('#indicador100 select');
 
-//   // Leer estado desde Firebase
-//   onValue(ref(db, 'indicadores/indicador100'), (snapshot) => {
-//     const valor = snapshot.val();
-//     if (valor && select) {
-//       select.value = valor;
-//       cambiarColor(select, 'indicador100');
-//     }
-//   });
+// Al cargar la página, leer los estados desde Firebase
+onValue(ref(db, 'indicadores'), (snapshot) => {
+  const estados = snapshot.val();
+  if (estados) {
+    for (let i = 100; i <= 110; i++) {
+      const id = `indicador${i}`;
+      const select = document.querySelector(`#${id} select`);
+      if (select && estados[id]) {
+        select.value = estados[id];
+        cambiarColor(select, id);
+      }
+    }
+  }
+});
 
-//   // Guardar estado cuando cambie
-//   if (select) {
-//     select.addEventListener("change", () => {
-//       const valor = select.value;
-//       set(ref(db, 'indicadores/indicador100'), valor);
-//       cambiarColor(select, 'indicador100');
-//     });
-//   }
-// });
+// Detectar cambios y guardar en Firebase
+document.addEventListener("DOMContentLoaded", () => {
+  for (let i = 100; i <= 110; i++) {
+    const id = `indicador${i}`;
+    const select = document.querySelector(`#${id} select`);
+    if (select) {
+      select.addEventListener("change", () => {
+        const valor = select.value;
+        set(ref(db, `indicadores/${id}`), valor);
+        cambiarColor(select, id);
+      });
+ }
+  }
+});
+
 
 
