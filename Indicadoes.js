@@ -32,7 +32,7 @@ onValue(ref(db, 'indicadores'), (snapshot) => {
 
 // 📤 Guardar estado cuando cambie cualquier indicador
 document.addEventListener("DOMContentLoaded", () => {
-  for (let i = 1; i <= 10; i++) {
+  for (let i = 100; i <= 110; i++) {
     const id = `indicador${i}`;
     const checkbox = document.getElementById(id);
     if (checkbox) {
