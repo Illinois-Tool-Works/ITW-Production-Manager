@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(251, 6, 6, 0.9);
+  background-color: rgba(6, 120, 251, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -87,6 +87,16 @@ h1 {
   text-align: right;
   display: none;
 
+}
+.tooltip-comentario {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 1000;
+  max-width: 200px;
 }
 
 /* Colores personalizados */
