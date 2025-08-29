@@ -51,7 +51,7 @@ h1 {
 }
 .indicadores {
   position: relative;
-  width: 100%; /* o un ancho fijo si  */
+  width: 100%; /* o un ancho fijo si prefieres */
   height: 300px; /* ajusta según lo que necesites */
   border: 1px solid white; /* opcional, para visualizar el área */
 }
