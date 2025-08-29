@@ -58,7 +58,7 @@ h1 {
 
 
 .indicador {
-  position: absolute;
+  position: relative;
   width: 100px; /* ajusta según tu diseño */
   text-align: center;
 }
