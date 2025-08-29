@@ -156,32 +156,17 @@ window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
 
 ///////////////////////////mensaje y guardado/////////////////////////////////////////////////////
 
-function mostrarTooltip(spanElement) {
-  const indicador = spanElement.closest('.indicador');
-  const indicadorId = indicador.id;
-  const tooltip = indicador.querySelector('.tooltip-comentario');
+function cargarComentario(indicadorId) {
+  const indicador = document.getElementById(indicadorId);
+  const comentarioBox = indicador?.querySelector('.comentario-visible');
+  if (!comentarioBox) return;
 
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   onValue(comentarioRef, snapshot => {
     const data = snapshot.val();
-    if (data && data.texto) {
-      tooltip.textContent = data.texto;
-      tooltip.style.display = 'block';
-    } else {
-      tooltip.textContent = "Sin comentario";
-      tooltip.style.display = 'block';
-    }
-  }, {
-    onlyOnce: true
+    comentarioBox.textContent = data?.texto || "Sin comentario";
   });
 }
-
-function ocultarTooltip(spanElement) {
-  const indicador = spanElement.closest('.indicador');
-  const tooltip = indicador.querySelector('.tooltip-comentario');
-  tooltip.style.display = 'none';
+for (let i = 0; i < 10; i++) {
+  cargarComentario(`indicador${i}`);
 }
-
-// ✅ Exponer si usas atributos inline
-window.mostrarTooltip = mostrarTooltip;
-window.ocultarTooltip = ocultarTooltip;
