@@ -84,10 +84,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-  // Inicializar indicadores al cargar la página
-  get(child(ref(db), 'indicadores')).then((snapshot) => {
-    const estados = snapshot.val();
-    inicializarIndicadores(estados);
-  }).catch((error) => {
-    console.error(error);
-  });
