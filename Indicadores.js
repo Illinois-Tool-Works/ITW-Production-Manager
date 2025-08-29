@@ -102,33 +102,56 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
-function mostrarComentario(selectElement) {
-    const indicadorId = selectElement.closest('.indicador').id;
-    const comentarioBox = document.querySelector(`.comentario-asociado[data-indicador="${indicadorId}"]`);
-    comentarioBox.style.display = 'block';
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ // Mostrar campo de comentario al cambiar estado
+  function activarComentario(selectElement) {
+    const indicador = selectElement.closest('.indicador');
+    const input = indicador.querySelector('.comentario-input');
+    input.style.display = 'block';
+    input.focus();
   }
 
-  document.querySelectorAll('.comentario-asociado textarea').forEach(textarea => {
-    textarea.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        const comentario = this.value.trim();
-        if (!comentario) return;
+  // Guardar comentario al presionar Enter
+  function guardarAlEnter(event, inputElement) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      const comentario = inputElement.value.trim();
+      if (!comentario) return;
 
-        const indicadorId = this.closest('.comentario-asociado').dataset.indicador;
-        const estado = document.querySelector(`#${indicadorId} select`).value;
-        const timestamp = new Date().toISOString();
+      const indicador = inputElement.closest('.indicador');
+      const indicadorId = indicador.id;
+      const estado = indicador.querySelector('select').value;
+      const timestamp = new Date().toISOString();
 
-        db.ref(`comentarios/${indicadorId}`).push({
-          estado: estado,
-          texto: comentario,
-          fecha: timestamp
-        }).then(() => {
-          this.value = "";
-          this.closest('.comentario-asociado').style.display = 'none';
-        }).catch(error => {
-          console.error("Error al guardar:", error);
-        });
-      }
-    });
-  });
+      db.ref(`comentarios/${indicadorId}`).push({
+        estado: estado,
+        texto: comentario,
+        fecha: timestamp
+      }).then(() => {
+        inputElement.value = "";
+        inputElement.style.display = 'none';
+        const tooltip = indicador.querySelector('.tooltip-comentario');
+        tooltip.textContent = comentario;
+      }).catch(error => {
+        console.error("Error al guardar:", error);
+      });
+    }
+  }
+
+  // Mostrar tooltip al pasar el cursor
+  function mostrarTooltip(spanElement) {
+    const indicador = spanElement.closest('.indicador');
+    const tooltip = indicador.querySelector('.tooltip-comentario');
+    if (tooltip.textContent) {
+      tooltip.style.display = 'block';
+    }
+  }
+
+  // Ocultar tooltip al salir del cursor
+  function ocultarTooltip(spanElement) {
+    const indicador = spanElement.closest('.indicador');
+    const tooltip = indicador.querySelector('.tooltip-comentario');
+    tooltip.style.display = 'none';
+  }

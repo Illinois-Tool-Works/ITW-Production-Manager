@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(226, 251, 6, 0.9);
+  background-color: rgba(6, 222, 251, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -88,23 +88,28 @@ h1 {
   display: none;
 
 }
-.comentario-asociado {
-  margin-top: 8px;
-  padding: 6px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-left: 4px solid #007acc;
-  border-radius: 4px;
-  width: 260px;
-}
-
-.comentario-asociado textarea {
+.comentario-input {
+  margin-top: 6px;
   width: 100%;
-  height: 60px;
-  resize: none;
+  padding: 4px;
   font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
+.tooltip-comentario {
+  position: absolute;
+  top: -35px;
+  left: 0;
+  background: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+}
 
 
 /* Colores personalizados */
