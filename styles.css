@@ -80,26 +80,6 @@ h1 {
   align-items: center;
 
 }
-select {
-  margin-bottom: 10px;
-}
-
-.comentario-extra {
-  margin-top: 10px;
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 8px;
-  border-radius: 4px;
-}
-
-textarea {
-  width: 100%;
-  height: 60px;
-  resize: none;
-  margin-bottom: 6px;
-  font-size: 14px;
-}
-
 
 .hora-comentario {
   font-size: 0.85em;
@@ -108,6 +88,24 @@ textarea {
   display: none;
 
 }
+.comentario-asociado {
+  margin-bottom: 20px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-left: 4px solid #007acc;
+  border-radius: 4px;
+  width: 260px;
+}
+
+.comentario-asociado textarea {
+  width: 100%;
+  height: 60px;
+  resize: none;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
 
 /* Colores personalizados */
 .rojo { background-color: red; }
