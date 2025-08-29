@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(251, 6, 79, 0.9);
+  background-color: rgba(116, 251, 6, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -23,7 +23,7 @@ body {
   text-align: center;
 
   /* Posicionamiento */
-  position: absolute; /* o relative/fixed/sticky según tu necesidad */
+  /* position: absolute; o relative/fixed/sticky según tu necesidad */
   top: 50%;           /* distancia desde el top del contenedor padre */
   left: 50%;          /* distancia desde el left del contenedor padre */
   /* transform: translate(-50%, -50%); /* centra el contenedor */
