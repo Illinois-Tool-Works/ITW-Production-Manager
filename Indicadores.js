@@ -170,3 +170,12 @@ function cargarComentario(indicadorId) {
 for (let i = 100; i < 110; i++) {
   cargarComentario(`indicador${i}`);
 }
+document.querySelectorAll('.cuadro').forEach(cuadro => {
+  cuadro.addEventListener('click', () => {
+    const comentario = cuadro.parentElement.querySelector('.comentario-popover');
+    if (comentario) {
+      comentario.style.display = comentario.style.display === 'block' ? 'none' : 'block';
+    }
+  });
+});
+

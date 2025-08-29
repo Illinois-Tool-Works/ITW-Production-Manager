@@ -8,13 +8,12 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(251, 59, 6, 0.9);
+  background-color: rgba(6, 251, 112, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
-/* Contenedor principal */
 /* Contenedor principal */
 .container2 {
   position: relative;
@@ -26,10 +25,9 @@ body {
   max-width: 900px;
   margin: auto;
   box-sizing: border-box;
-  container-type: inline-size; /* Para usar container queries si lo deseas */
+  container-type: inline-size;
 }
 
-/* Responsive para móviles */
 @media (max-width: 480px) {
   .container2 {
     padding: 6vw;
@@ -86,6 +84,12 @@ h1 {
 }
 
 /* Indicadores */
+.indicadores-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1em;
+}
+
 .indicador {
   margin-bottom: 1em;
   padding: 1em;
@@ -93,13 +97,6 @@ h1 {
   border-radius: 6px;
   position: relative;
   box-sizing: border-box;
-}
-
-/* Layout adaptable para indicadores */
-.indicadores-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1em;
 }
 
 /* Número + comentario alineados */
@@ -124,6 +121,7 @@ h1 {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .cuadro:hover {
@@ -131,7 +129,29 @@ h1 {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Comentario visible */
+/* Comentario emergente tipo tooltip */
+.comentario-popover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #f5f5f5;
+  padding: 0.5em 1em;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  font-size: 0.9em;
+  color: #333;
+  z-index: 10;
+  display: none;
+  max-width: 300px;
+  word-break: break-word;
+}
+
+.indicador:hover .comentario-popover,
+.indicador:focus-within .comentario-popover {
+  display: block;
+}
+
+/* Comentario visible (modo fijo) */
 .comentario-visible {
   font-size: clamp(0.8125em, 2vw, 0.9375em);
   color: #333;
@@ -141,6 +161,23 @@ h1 {
   max-width: 100%;
   flex: 1 1 auto;
   word-break: break-word;
+}
+
+/* Menú desplegable */
+.select-prioridad {
+  font-size: clamp(0.875em, 2vw, 1em);
+  padding: 0.4em 0.6em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+  width: 100%;
+  max-width: 200px;
+}
+
+@media (max-width: 480px) {
+  .select-prioridad-wrapper {
+    display: none;
+  }
 }
 /* .indicadores {
   position: relative;
