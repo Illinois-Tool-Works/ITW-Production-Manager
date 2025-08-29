@@ -15,27 +15,40 @@ body {
   text-align: center;
 }
 /* Contenedor principal */
+:root {
+  /* Tamaños base */
+  --container-max-width: 900px;
+  --container-padding: 5vw;
+  --container-radius: 12px;
+  --container-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+
+  /* Responsive ajustes */
+  --container-padding-mobile: 6vw;
+  --container-radius-mobile: 8px;
+}
+
+/* Contenedor principal */
 .container2 {
   position: relative;
   background-color: white;
-  padding: 5vw;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  padding: var(--container-padding);
+  border-radius: var(--container-radius);
+  box-shadow: var(--container-shadow);
   text-align: center;
-  max-width: 900px;
+  max-width: var(--container-max-width);
   margin: auto;
   box-sizing: border-box;
   container-type: inline-size;
 }
 
+/* Ajustes para móviles */
 @media (max-width: 480px) {
   .container2 {
-    padding: 6vw;
+    padding: var(--container-padding-mobile);
     max-width: 100%;
-    border-radius: 8px;
+    border-radius: var(--container-radius-mobile);
   }
 }
-
 /* Título */
 h1 {
   color: #333;
