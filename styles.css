@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(6, 251, 112, 0.9);
+  background-color: rgba(251, 141, 6, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -23,8 +23,8 @@ body {
   --container-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
 
   /* Responsive ajustes */
-  --container-padding-mobile: 6vw;
-  --container-radius-mobile: 8px;
+  /* --container-padding-mobile: 6vw;
+  --container-radius-mobile: 8px; */
 }
 
 /* Contenedor principal */
@@ -42,13 +42,13 @@ body {
 }
 
 /* Ajustes para móviles */
-@media (max-width: 480px) {
+/* @media (max-width: 480px) {
   .container2 {
     padding: var(--container-padding-mobile);
     max-width: 100%;
     border-radius: var(--container-radius-mobile);
   }
-}
+} */
 /* Título */
 h1 {
   color: #333;
