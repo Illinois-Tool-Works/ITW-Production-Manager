@@ -102,3 +102,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+function mostrarComentario(selectElement) {
+    const indicadorId = selectElement.closest('.indicador').id;
+    const comentarioBox = document.querySelector(`.comentario-asociado[data-indicador="${indicadorId}"]`);
+    comentarioBox.style.display = 'block';
+  }
+
+  document.querySelectorAll('.comentario-asociado textarea').forEach(textarea => {
+    textarea.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const comentario = this.value.trim();
+        if (!comentario) return;
+
+        const indicadorId = this.closest('.comentario-asociado').dataset.indicador;
+        const estado = document.querySelector(`#${indicadorId} select`).value;
+        const timestamp = new Date().toISOString();
+
+        db.ref(`comentarios/${indicadorId}`).push({
+          estado: estado,
+          texto: comentario,
+          fecha: timestamp
+        }).then(() => {
+          this.value = "";
+          this.closest('.comentario-asociado').style.display = 'none';
+        }).catch(error => {
+          console.error("Error al guardar:", error);
+        });
+      }
+    });
+  });
