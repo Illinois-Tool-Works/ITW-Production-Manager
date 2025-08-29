@@ -8,12 +8,13 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(6, 251, 43, 0.9);
+  background-color: rgba(251, 59, 6, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
+/* Contenedor principal */
 /* Contenedor principal */
 .container2 {
   position: relative;
@@ -25,33 +26,43 @@ body {
   max-width: 900px;
   margin: auto;
   box-sizing: border-box;
+  container-type: inline-size; /* Para usar container queries si lo deseas */
+}
+
+/* Responsive para móviles */
+@media (max-width: 480px) {
+  .container2 {
+    padding: 6vw;
+    max-width: 100%;
+    border-radius: 8px;
+  }
 }
 
 /* Título */
 h1 {
   color: #333;
-  margin-bottom: 20px;
-  font-size: clamp(24px, 4vw, 36px);
+  margin-bottom: 1em;
+  font-size: clamp(1.5em, 4vw, 2.25em);
 }
 
 /* Fecha y hora */
 #datetime {
-  font-size: clamp(16px, 2vw, 20px);
+  font-size: clamp(1em, 2vw, 1.25em);
   color: #555;
-  margin-bottom: 30px;
+  margin-bottom: 2em;
 }
 
-/* Botones */
+/* Grupo de botones */
 .button-group {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: 0.75em;
 }
 
 .button-group button {
-  padding: 12px 24px;
-  font-size: clamp(14px, 2vw, 16px);
+  padding: 0.75em 1.5em;
+  font-size: clamp(0.875em, 2vw, 1em);
   background-color: #0078D7;
   color: white;
   border: none;
@@ -67,21 +78,35 @@ h1 {
   background-color: #005fa3;
 }
 
+@media (max-width: 480px) {
+  .button-group button {
+    min-width: 100%;
+    font-size: 4vw;
+  }
+}
+
 /* Indicadores */
 .indicador {
-  margin-bottom: 16px;
-  padding: 12px;
+  margin-bottom: 1em;
+  padding: 1em;
   border: 1px solid #ccc;
   border-radius: 6px;
   position: relative;
   box-sizing: border-box;
 }
 
+/* Layout adaptable para indicadores */
+.indicadores-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1em;
+}
+
 /* Número + comentario alineados */
 .cuadro-comentario {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75em;
   flex-wrap: wrap;
 }
 
@@ -95,7 +120,7 @@ h1 {
   line-height: 48px;
   border-radius: 50%;
   font-weight: bold;
-  font-size: clamp(16px, 3vw, 20px);
+  font-size: clamp(1em, 3vw, 1.25em);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   flex-shrink: 0;
@@ -108,10 +133,10 @@ h1 {
 
 /* Comentario visible */
 .comentario-visible {
-  font-size: clamp(13px, 2vw, 15px);
+  font-size: clamp(0.8125em, 2vw, 0.9375em);
   color: #333;
   background-color: #f5f5f5;
-  padding: 6px 10px;
+  padding: 0.5em 1em;
   border-radius: 4px;
   max-width: 100%;
   flex: 1 1 auto;
