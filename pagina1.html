@@ -49,6 +49,14 @@
        <div class="indicador" id="indicador130" style="top: 260px; left: 650px;"><span class="cuadro">43</span><select onchange="cambiarColor(this, 'indicador130')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
       </div>
     <script type="module" src="Indicadores.js"></script>
+    <script>
+  function mostrarComentarioVisual(selectElement) {
+    const indicador = selectElement.closest('.indicador');
+    const comentarioBox = indicador.querySelector('.comentario-extra');
+    comentarioBox.style.display = 'block';
+  }
+</script>
+
   <script>
     function actualizarFechaHora() {
       const ahora = new Date();
