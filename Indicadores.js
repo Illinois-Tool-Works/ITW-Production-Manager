@@ -113,9 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
     input.focus();
   }
   function activarComentarioYColor(selectElement, indicadorId) {
-  cambiarColor(selectElement, indicadorId);   // Mantiene tu lógica de color
-  activarComentario(selectElement);           // Muestra el input de comentario
+  cambiarColor(selectElement, indicadorId);
+  activarComentario(selectElement);
 }
+
+// Exponer al ámbito global
+window.activarComentarioYColor = activarComentarioYColor;
 
 
   // Guardar comentario al presionar Enter
