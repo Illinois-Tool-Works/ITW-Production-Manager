@@ -60,17 +60,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const contenedor = document.querySelector('.indicadores');
   const selects = contenedor.querySelectorAll('.indicador select');
 
-  // Guardar estado al cambiar
+   // Guardar cambios al seleccionar
   selects.forEach(select => {
     const id = select.closest('.indicador').id;
     select.addEventListener("change", () => {
-      const estado = select.value;
-      set(ref(db, `indicadores/${id}`), estado);
+      const valor = select.value;
+      set(ref(db, `indicadores/${id}`), valor);
       cambiarColor(select, id);
     });
   });
 
-  // Escuchar cambios en tiempo real
+  // 🔄 Aquí es donde agregas la lectura en tiempo real
   onValue(ref(db, 'indicadores'), (snapshot) => {
     const estados = snapshot.val();
     if (!estados) return;
@@ -81,6 +81,32 @@ document.addEventListener("DOMContentLoaded", () => {
         select.value = estados[id];
         cambiarColor(select, id);
       }
+    });
+  });
+
+  // Guardar cambios al seleccionar
+  selects.forEach(select => {
+    const id = select.closest('.indicador').id;
+    select.addEventListener("change", () => {
+      const valor = select.value;
+      set(ref(db, `indicadores/${id}`), valor);
+      cambiarColor(select, id);
+    });
+  });
+});
+
+
+
+// Detectar cambios y guardar en Firebase
+document.addEventListener("DOMContentLoaded", () => {
+  const contenedor = document.querySelector('.indicadores');
+  const selects = contenedor.querySelectorAll('.indicador select');
+  selects.forEach(select => {
+    const id = select.closest('.indicador').id;
+    select.addEventListener("change", () => {
+      const valor = select.value;
+      set(ref(db, `indicadores/${id}`), valor);
+      cambiarColor(select, id);
     });
   });
 });
