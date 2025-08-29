@@ -1,4 +1,4 @@
-   // Import the functions you need from the SDKs you need
+  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 
   import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
@@ -25,15 +25,15 @@
 //   console.log('Dato enviado: corriendo');
 // });
 
-// Función para aplicar el color visualmente al cuadro
-function cambiarColor(select, id) {
-  const color = select.value;
-  const div = document.getElementById(id);
-  const cuadro = div.querySelector('.cuadro');
-  if (cuadro) {
-    cuadro.className = `cuadro ${color}`;
-  }
-}
+// // Función para aplicar el color visualmente al cuadro
+// function cambiarColor(select, id) {
+//   const color = select.value;
+//   const div = document.getElementById(id);
+//   const cuadro = div.querySelector('.cuadro');
+//   if (cuadro) {
+//     cuadro.className = `cuadro ${color}`;
+//   }
+// }
 
 
 // Inicializar los primeros 10 indicadores si no existen
@@ -48,21 +48,44 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
+function cambiarColor(select, id) {
+  const color = select.value;
+  const div = document.getElementById(id);
+  const cuadro = div.querySelector('.cuadro');
+  if (cuadro) {
+    cuadro.style.backgroundColor = color;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const contenedor = document.querySelector('.indicadores');
   const selects = contenedor.querySelectorAll('.indicador select');
+  const comentarios = contenedor.querySelectorAll('.indicador .comentario');
 
-  // Guardar cambios al seleccionar
+  // Guardar estado al cambiar el select
   selects.forEach(select => {
     const id = select.closest('.indicador').id;
     select.addEventListener("change", () => {
-      const valor = select.value;
-      set(ref(db, `indicadores/${id}`), valor);
+      const comentario = document.querySelector(`#${id} .comentario`).value;
+      const estado = select.value;
+      const horaComentario = new Date().toISOString();
+      set(ref(db, `indicadores/${id}`), { estado, comentario, horaComentario });
       cambiarColor(select, id);
     });
   });
 
-  // 🔄 Aquí es donde agregas la lectura en tiempo real
+  // Guardar comentario al escribir
+  comentarios.forEach(textarea => {
+    const id = textarea.closest('.indicador').id;
+    textarea.addEventListener("input", () => {
+      const estado = document.querySelector(`#${id} select`).value;
+      const comentario = textarea.value;
+      const horaComentario = new Date().toISOString();
+      set(ref(db, `indicadores/${id}`), { estado, comentario, horaComentario });
+    });
+  });
+
+  // Escuchar cambios en tiempo real
   onValue(ref(db, 'indicadores'), (snapshot) => {
     const estados = snapshot.val();
     if (!estados) return;
@@ -70,35 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
     selects.forEach(select => {
       const id = select.closest('.indicador').id;
       if (estados[id]) {
-        select.value = estados[id];
+        select.value = estados[id].estado;
         cambiarColor(select, id);
+        const textarea = document.querySelector(`#${id} .comentario`);
+        if (textarea) textarea.value = estados[id].comentario || '';
       }
-    });
-  });
-
-  // Guardar cambios al seleccionar
-  selects.forEach(select => {
-    const id = select.closest('.indicador').id;
-    select.addEventListener("change", () => {
-      const valor = select.value;
-      set(ref(db, `indicadores/${id}`), valor);
-      cambiarColor(select, id);
-    });
-  });
-});
-
-
-
-// Detectar cambios y guardar en Firebase
-document.addEventListener("DOMContentLoaded", () => {
-  const contenedor = document.querySelector('.indicadores');
-  const selects = contenedor.querySelectorAll('.indicador select');
-  selects.forEach(select => {
-    const id = select.closest('.indicador').id;
-    select.addEventListener("change", () => {
-      const valor = select.value;
-      set(ref(db, `indicadores/${id}`), valor);
-      cambiarColor(select, id);
     });
   });
 });
