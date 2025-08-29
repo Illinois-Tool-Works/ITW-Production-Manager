@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgb(40, 12, 97);
+  background-color: rgb(159, 138, 199);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -58,7 +58,7 @@ h1 {
 
 
 .indicador {
-  position: relative;
+  position: absolute;
   width: 100px; /* ajusta según tu diseño */
   text-align: center;
 }
