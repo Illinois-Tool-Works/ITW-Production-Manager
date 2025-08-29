@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(251, 67, 6, 0.9);
+  background-color: rgba(6, 251, 55, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -24,7 +24,7 @@ body {
 
   /* Posicionamiento */
   position: absolute; /* o relative/fixed/sticky según tu necesidad */
-  top: 10%;           /* distancia desde el top del contenedor padre */
+  top: 50%;           /* distancia desde el top del contenedor padre */
   left: 50%;          /* distancia desde el left del contenedor padre */
   transform: translate(-50%, -50%); /* centra el contenedor */
   z-index: 10;        /* para controlar superposición si hay otros elementos */
