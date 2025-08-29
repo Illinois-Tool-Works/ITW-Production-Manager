@@ -112,6 +112,11 @@ function enviarComentarioDesdeBoton(buttonElement) {
   if (!comentario) return;
 
   const indicadorId = inputElement.dataset.indicador;
+  if (!indicadorId) {
+    console.warn("Falta data-indicador en el input");
+    return;
+  }
+
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
@@ -121,13 +126,15 @@ function enviarComentarioDesdeBoton(buttonElement) {
     estado,
     texto: comentario,
     fecha: timestamp
-  }).then(() => {
+  })
+  .then(() => {
+    console.log(`Comentario enviado a ${indicadorId}:`, comentario);
     inputElement.value = "";
-  }).catch(error => {
+  })
+  .catch(error => {
     console.error(`Error al guardar comentario en ${indicadorId}:`, error);
   });
 }
-
 window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
 
 
