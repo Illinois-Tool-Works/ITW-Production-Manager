@@ -8,18 +8,26 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(6, 51, 251, 0.9);
+  background-color: rgba(251, 67, 6, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
 .container2 {
-  background-color: rgba(251, 141, 6, 0.9);
+  /* Estilo visual */
+  background-color: rgb(255, 255, 255);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   text-align: center;
+
+  /* Posicionamiento */
+  position: absolute; /* o relative/fixed/sticky según tu necesidad */
+  top: 10%;           /* distancia desde el top del contenedor padre */
+  left: 50%;          /* distancia desde el left del contenedor padre */
+  transform: translate(-50%, -50%); /* centra el contenedor */
+  z-index: 10;        /* para controlar superposición si hay otros elementos */
 }
 /* Título */
 h1 {
