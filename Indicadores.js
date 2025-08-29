@@ -106,3 +106,30 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+function enviarComentarioAIndicador100(event, inputElement) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+
+    const comentario = inputElement.value.trim();
+    if (!comentario) return;
+
+    const timestamp = new Date().toISOString();
+    const estado = "manual"; // Puedes ajustar esto si quieres capturar el estado
+
+    const comentarioRef = ref(db, "comentarios/indicador100");
+    push(comentarioRef, {
+      estado: estado,
+      texto: comentario,
+      fecha: timestamp
+    })
+    .then(() => {
+      console.log("Comentario enviado a indicador100:", comentario);
+      inputElement.value = "";
+    })
+    .catch(error => {
+      console.error("Error al enviar comentario:", error);
+    });
+  }
+}
+
+window.enviarComentarioAIndicador100 = enviarComentarioAIndicador100;
