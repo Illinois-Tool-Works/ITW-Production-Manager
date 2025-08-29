@@ -76,6 +76,27 @@ document.addEventListener("DOMContentLoaded", () => {
         cambiarColor(select, id);
       }
     });
+    /////////////////////////////////////////////////////////////////////////////
+    function mostrarTooltip(spanElement) {
+  const indicador = spanElement.closest('.indicador');
+  const indicadorId = indicador.id;
+  const tooltip = indicador.querySelector('.tooltip-comentario');
+
+  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
+  onValue(comentarioRef, snapshot => {
+    const data = snapshot.val();
+    if (data && data.texto) {
+      tooltip.textContent = data.texto;
+      tooltip.style.display = 'block';
+    } else {
+      tooltip.textContent = "Sin comentario";
+      tooltip.style.display = 'block';
+    }
+  }, {
+    onlyOnce: true
+  });
+}
+
   });
 
   // Guardar cambios al seleccionar
@@ -150,3 +171,8 @@ function guardarComentario(inputElement) {
 // ✅ Exponer funciones si usas atributos inline
 window.enviarComentario = enviarComentario;
 window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
+
+window.mostrarTooltip = mostrarTooltip;
+window.ocultarTooltip = ocultarTooltip;
+
+///////////////////////////mensaje y guardado/////////////////////////////////////////////////////
