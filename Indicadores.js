@@ -115,7 +115,7 @@ function enviarComentario(event, inputElement) {
 
     const indicadorId = inputElement.dataset.indicador;
     if (!indicadorId) {
-      console.warn("No se encontró data-indicador en el input");
+      console.warn("Falta data-indicador en el input");
       return;
     }
 
@@ -125,12 +125,12 @@ function enviarComentario(event, inputElement) {
 
     const comentarioRef = ref(db, `comentarios/${indicadorId}`);
     push(comentarioRef, {
-      estado: estado,
+      estado,
       texto: comentario,
       fecha: timestamp
     })
     .then(() => {
-      console.log(`Comentario enviado a ${indicadorId}:`, comentario);
+      console.log(`Comentario guardado en ${indicadorId}:`, comentario);
       inputElement.value = "";
     })
     .catch(error => {
@@ -141,3 +141,4 @@ function enviarComentario(event, inputElement) {
 
 // Exponer si usas atributos inline
 window.enviarComentario = enviarComentario;
+
