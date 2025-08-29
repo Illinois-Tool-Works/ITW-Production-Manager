@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(124, 6, 251, 0.9);
+  background-color: rgba(251, 6, 6, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -47,7 +47,7 @@ h1 {
 }
 
 .button-group button:hover {
-  background-color: #9e0000;
+  background-color: #0078D7;
 }
 .indicadores {
   position: relative;

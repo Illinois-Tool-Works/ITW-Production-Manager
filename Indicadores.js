@@ -109,35 +109,43 @@ document.addEventListener("DOMContentLoaded", () => {
 function enviarComentario(event, inputElement) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
-
-    const comentario = inputElement.value.trim();
-    if (!comentario) return;
-
-    const indicadorId = inputElement.dataset.indicador;
-    if (!indicadorId) {
-      console.warn("Falta data-indicador en el input");
-      return;
-    }
-
-    const indicador = document.getElementById(indicadorId);
-    const estado = indicador?.querySelector("select")?.value || "manual";
-    const timestamp = new Date().toISOString();
-
-    const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-    push(comentarioRef, {
-      estado,
-      texto: comentario,
-      fecha: timestamp
-    })
-    .then(() => {
-      console.log(`Comentario guardado en ${indicadorId}:`, comentario);
-      inputElement.value = "";
-    })
-    .catch(error => {
-      console.error(`Error al guardar comentario en ${indicadorId}:`, error);
-    });
+    guardarComentario(inputElement);
   }
 }
 
-// Exponer si usas atributos inline
+function enviarComentarioDesdeBoton(inputElement) {
+  guardarComentario(inputElement);
+}
+
+function guardarComentario(inputElement) {
+  const comentario = inputElement.value.trim();
+  if (!comentario) return;
+
+  const indicadorId = inputElement.dataset.indicador;
+  if (!indicadorId) {
+    console.warn("Falta data-indicador en el input");
+    return;
+  }
+
+  const indicador = document.getElementById(indicadorId);
+  const estado = indicador?.querySelector("select")?.value || "manual";
+  const timestamp = new Date().toISOString();
+
+  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
+  push(comentarioRef, {
+    estado,
+    texto: comentario,
+    fecha: timestamp
+  })
+  .then(() => {
+    console.log(`Comentario guardado en ${indicadorId}:`, comentario);
+    inputElement.value = "";
+  })
+  .catch(error => {
+    console.error(`Error al guardar comentario en ${indicadorId}:`, error);
+  });
+}
+
+// ✅ Exponer funciones si usas atributos inline
 window.enviarComentario = enviarComentario;
+window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
