@@ -117,6 +117,7 @@ function enviarComentarioDesdeBoton(inputElement) {
   guardarComentario(inputElement);
 }
 
+
 function guardarComentario(inputElement) {
   const comentario = inputElement.value.trim();
   if (!comentario) return;
@@ -132,17 +133,17 @@ function guardarComentario(inputElement) {
   const timestamp = new Date().toISOString();
 
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-  push(comentarioRef, {
+  set(comentarioRef, {
     estado,
     texto: comentario,
     fecha: timestamp
   })
   .then(() => {
-    console.log(`Comentario guardado en ${indicadorId}:`, comentario);
+    console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
     inputElement.value = "";
   })
   .catch(error => {
-    console.error(`Error al guardar comentario en ${indicadorId}:`, error);
+    console.error(`Error al actualizar comentario en ${indicadorId}:`, error);
   });
 }
 
