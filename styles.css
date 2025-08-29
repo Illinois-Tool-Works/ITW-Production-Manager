@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgb(251, 120, 6);
+  background-color: rgba(251, 120, 6, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
