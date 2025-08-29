@@ -15,14 +15,14 @@
  <div class="indicadores" >
        <div class="indicador" id="indicador100">
   <span class="cuadro" onmouseenter="mostrarTooltip(this)" onmouseleave="ocultarTooltip(this)">48</span>
-  <select onchange="activarComentario(this)">
+  <select onchange="activarComentarioYColor(this, 'indicador100')">
     <option value="gris">No plan</option>
     <option value="rojo">Paro</option>
     <option value="verde">Corriendo</option>
     <option value="azul">Cambio de molde</option>
   </select>
   <input type="text" class="comentario-input" placeholder="Comentario..." onkeydown="guardarAlEnter(event, this)" style="display: none;">
-<div class="tooltip-comentario" style="display: none;"></div>
+  <div class="tooltip-comentario" style="display: none;"></div>
 </div>
 
 
