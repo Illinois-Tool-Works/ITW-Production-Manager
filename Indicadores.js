@@ -1,7 +1,9 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 
-  import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
+  import { getDatabase, ref, set, onValue, push } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
+
+  import { push } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -124,6 +126,8 @@ window.activarComentario = activarComentario;
 window.guardarAlEnter = guardarAlEnter;
 window.mostrarTooltip = mostrarTooltip;
 window.ocultarTooltip = ocultarTooltip;
+window.guardarAlEnter = guardarAlEnter;
+
 
 
 
@@ -169,3 +173,33 @@ window.ocultarTooltip = ocultarTooltip;
     const tooltip = indicador.querySelector('.tooltip-comentario');
     tooltip.style.display = 'none';
   }
+function guardarAlEnter(event, inputElement) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+
+    const comentario = inputElement.value.trim();
+    if (!comentario) return;
+
+    const indicador = inputElement.closest('.indicador');
+    const indicadorId = indicador.id;
+    const estado = indicador.querySelector('select').value;
+    const timestamp = new Date().toISOString();
+
+    const comentarioRef = ref(db, `comentarios/${indicadorId}`);
+    push(comentarioRef, {
+      estado: estado,
+      texto: comentario,
+      fecha: timestamp
+    })
+    .then(() => {
+      inputElement.value = "";
+      inputElement.style.display = 'none';
+
+      const tooltip = indicador.querySelector('.tooltip-comentario');
+      if (tooltip) tooltip.textContent = comentario;
+    })
+    .catch(error => {
+      console.error("Error al guardar:", error);
+    });
+  }
+}
