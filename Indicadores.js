@@ -119,6 +119,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Exponer al ámbito global
 window.activarComentarioYColor = activarComentarioYColor;
+window.cambiarColor = cambiarColor;
+window.activarComentario = activarComentario;
+window.guardarAlEnter = guardarAlEnter;
+window.mostrarTooltip = mostrarTooltip;
+window.ocultarTooltip = ocultarTooltip;
+
 
 
   // Guardar comentario al presionar Enter
