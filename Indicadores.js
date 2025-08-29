@@ -1,4 +1,4 @@
-  // Import the functions you need from the SDKs you need
+   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 
   import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
@@ -25,15 +25,15 @@
 //   console.log('Dato enviado: corriendo');
 // });
 
-// // Función para aplicar el color visualmente al cuadro
-// function cambiarColor(select, id) {
-//   const color = select.value;
-//   const div = document.getElementById(id);
-//   const cuadro = div.querySelector('.cuadro');
-//   if (cuadro) {
-//     cuadro.className = `cuadro ${color}`;
-//   }
-// }
+// Función para aplicar el color visualmente al cuadro
+function cambiarColor(select, id) {
+  const color = select.value;
+  const div = document.getElementById(id);
+  const cuadro = div.querySelector('.cuadro');
+  if (cuadro) {
+    cuadro.className = `cuadro ${color}`;
+  }
+}
 
 
 // Inicializar los primeros 10 indicadores si no existen
@@ -48,19 +48,11 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
-function cambiarColor(select, id) {
-  const color = select.value;
-  const cuadro = document.querySelector(`#${id} .cuadro`);
-  if (cuadro) {
-    cuadro.style.backgroundColor = color;
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   const contenedor = document.querySelector('.indicadores');
   const selects = contenedor.querySelectorAll('.indicador select');
 
-   // Guardar cambios al seleccionar
+  // Guardar cambios al seleccionar
   selects.forEach(select => {
     const id = select.closest('.indicador').id;
     select.addEventListener("change", () => {
