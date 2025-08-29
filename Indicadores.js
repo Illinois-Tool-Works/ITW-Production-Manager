@@ -3,8 +3,6 @@
 
   import { getDatabase, ref, set, onValue, push } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
 
-  import { push } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
-
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,6 +24,14 @@
 //   set(ref(db, 'pruebaEstado'), 'corriendo');
 //   console.log('Dato enviado: corriendo');
 // });
+// Exponer al ámbito global
+window.activarComentarioYColor = activarComentarioYColor;
+window.cambiarColor = cambiarColor;
+window.activarComentario = activarComentario;
+window.guardarAlEnter = guardarAlEnter;
+window.mostrarTooltip = mostrarTooltip;
+window.ocultarTooltip = ocultarTooltip;
+window.guardarAlEnter = guardarAlEnter;
 
 // Función para aplicar el color visualmente al cuadro
 function cambiarColor(select, id) {
@@ -119,14 +125,6 @@ document.addEventListener("DOMContentLoaded", () => {
   activarComentario(selectElement);
 }
 
-// Exponer al ámbito global
-window.activarComentarioYColor = activarComentarioYColor;
-window.cambiarColor = cambiarColor;
-window.activarComentario = activarComentario;
-window.guardarAlEnter = guardarAlEnter;
-window.mostrarTooltip = mostrarTooltip;
-window.ocultarTooltip = ocultarTooltip;
-window.guardarAlEnter = guardarAlEnter;
 
 
 
