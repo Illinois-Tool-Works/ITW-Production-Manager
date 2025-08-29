@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(75, 6, 251, 0.9);
+  background-color: rgba(67, 251, 6, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -49,22 +49,57 @@ h1 {
 .button-group button:hover {
   background-color: #0078D7;
 }
-.indicadores {
+.indicador {
+  margin-bottom: 12px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   position: relative;
-  width: 100%; /* o un ancho fijo si prefieres */
-  height: 300px; /* ajusta según lo que necesites */
-  border: 1px solid white; /* opcional, para visualizar el área */
+}
+
+.cuadro-comentario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.cuadro {
+  width: 30px;
+  height: 30px;
+  background-color: #ddd;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.comentario-visible {
+  font-size: 14px;
+  color: #333;
+  background-color: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  max-width: 250px;
+  white-space: pre-wrap;
+}
+
+/* .indicadores {
+  position: relative;
+  width: 100%;
+  height: 300px; 
+  border: 1px solid white; 
 }
 
 
 .indicador {
   position: absolute;
-  width: 100px; /* ajusta según tu diseño */
+  width: 100px; 
   text-align: center;
-}
+} */
 
 
-.cuadro {
+/* .cuadro {
   width: 50px;
   height: 50px;
   margin-bottom: 10px;
@@ -79,7 +114,7 @@ h1 {
   justify-content: center;
   align-items: center;
 
-}
+} */
 
 .hora-comentario {
   font-size: 0.85em;
@@ -88,7 +123,7 @@ h1 {
   display: none;
 
 }
-.comentario-visible {
+/* .comentario-visible {
   margin-top: 6px;
   font-size: 14px;
   color: #444;
@@ -97,7 +132,7 @@ h1 {
   border-radius: 4px;
   max-width: 200px;
   white-space: pre-wrap;
-}
+} */
 
 /* Colores personalizados */
 .rojo { background-color: red; }
