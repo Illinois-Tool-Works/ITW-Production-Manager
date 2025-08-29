@@ -25,13 +25,7 @@
 //   console.log('Dato enviado: corriendo');
 // });
 // Exponer al ámbito global
-window.activarComentarioYColor = activarComentarioYColor;
-window.cambiarColor = cambiarColor;
-window.activarComentario = activarComentario;
-window.guardarAlEnter = guardarAlEnter;
-window.mostrarTooltip = mostrarTooltip;
-window.ocultarTooltip = ocultarTooltip;
-window.guardarAlEnter = guardarAlEnter;
+
 
 // Función para aplicar el color visualmente al cuadro
 function cambiarColor(select, id) {
@@ -112,92 +106,3 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- // Mostrar campo de comentario al cambiar estado
-  function activarComentario(selectElement) {
-    const indicador = selectElement.closest('.indicador');
-    const input = indicador.querySelector('.comentario-input');
-    input.style.display = 'block';
-    input.focus();
-  }
-  function activarComentarioYColor(selectElement, indicadorId) {
-  cambiarColor(selectElement, indicadorId);
-  activarComentario(selectElement);
-}
-
-
-
-
-
-  // Guardar comentario al presionar Enter
-  function guardarAlEnter(event, inputElement) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault();
-      const comentario = inputElement.value.trim();
-      if (!comentario) return;
-
-      const indicador = inputElement.closest('.indicador');
-      const indicadorId = indicador.id;
-      const estado = indicador.querySelector('select').value;
-      const timestamp = new Date().toISOString();
-
-      db.ref(`comentarios/${indicadorId}`).push({
-        estado: estado,
-        texto: comentario,
-        fecha: timestamp
-      }).then(() => {
-        inputElement.value = "";
-        inputElement.style.display = 'none';
-        const tooltip = indicador.querySelector('.tooltip-comentario');
-        tooltip.textContent = comentario;
-      }).catch(error => {
-        console.error("Error al guardar:", error);
-      });
-    }
-  }
-
-  // Mostrar tooltip al pasar el cursor
-  function mostrarTooltip(spanElement) {
-    const indicador = spanElement.closest('.indicador');
-    const tooltip = indicador.querySelector('.tooltip-comentario');
-    if (tooltip.textContent) {
-      tooltip.style.display = 'block';
-    }
-  }
-
-  // Ocultar tooltip al salir del cursor
-  function ocultarTooltip(spanElement) {
-    const indicador = spanElement.closest('.indicador');
-    const tooltip = indicador.querySelector('.tooltip-comentario');
-    tooltip.style.display = 'none';
-  }
-function guardarAlEnter(event, inputElement) {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-
-    const comentario = inputElement.value.trim();
-    if (!comentario) return;
-
-    const indicador = inputElement.closest('.indicador');
-    const indicadorId = indicador.id;
-    const estado = indicador.querySelector('select').value;
-    const timestamp = new Date().toISOString();
-
-    const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-    push(comentarioRef, {
-      estado: estado,
-      texto: comentario,
-      fecha: timestamp
-    })
-    .then(() => {
-      inputElement.value = "";
-      inputElement.style.display = 'none';
-
-      const tooltip = indicador.querySelector('.tooltip-comentario');
-      if (tooltip) tooltip.textContent = comentario;
-    })
-    .catch(error => {
-      console.error("Error al guardar:", error);
-    });
-  }
-}
