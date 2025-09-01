@@ -164,27 +164,11 @@ function cargarComentario(indicadorId) {
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   onValue(comentarioRef, snapshot => {
     const data = snapshot.val();
-    const texto = data?.texto || "Sin comentario";
-    const fecha = data?.fecha ? new Date(data.fecha) : null;
-
-    let fechaModificacion = "";
-    if (fecha) {
-      const opciones = {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
-      fechaModificacion = fecha.toLocaleString('es-MX', opciones);
-    }
-
-    comentarioBox.innerHTML = `
-      <div>${texto}</div>
-      <small style="color: gray;">Modificado el ${fechaModificacion}</small>
-    `;
+    comentarioBox.textContent = data?.texto || "Sin comentario";
   });
+}
+for (let i = 100; i < 110; i++) {
+  cargarComentario(`indicador${i}`);
 }
 
 document.querySelectorAll('.cuadro').forEach(cuadro => {
