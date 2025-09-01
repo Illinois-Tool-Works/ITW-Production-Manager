@@ -136,7 +136,7 @@ function guardarComentario(inputElement) {
 
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   set(comentarioRef, {
-    estado,
+    estado: estado,
     texto: comentario,
     fecha: timestamp
   })
@@ -164,7 +164,12 @@ function cargarComentario(indicadorId) {
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   onValue(comentarioRef, snapshot => {
     const data = snapshot.val();
-    comentarioBox.textContent = data?.texto || "Sin comentario";
+    const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
+  dateStyle: "medium",
+  timeStyle: "short"
+});
+
+comentarioBox.textContent = `${data?.texto || "Sin comentario"} — ${fechaFormateada}`;
   });
 }
 for (let i = 100; i < 110; i++) {
@@ -179,6 +184,8 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
     }
   });
 });
+
+
 /////////////////////
 
 function validarUsuario(usuarioId, contraseñaIngresada) {
