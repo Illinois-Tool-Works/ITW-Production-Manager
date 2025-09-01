@@ -150,7 +150,7 @@ function guardarComentario(inputElement) {
 
 // ✅ Exponer funciones si usas atributos inline
 window.enviarComentario = enviarComentario;
-window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
+// window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
 
 
 ///////////////////////////mensaje y guardado/////////////////////////////////////////////////////
