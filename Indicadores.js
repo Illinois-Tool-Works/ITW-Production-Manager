@@ -164,19 +164,19 @@ function cargarComentario(indicadorId) {
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   onValue(comentarioRef, snapshot => {
     const data = snapshot.val();
-    comentarioBox.textContent = data?.texto || "Sin comentario";
-  });
-}
-for (let i = 100; i < 110; i++) {
-  cargarComentario(`indicador${i}`);
-}
-document.querySelectorAll('.cuadro').forEach(cuadro => {
-  cuadro.addEventListener('click', () => {
-    const comentario = cuadro.parentElement.querySelector('.comentario-popover');
-    if (comentario) {
-      comentario.style.display = comentario.style.display === 'block' ? 'none' : 'block';
+    const texto = data?.texto || "Sin comentario";
+    const fecha = data?.fecha ? new Date(data.fecha) : null;
+
+    let horaFormateada = "";
+    if (fecha) {
+      const opciones = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      horaFormateada = fecha.toLocaleTimeString('es-MX', opciones);
     }
+
+    comentarioBox.textContent = horaFormateada
+      ? `${texto} — ${horaFormateada}`
+      : texto;
   });
-});
+}
 /////////////////////
 
