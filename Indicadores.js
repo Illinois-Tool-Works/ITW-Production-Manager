@@ -196,7 +196,7 @@ window.desbloquearComentarioInput = async function () {
   const nombre = prompt("Usuario:");
   const contraseña = prompt("Contraseña:");
 
-  const docRef = db.collection("usuarios").doc(nombre);
+  const docRef = doc(db, "usuarios", nombre);
   const docSnap = await docRef.get();
 
   if (!docSnap.exists || docSnap.data().contraseña !== contraseña) {
