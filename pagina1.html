@@ -41,7 +41,7 @@
 </div>
 
 
- <div class="indicador indicador-tamaño" id="indicador102" style="top: 105%; left: 10%;">
+ <div class="indicador indicador-tamaño" id="indicador102" style="top: 100%; left: 10%;">
   <div class="comentario-visible">Sin comentario</div>
 
   <div class="grupo-horizontal">
@@ -62,6 +62,30 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador102')">🔒</button>
+
+  </div>
+</div>
+ <div class="indicador indicador-tamaño" id="indicador103" style="top: 145%; left: 10%;">
+  <div class="comentario-visible">Sin comentario</div>
+
+  <div class="grupo-horizontal">
+    <select disabled onchange="cambiarColor(this, 'indicador103')">
+      <option value="gris">No plan</option>
+      <option value="rojo">Paro</option>
+      <option value="verde">Corriendo</option>
+      <option value="azul">Cambio de molde</option>
+    </select>
+
+    <span class="cuadro">50</span>
+
+    <input type="text"
+           class="comentario-input"
+           data-indicador="indicador103"
+           placeholder="Comentario..."
+           onkeydown="enviarComentario(event, this)"
+           enterkeyhint="send"
+           disabled>
+           <button onclick="desbloquearIndicador('indicador103')">🔒</button>
 
   </div>
 </div>
