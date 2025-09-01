@@ -40,10 +40,35 @@
   </div>
 </div>
 
-        <div class="indicador indicador-tamaño" id="indicador102" style="top: 110%; left: 0%;">
+
+ <div class="indicador indicador-tamaño" id="indicador102" style="top: 65%; left: 10%;">
+  <div class="comentario-visible">Sin comentario</div>
+
+  <div class="grupo-horizontal">
+    <select disabled onchange="cambiarColor(this, 'indicador102')">
+      <option value="gris">No plan</option>
+      <option value="rojo">Paro</option>
+      <option value="verde">Corriendo</option>
+      <option value="azul">Cambio de molde</option>
+    </select>
+
+    <span class="cuadro">49</span>
+
+    <input type="text"
+           class="comentario-input"
+           data-indicador="indicador102"
+           placeholder="Comentario..."
+           onkeydown="enviarComentario(event, this)"
+           enterkeyhint="send"
+           disabled>
+           <button onclick="desbloquearComentarioInput()">🔒</button>
+
+  </div>
+</div>
+        <!-- <div class="indicador indicador-tamaño" id="indicador102" style="top: 110%; left: 0%;">
         <div class="comentario-visible">Sin comentario</div>
          <select onchange="cambiarColor(this, 'indicador102')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select>
-        <div><span class="cuadro">49</span><input type="text"class="comentario-input"data-indicador="indicador102"placeholder="Comentario..."onkeydown="enviarComentario(event, this)"></div>
+        <div><span class="cuadro">49</span><input type="text"class="comentario-input"data-indicador="indicador102"placeholder="Comentario..."onkeydown="enviarComentario(event, this)"></div> -->
        <!-- <div class="indicador" id="indicador103" style="top: 260px; left: 50px;"><span class="cuadro">50</span><select onchange="cambiarColor(this, 'indicador103')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
        <div class="indicador" id="indicador104" style="top: 360px; left: 50px;"><span class="cuadro">51</span><select onchange="cambiarColor(this, 'indicador104')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
        <div class="indicador" id="indicador105" style="top: 460px; left: 50px;"><span class="cuadro">52</span><select onchange="cambiarColor(this, 'indicador105')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
