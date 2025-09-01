@@ -150,8 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // }
 
 // ✅ Exponer funciones si usas atributos inline
-window.enviarComentario = enviarComentario;
-window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
+// window.enviarComentario = enviarComentario;
+// window.enviarComentarioDesdeBoton = enviarComentarioDesdeBoton;
 
 
 ///////////////////////////mensaje y guardado/////////////////////////////////////////////////////
