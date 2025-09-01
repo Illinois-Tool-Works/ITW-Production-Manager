@@ -134,8 +134,9 @@ function guardarComentario(inputElement) {
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
 
-  const comentarioRef = ref(db, `indicadores/${indicadorId}`);
+  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   set(comentarioRef, {
+    estado,
     texto: comentario,
     fecha: timestamp
   })
