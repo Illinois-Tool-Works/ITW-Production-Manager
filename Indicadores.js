@@ -135,6 +135,7 @@ window.enviarComentario = async function (event, input) {
   });
 
   input.value = "";
+  input.disabled = true;
   alert(`Comentario actualizado por ${usuario} en ${indicadorId}`);
 };
 
