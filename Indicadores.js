@@ -191,20 +191,24 @@ async function validarUsuario(nombre, contraseña) {
 }
 
 
-async function desbloquearComentarioInput() {
+window.desbloquearComentarioInput = async function () {
   const nombre = prompt("Usuario:");
   const contraseña = prompt("Contraseña:");
 
-  const acceso = await validarUsuario(nombre, contraseña);
-  if (acceso) {
-    const input = document.querySelector('.comentario-input');
-    input.disabled = false;
-    input.dataset.usuario = nombre; // útil para registrar quién escribe
-    alert("Acceso concedido. Puedes escribir tu comentario.");
-  } else {
+  const docRef = db.collection("usuarios").doc(nombre);
+  const docSnap = await docRef.get();
+
+  if (!docSnap.exists || docSnap.data().contraseña !== contraseña) {
     alert("Credenciales incorrectas. Comentario bloqueado.");
+    return;
   }
-}
+
+  const input = document.querySelector('.comentario-input');
+  input.disabled = false;
+  input.dataset.usuario = nombre;
+  alert("Acceso concedido. Puedes escribir tu comentario.");
+};
+
 
 
 async function guardarComentario() {
