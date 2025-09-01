@@ -170,16 +170,6 @@ function cargarComentario(indicadorId) {
 for (let i = 100; i < 110; i++) {
   cargarComentario(`indicador${i}`);
 }
-let horaModificacion = "";
-    if (fecha) {
-      const opciones = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      horaModificacion = fecha.toLocaleTimeString('es-MX', opciones);
-    }
-
-    comentarioBox.innerHTML = `
-      <div>${texto}</div>
-      <small style="color: gray;">Modificado a las ${horaModificacion}</small>
-    `;
 
 document.querySelectorAll('.cuadro').forEach(cuadro => {
   cuadro.addEventListener('click', () => {
