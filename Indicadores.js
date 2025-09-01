@@ -1,7 +1,7 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 
-  import { getDatabase, ref, set, onValue, push} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
+  import { getDatabase, ref, set, onValue, push, update} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
 
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -108,12 +108,35 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-function enviarComentario(event, inputElement) {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    guardarComentario(inputElement);
-  }
-}
+// function enviarComentario(event, inputElement) {
+//   if (event.key === 'Enter' && !event.shiftKey) {
+//     event.preventDefault();
+//     guardarComentario(inputElement);
+//   }
+// }
+
+window.enviarComentario = async function (event, input) {
+  if (event.key !== "Enter" && !event.shiftKey) return;
+
+  const comentario = input.value.trim();
+  if (!comentario) return;
+
+  const indicadorId = input.dataset.indicador;
+  const usuario = input.dataset.usuario || "desconocido";
+  const timestamp = new Date().toISOString();
+
+  const db = getDatabase();
+  const indicadorRef = ref(db, `indicadores/${indicadorId}`);
+
+  await update(indicadorRef, {
+    texto: comentario,
+    usuario,
+    fecha: timestamp
+  });
+
+  input.value = "";
+  alert(`Comentario actualizado por ${usuario} en ${indicadorId}`);
+};
 
 // function enviarComentarioDesdeBoton(inputElement) {
 //   guardarComentario(inputElement);
