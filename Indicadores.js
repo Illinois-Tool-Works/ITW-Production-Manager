@@ -29,6 +29,7 @@
 
 // Función para aplicar el color visualmente al cuadro
 function cambiarColor(select, id) {
+       select.disabled = true;
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
@@ -58,8 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
   selects.forEach(select => {
     const id = select.closest('.indicador').id;
     select.addEventListener("change", () => {
-             inputElement.disabled = true;
-       select.disabled = true;
       const valor = select.value;
       set(ref(db, `indicadores/${id}`), valor);
       cambiarColor(select, id);
@@ -115,7 +114,6 @@ function enviarComentario(event, inputElement) {
     event.preventDefault();
     guardarComentario(inputElement);
     inputElement.disabled = true;
-    select.disabled = true;
   }
 }
 
