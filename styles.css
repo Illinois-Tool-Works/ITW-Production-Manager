@@ -14,13 +14,24 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   text-align: center;
 }
-.container2 { /*contenedor de fecha y boton back*/
-  background-color: white(255, 255, 255);
+body2 {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;     /* Centra horizontalmente */
+  align-items: flex-start;     /* Alinea arriba */
+  padding-top: 5vh;            /* Espacio desde la parte superior */
+  background-color: #f0f0f0;   /* Fondo opcional para contraste */
+}
+
+.container2 {
+  background-color: white;
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
   text-align: center;
-  position: absolute;;
+  width: clamp(300px, 40%, 600px); /* Tamaño adaptable */
+  max-width: 90vw;                /* Evita que se desborde en pantallas pequeñas */
 }
 
 .button-group {
