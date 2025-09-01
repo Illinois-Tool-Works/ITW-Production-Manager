@@ -246,23 +246,23 @@ async function guardarComentario() {
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
   });
 }
-async function enviarComentario(event, input) {
-  if (event.key !== "Enter") return;
+// async function enviarComentario(event, input) {
+//   if (event.key !== "Enter") return;
 
-  const comentario = input.value;
-  const indicador = input.dataset.indicador;
-  const usuario = input.dataset.usuario || "desconocido";
+//   const comentario = input.value;
+//   const indicador = input.dataset.indicador;
+//   const usuario = input.dataset.usuario || "desconocido";
 
-  await db.collection("comentarios").add({
-    comentario,
-    indicador,
-    usuario,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  });
+//   await db.collection("comentarios").add({
+//     comentario,
+//     indicador,
+//     usuario,
+//     timestamp: firebase.firestore.FieldValue.serverTimestamp()
+//   });
 
-  input.value = "";
-  alert("Comentario guardado.");
-}
+//   input.value = "";
+//   alert("Comentario guardado.");
+// }
 
 
 
