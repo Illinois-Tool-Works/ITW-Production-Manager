@@ -108,12 +108,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// function enviarComentario(event, inputElement) {
-//   if (event.key === 'Enter' && !event.shiftKey) {
-//     event.preventDefault();
-//     guardarComentario(inputElement);
-//   }
-// }
+function enviarComentario(event, inputElement) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    guardarComentario(inputElement);
+  }
+}
 
 window.enviarComentario = async function (event, input) {
   if (event.key !== "Enter" && !event.shiftKey) return;
@@ -152,7 +152,7 @@ function guardarComentario(inputElement) {
     console.warn("Falta data-indicador en el input");
     return;
   }
-
+  const usuario = inputElement.dataset.usuario || "desconocido";
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
@@ -161,7 +161,8 @@ function guardarComentario(inputElement) {
   set(comentarioRef, {
     estado: estado,
     texto: comentario,
-    fecha: timestamp
+    fecha: timestamp,
+    usuario: usuario 
   })
   .then(() => {
     console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
