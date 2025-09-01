@@ -251,6 +251,13 @@ select,
   max-width: 200px;
   white-space: pre-wrap;
 } */
+.indicadores-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  align-items: start;
+}
 
 /* Colores personalizados */
 .rojo { background-color: red; }
