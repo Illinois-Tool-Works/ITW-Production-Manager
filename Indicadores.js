@@ -219,22 +219,17 @@ window.enviarComentario = async function (event, input) {
   const usuario = input.dataset.usuario || "desconocido";
 
   const db = getDatabase();
-  const comentarioRef = push(ref(db, "comentarios"));
+  const indicadorRef = ref(db, `indicadores/${indicador}`);
 
-  await set(comentarioRef, {
-    comentario,
-    indicador,
+  await update(indicadorRef, {
+    texto: comentario,
     usuario,
     timestamp: new Date().toISOString()
   });
 
   input.value = "";
-  alert("Comentario guardado.");
+  alert(`Comentario actualizado en ${indicador}`);
 };
-
-
-
-
 
 async function guardarComentario() {
   const comentario = document.getElementById("comentario-input").value;
