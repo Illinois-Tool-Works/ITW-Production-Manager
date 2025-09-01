@@ -1,7 +1,7 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 
-  import { getDatabase, ref, set, onValue, push } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
+  import { getDatabase, ref, set, onValue, push, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
 
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -181,14 +181,15 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
 });
 /////////////////////
 async function validarUsuario(nombre, contraseña) {
-  const docRef = db.collection("usuarios").doc(nombre);
-  const docSnap = await docRef.get();
+  const docRef = doc(db, "usuarios", nombre);
+  const docSnap = await getDoc(docRef);
 
-  if (!docSnap.exists) return false;
+  if (!docSnap.exists()) return false;
 
   const datos = docSnap.data();
   return datos.contraseña === contraseña;
 }
+
 
 
 window.desbloquearComentarioInput = async function () {
