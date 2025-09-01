@@ -6,16 +6,21 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container2" style="top: -240px; left: 550px;">
+  <div class="container2" style="top: 10%; left: 35%;">
     <h1>Área 1</h1><div id="datetime" >Cargando fecha y hora...</div>
     <div class="button-group">
       <button onclick="location.href='index.html'">Back</button>
     </div>
   </div>
  <div class="indicadores" >
-       <div class="indicador" id="indicador100"><div class="comentario-visible">Sin comentario</div><span class="cuadro">48</span><select onchange="cambiarColor(this, 'indicador100')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select><input type="text"class="comentario-input"data-indicador="indicador100"placeholder="Comentario..."onkeydown="enviarComentario(event, this)"></div>
-
-       <div class="indicador" id="indicador102" style="top: 160px; left: 50px;" ><span class="cuadro">49</span><select onchange="cambiarColor(this, 'indicador102')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select> <input type="text"class="comentario-input"data-indicador="indicador102"placeholder="Comentario..."onkeydown="enviarComentario(event, this)"></div>
+       <div class="indicador indicador-tamaño" id="indicador100" style="top: 55%; left: 10%;">
+        <div class="comentario-visible">Sin comentario</div>
+         <select onchange="cambiarColor(this, 'indicador100')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select>
+        <div><span class="cuadro">48</span><input type="text"class="comentario-input"data-indicador="indicador100"placeholder="Comentario..."onkeydown="enviarComentario(event, this)"></div>
+        <div class="indicador indicador-tamaño" id="indicador102" style="top: 110%; left: 0%;">
+        <div class="comentario-visible">Sin comentario</div>
+         <select onchange="cambiarColor(this, 'indicador102')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select>
+        <div><span class="cuadro">49</span><input type="text"class="comentario-input"data-indicador="indicador102"placeholder="Comentario..."onkeydown="enviarComentario(event, this)"></div>
        <!-- <div class="indicador" id="indicador103" style="top: 260px; left: 50px;"><span class="cuadro">50</span><select onchange="cambiarColor(this, 'indicador103')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
        <div class="indicador" id="indicador104" style="top: 360px; left: 50px;"><span class="cuadro">51</span><select onchange="cambiarColor(this, 'indicador104')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
        <div class="indicador" id="indicador105" style="top: 460px; left: 50px;"><span class="cuadro">52</span><select onchange="cambiarColor(this, 'indicador105')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
