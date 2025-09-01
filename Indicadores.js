@@ -167,6 +167,7 @@ function guardarComentario(inputElement) {
   })
   .then(() => {
     console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
+    input.disabled = true;
     inputElement.value = "";
   })
   .catch(error => {
