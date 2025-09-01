@@ -179,12 +179,4 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
   });
 });
 /////////////////////
-document.getElementById("messageInput").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault(); // Evita salto de línea si es textarea
-    const mensaje = e.target.value;
-    console.log("Mensaje enviado:", mensaje);
-    // Tu lógica de envío
-  }
-});
 
