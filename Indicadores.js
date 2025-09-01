@@ -249,7 +249,7 @@ const input = document.querySelector('.comentario-input');
   input.disabled = false;
   input.dataset.usuario = nombre;
 
-  if (select) select.disabled = false; // ✅ habilita el select
+  select.disabled = false; // ✅ habilita el select
 
   alert(`Bienvenido, ${nombre}. Puedes escribir tu comentario.`);
 };
