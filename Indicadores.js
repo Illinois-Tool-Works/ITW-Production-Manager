@@ -231,7 +231,31 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
   });
 }
 
-window.desbloquearComentarioInput = async function () {
+// window.desbloquearComentarioInput = async function () {
+//   const usuarioId = prompt("ID de usuario:");
+//   const contraseña = prompt("Contraseña:");
+
+//   const nombre = await validarUsuario(usuarioId, contraseña);
+//   if (!nombre) {
+//     alert("Credenciales incorrectas. Comentario bloqueado.");
+//     return;
+//   }
+  
+
+// const input = document.querySelector('.comentario-input');
+//   const indicadorId = input.dataset.indicador;
+//   const indicador = document.getElementById(indicadorId);
+//   const select = indicador?.querySelector("select");
+
+//   input.disabled = false;
+//   input.dataset.usuario = nombre;
+
+//   select.disabled = false; // ✅ habilita el select
+
+//   alert(`Bienvenido, ${nombre}. Puedes escribir tu comentario.`);
+// };
+
+window.desbloquearIndicador = async function (indicadorId) {
   const usuarioId = prompt("ID de usuario:");
   const contraseña = prompt("Contraseña:");
 
@@ -240,25 +264,22 @@ window.desbloquearComentarioInput = async function () {
     alert("Credenciales incorrectas. Comentario bloqueado.");
     return;
   }
+
   const indicador = document.getElementById(indicadorId);
   if (!indicador) {
     alert(`No se encontró el indicador "${indicadorId}".`);
     return;
   }
 
+  const input = indicador.querySelector('.comentario-input');
+  const select = indicador.querySelector('select');
 
-const input = document.querySelector('.comentario-input');
-  const indicadorId = input.dataset.indicador;
-  const select = indicador?.querySelector("select");
+    input.disabled = false;
+    input.dataset.usuario = nombre;
+    select.disabled = false;
 
-  input.disabled = false;
-  input.dataset.usuario = nombre;
-
-  select.disabled = false; // ✅ habilita el select
-
-  alert(`Bienvenido, ${nombre}. Puedes escribir tu comentario.`);
+  alert(`Bienvenido, ${nombre}. Puedes editar el indicador ${indicadorId}.`);
 };
-
 
 
 
