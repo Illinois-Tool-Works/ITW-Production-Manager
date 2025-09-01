@@ -240,10 +240,15 @@ window.desbloquearComentarioInput = async function () {
     alert("Credenciales incorrectas. Comentario bloqueado.");
     return;
   }
+  const indicador = document.getElementById(indicadorId);
+  if (!indicador) {
+    alert(`No se encontró el indicador "${indicadorId}".`);
+    return;
+  }
+
 
 const input = document.querySelector('.comentario-input');
   const indicadorId = input.dataset.indicador;
-  const indicador = document.getElementById(indicadorId);
   const select = indicador?.querySelector("select");
 
   input.disabled = false;
