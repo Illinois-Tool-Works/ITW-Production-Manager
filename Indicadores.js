@@ -184,12 +184,10 @@ function validarUsuario(nombre, contraseña) {
   return new Promise((resolve) => {
     const userRef = ref(db, `usuarios/${nombre}`);
     onValue(userRef, (snapshot) => {
-      const datos = snapshot.val();
-      if (!datos) return resolve(false);
-      resolve(datos.contraseña === contraseña);
-    }, {
-      onlyOnce: true
-    });
+      const valor = snapshot.val();
+      if (!valor) return resolve(false);
+      resolve(valor === contraseña);
+    }, { onlyOnce: true });
   });
 }
 
@@ -211,6 +209,7 @@ window.desbloquearComentarioInput = async function () {
   input.dataset.usuario = nombre;
   alert("Acceso concedido. Puedes escribir tu comentario.");
 };
+
 
 
 
