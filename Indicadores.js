@@ -241,9 +241,16 @@ window.desbloquearComentarioInput = async function () {
     return;
   }
 
-  const input = document.querySelector('.comentario-input');
+const input = document.querySelector('.comentario-input');
+  const indicadorId = input.dataset.indicador;
+  const indicador = document.getElementById(indicadorId);
+  const select = indicador?.querySelector("select");
+
   input.disabled = false;
   input.dataset.usuario = nombre;
+
+  if (select) select.disabled = false; // ✅ habilita el select
+
   alert(`Bienvenido, ${nombre}. Puedes escribir tu comentario.`);
 };
 
