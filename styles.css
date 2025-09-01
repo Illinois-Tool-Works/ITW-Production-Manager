@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(35, 251, 6, 0.9);
+  background-color: rgba(39, 6, 251, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -117,7 +117,7 @@ h1 {
   margin-bottom: 1em;
   padding: 1em;
   border: 1px solid #ccc;
-   min-height: 120px; /* asegura espacio vertical mínimo */
+   min-height: 220px; /* asegura espacio vertical mínimo */
   border-radius: 6px;
   position: relative;
   box-sizing: border-box;
