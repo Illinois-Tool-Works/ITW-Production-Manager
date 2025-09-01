@@ -13,10 +13,27 @@
     </div>
   </div>
  <div class="indicadores" >
-       <div class="indicador indicador-tamaño" id="indicador100" style="top: 55%; left: 10%;">
-        <div class="comentario-visible">Sin comentario</div>
-         <select onchange="cambiarColor(this, 'indicador100')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select>
-        <div><span class="cuadro">48</span><input type="text"class="comentario-input"data-indicador="indicador100"placeholder="Comentario..."onkeydown="enviarComentario(event, this)"></div>
+  <div class="indicador indicador-tamaño" id="indicador100" style="top: 55%; left: 10%;">
+  <div class="comentario-visible">Sin comentario</div>
+
+  <div class="grupo-horizontal">
+    <select onchange="cambiarColor(this, 'indicador100')">
+      <option value="gris">No plan</option>
+      <option value="rojo">Paro</option>
+      <option value="verde">Corriendo</option>
+      <option value="azul">Cambio de molde</option>
+    </select>
+
+    <span class="cuadro">48</span>
+
+    <input type="text"
+           class="comentario-input"
+           data-indicador="indicador100"
+           placeholder="Comentario..."
+           onkeydown="enviarComentario(event, this)">
+  </div>
+</div>
+
         <div class="indicador indicador-tamaño" id="indicador102" style="top: 110%; left: 0%;">
         <div class="comentario-visible">Sin comentario</div>
          <select onchange="cambiarColor(this, 'indicador102')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select>

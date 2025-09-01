@@ -96,11 +96,11 @@ h1 {
 } */
 
 /* Indicadores */
-.indicadores-wrapper {
+/* .indicadores-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1em;
-}
+} */
 
 .indicador {
   margin-bottom: 1em;
@@ -144,26 +144,47 @@ h1 {
   gap: 0.75em;
   flex-wrap: wrap;
 }
-.comentario-input {
-  width: 159px;     /* tamaño fijo */
-  height: 10px;     /* altura del campo */
-  font-size: 0.9em; /* tamaño de texto */
-  padding: 4px 8px;
-  position: absolute;
-  top: 65px;     /* distancia desde el top del contenedor */
-  left: 63px;   /* distancia desde la izquierda */
-  font-size: 20px;
-}
+
 .comentario-visible {
-  font-size: 20px;  /* tamaño fijo */
+  font-size: 0.9rem;
+  color: #333;
 }
 
-.indicador select {
-  position: absolute;
-  top: 40px;     /* distancia desde el top del contenedor */
-  left: 63px;   /* distancia desde la izquierda */
-  font-size: 20px; /* tamaño fijo */
+.grupo-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
 }
+
+select,
+.cuadro,
+.comentario-input {
+  flex: 1 1 auto;
+  min-width: 100px;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+/* .comentario-input {
+  width: 159px;     
+  height: 10px;     
+  font-size: 0.9em; 
+  padding: 4px 8px;
+  top: 65px;    
+  left: 63px;  
+  font-size: 20px;
+} */
+.comentario-visible {
+  font-size: 20px; 
+}
+
+
+/* .indicador select {
+  top: 40px;    
+  left: 63px;   
+  font-size: 20px; 
+} */
 
 .cuadro:hover {
   transform: scale(1.1);
