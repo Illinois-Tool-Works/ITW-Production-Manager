@@ -21,7 +21,7 @@ body2 {
   justify-content: center;     /* Centra horizontalmente */
   align-items: flex-start;     /* Alinea arriba */
   padding-top: 5vh;            /* Espacio desde la parte superior */
-  background-color: #f0f0f0;   /* Fondo opcional para contraste */
+  background-color: white;   /* Fondo opcional para contraste */
 }
 
 .container2 {
