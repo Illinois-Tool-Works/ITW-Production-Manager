@@ -20,7 +20,7 @@ body2 {
   display: flex;
   justify-content: center;     /* Centra horizontalmente */
   align-items: flex-start;     /* Alinea arriba */
-  padding-top: 4vh;            /* Espacio desde la parte superior */
+  padding-top: 10%;            /* Espacio desde la parte superior */
   background-color: white;   /* Fondo opcional para contraste */
 }
 
