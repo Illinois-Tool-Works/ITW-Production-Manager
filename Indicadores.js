@@ -211,14 +211,16 @@ window.desbloquearComentarioInput = async function () {
   alert(`Bienvenido, ${nombre}. Puedes escribir tu comentario.`);
 };
 
-async function enviarComentario(event, input) {
+window.enviarComentario = async function (event, input) {
   if (event.key !== "Enter") return;
 
   const comentario = input.value;
   const indicador = input.dataset.indicador;
   const usuario = input.dataset.usuario || "desconocido";
 
+  const db = getDatabase();
   const comentarioRef = push(ref(db, "comentarios"));
+
   await set(comentarioRef, {
     comentario,
     indicador,
@@ -228,7 +230,8 @@ async function enviarComentario(event, input) {
 
   input.value = "";
   alert("Comentario guardado.");
-}
+};
+
 
 
 
