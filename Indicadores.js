@@ -180,26 +180,27 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
   });
 });
 /////////////////////
-function validarUsuario(nombre, contraseña) {
+
+function validarUsuario(usuarioId, contraseñaIngresada) {
   return new Promise((resolve) => {
-    const userRef = ref(db, `usuarios/${nombre}`);
+    const userRef = ref(db, `usuarios/${usuarioId}`);
     onValue(userRef, (snapshot) => {
-      const valor = snapshot.val();
-      if (!valor) return resolve(false);
-      resolve(valor === contraseña);
+      const datos = snapshot.val();
+      if (!datos || datos.contraseña !== contraseñaIngresada) {
+        resolve(false);
+      } else {
+        resolve(datos.nombre); // Devuelve el nombre si es válido
+      }
     }, { onlyOnce: true });
   });
 }
 
-
-
-
 window.desbloquearComentarioInput = async function () {
-  const nombre = prompt("Usuario:");
+  const usuarioId = prompt("ID de usuario:");
   const contraseña = prompt("Contraseña:");
 
-  const acceso = await validarUsuario(nombre, contraseña);
-  if (!acceso) {
+  const nombre = await validarUsuario(usuarioId, contraseña);
+  if (!nombre) {
     alert("Credenciales incorrectas. Comentario bloqueado.");
     return;
   }
@@ -207,9 +208,27 @@ window.desbloquearComentarioInput = async function () {
   const input = document.querySelector('.comentario-input');
   input.disabled = false;
   input.dataset.usuario = nombre;
-  alert("Acceso concedido. Puedes escribir tu comentario.");
+  alert(`Bienvenido, ${nombre}. Puedes escribir tu comentario.`);
 };
 
+async function enviarComentario(event, input) {
+  if (event.key !== "Enter") return;
+
+  const comentario = input.value;
+  const indicador = input.dataset.indicador;
+  const usuario = input.dataset.usuario || "desconocido";
+
+  const comentarioRef = push(ref(db, "comentarios"));
+  await set(comentarioRef, {
+    comentario,
+    indicador,
+    usuario,
+    timestamp: new Date().toISOString()
+  });
+
+  input.value = "";
+  alert("Comentario guardado.");
+}
 
 
 
