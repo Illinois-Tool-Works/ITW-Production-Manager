@@ -191,10 +191,8 @@ function cargarComentario(indicadorId) {
   dateStyle: "medium",
   timeStyle: "short"
 });
-const autor = data?.usuario || "anónimo";
 
-comentarioBox.textContent = `${texto} — ${autor}, ${fecha}`;
-
+comentarioBox.textContent = `${data?.texto || "Sin comentario"} — ${fechaFormateada}`;
   });
 }
 for (let i = 100; i < 110; i++) {
