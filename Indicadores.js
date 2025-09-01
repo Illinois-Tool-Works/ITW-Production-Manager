@@ -188,14 +188,14 @@ function cargarComentario(indicadorId) {
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   onValue(comentarioRef, snapshot => {
     const data = snapshot.val();
+    const autor = data?.usuario;
     const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
   dateStyle: "medium",
   timeStyle: "short"
-});
-const autor = data?.usuario || "anónimo";
+}
+);
 
-comentarioBox.textContent = `${texto} — ${autor}, ${fecha}`;
-
+comentarioBox.textContent = `${data?.texto || "Sin comentario"} —${autor} ,${fechaFormateada}`;
   });
 }
 for (let i = 100; i < 110; i++) {
