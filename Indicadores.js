@@ -108,46 +108,46 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
-function enviarComentario(event, inputElement) {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    guardarComentario(inputElement);
-  }
-}
+// function enviarComentario(event, inputElement) {
+//   if (event.key === 'Enter' && !event.shiftKey) {
+//     event.preventDefault();
+//     guardarComentario(inputElement);
+//   }
+// }
 
-function enviarComentarioDesdeBoton(inputElement) {
-  guardarComentario(inputElement);
-}
+// function enviarComentarioDesdeBoton(inputElement) {
+//   guardarComentario(inputElement);
+// }
 
 
-function guardarComentario(inputElement) {
-  const comentario = inputElement.value.trim();
-  if (!comentario) return;
+// function guardarComentario(inputElement) {
+//   const comentario = inputElement.value.trim();
+//   if (!comentario) return;
 
-  const indicadorId = inputElement.dataset.indicador;
-  if (!indicadorId) {
-    console.warn("Falta data-indicador en el input");
-    return;
-  }
+//   const indicadorId = inputElement.dataset.indicador;
+//   if (!indicadorId) {
+//     console.warn("Falta data-indicador en el input");
+//     return;
+//   }
 
-  const indicador = document.getElementById(indicadorId);
-  const estado = indicador?.querySelector("select")?.value || "manual";
-  const timestamp = new Date().toISOString();
+//   const indicador = document.getElementById(indicadorId);
+//   const estado = indicador?.querySelector("select")?.value || "manual";
+//   const timestamp = new Date().toISOString();
 
-  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-  set(comentarioRef, {
-    estado,
-    texto: comentario,
-    fecha: timestamp
-  })
-  .then(() => {
-    console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
-    inputElement.value = "";
-  })
-  .catch(error => {
-    console.error(`Error al actualizar comentario en ${indicadorId}:`, error);
-  });
-}
+//   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
+//   set(comentarioRef, {
+//     estado,
+//     texto: comentario,
+//     fecha: timestamp
+//   })
+//   .then(() => {
+//     console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
+//     inputElement.value = "";
+//   })
+//   .catch(error => {
+//     console.error(`Error al actualizar comentario en ${indicadorId}:`, error);
+//   });
+// }
 
 // ✅ Exponer funciones si usas atributos inline
 window.enviarComentario = enviarComentario;
@@ -180,4 +180,61 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
   });
 });
 /////////////////////
+async function validarUsuario(nombre, contraseña) {
+  const docRef = db.collection("usuarios").doc(nombre);
+  const docSnap = await docRef.get();
+
+  if (!docSnap.exists) return false;
+
+  const datos = docSnap.data();
+  return datos.contraseña === contraseña;
+}
+
+
+async function desbloquearComentarioInput() {
+  const nombre = prompt("Usuario:");
+  const contraseña = prompt("Contraseña:");
+
+  const acceso = await validarUsuario(nombre, contraseña);
+  if (acceso) {
+    const input = document.querySelector('.comentario-input');
+    input.disabled = false;
+    input.dataset.usuario = nombre; // útil para registrar quién escribe
+    alert("Acceso concedido. Puedes escribir tu comentario.");
+  } else {
+    alert("Credenciales incorrectas. Comentario bloqueado.");
+  }
+}
+
+
+async function guardarComentario() {
+  const comentario = document.getElementById("comentario-input").value;
+  const usuario = "Brandon nava huerta"; // puedes guardar esto al autenticar
+
+  await db.collection("comentarios").add({
+    comentario,
+    usuario,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+async function enviarComentario(event, input) {
+  if (event.key !== "Enter") return;
+
+  const comentario = input.value;
+  const indicador = input.dataset.indicador;
+  const usuario = input.dataset.usuario || "desconocido";
+
+  await db.collection("comentarios").add({
+    comentario,
+    indicador,
+    usuario,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  input.value = "";
+  alert("Comentario guardado.");
+}
+
+
+
 
