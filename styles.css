@@ -255,7 +255,7 @@ select,
 .mapa-indicadores {
   position: relative;
   width: 100%;
-  height: 2000px; /* ajusta según tu plano */
+  height: 3000px; /* ajusta según tu plano */
   overflow: auto;
 }
 
