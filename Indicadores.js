@@ -1,7 +1,7 @@
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 
-  import { getDatabase, ref, set, onValue, push, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
+  import { getDatabase, ref, set, onValue, push} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
 
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
@@ -180,15 +180,19 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
   });
 });
 /////////////////////
-async function validarUsuario(nombre, contraseña) {
-  const docRef = doc(db, "usuarios", nombre);
-  const docSnap = await getDoc(docRef);
-
-  if (!docSnap.exists()) return false;
-
-  const datos = docSnap.data();
-  return datos.contraseña === contraseña;
+function validarUsuario(nombre, contraseña) {
+  return new Promise((resolve) => {
+    const userRef = ref(db, `usuarios/${nombre}`);
+    onValue(userRef, (snapshot) => {
+      const datos = snapshot.val();
+      if (!datos) return resolve(false);
+      resolve(datos.contraseña === contraseña);
+    }, {
+      onlyOnce: true
+    });
+  });
 }
+
 
 
 
@@ -196,10 +200,8 @@ window.desbloquearComentarioInput = async function () {
   const nombre = prompt("Usuario:");
   const contraseña = prompt("Contraseña:");
 
-  const docRef = doc(db, "usuarios", nombre);
-  const docSnap = await docRef.get();
-
-  if (!docSnap.exists || docSnap.data().contraseña !== contraseña) {
+  const acceso = await validarUsuario(nombre, contraseña);
+  if (!acceso) {
     alert("Credenciales incorrectas. Comentario bloqueado.");
     return;
   }
@@ -209,6 +211,7 @@ window.desbloquearComentarioInput = async function () {
   input.dataset.usuario = nombre;
   alert("Acceso concedido. Puedes escribir tu comentario.");
 };
+
 
 
 
