@@ -142,7 +142,7 @@ h1 {
   width: auto; /* o un porcentaje si quieres que escale */
   max-width: calc(100% - 10%); /* evita que se desborde */
   box-sizing: border-box;
-  margin-top: -925%;
+  margin-top: -900%;
 }
 .indicador-tamaño {
   width: 260px;
