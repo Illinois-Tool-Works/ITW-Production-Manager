@@ -200,14 +200,13 @@ window.enviarComentario = async function (event, input) {
 
   const db = getDatabase();
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
-  const registroRef = ref(db, `registro/${indicadorId}/${timestamp}`);
   await update(indicadorRef, {
     texto: comentario,
     usuario,
     fecha: timestamp
   });
-
-    await update(registroRef, {
+  const registroRef = ref(db, `registro/${indicadorId}`);
+    await push(registroRef, {
     texto: comentario,
     usuario,
     fecha: timestamp
