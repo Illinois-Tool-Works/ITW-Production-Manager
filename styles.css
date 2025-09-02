@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgb(237, 214, 181);
+  background-color: rgb(181, 237, 193);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -142,7 +142,7 @@ h1 {
   width: auto; /* o un porcentaje si quieres que escale */
   max-width: calc(100% - 10%); /* evita que se desborde */
   box-sizing: border-box;
-  margin-top: -1000%;
+  margin-top: -925%;
 }
 .indicador-tamaño {
   width: 260px;
