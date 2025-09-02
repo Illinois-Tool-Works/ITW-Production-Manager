@@ -129,17 +129,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Detectar cambios y guardar en Firebase
 document.addEventListener("DOMContentLoaded", () => {
-  const contenedor = document.querySelector('.indicadores');
-  const selects = contenedor.querySelectorAll('.indicador select');
-  selects.forEach(select => {
-    const id = select.closest('.indicador').id;
-    select.addEventListener("change", () => {
-      const valor = select.value;
-      set(ref(db, `indicadores/${id}`), valor);
-      cambiarColor(select, id);
+  const columnas = document.querySelectorAll('.indicadores');
+
+  columnas.forEach(contenedor => {
+    const selects = contenedor.querySelectorAll('.indicador select');
+
+    selects.forEach(select => {
+      const id = select.closest('.indicador').id;
+      select.addEventListener("change", () => {
+        const valor = select.value;
+        set(ref(db, `indicadores/${id}`), valor);
+        cambiarColor(select, id);
+      });
     });
   });
 });
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function enviarComentario(event, inputElement) {
