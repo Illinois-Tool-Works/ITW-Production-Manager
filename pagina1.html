@@ -698,18 +698,18 @@
   }
 
   // Al cargar la página, aplicar colores guardados
-  window.onload = function () {
-    for (let i = 100; i <= 110; i++) {
-      const id = 'indicador' + i;
-      const colorGuardado = localStorage.getItem(id);
-      if (colorGuardado) {
-        const cuadro = document.querySelector(`#${id} .cuadro`);
-        const select = document.querySelector(`#${id} select`);
-        cuadro.className = 'cuadro ' + colorGuardado;
-        select.value = colorGuardado;
-      }
-    }
-  };
+  // window.onload = function () {
+  //   for (let i = 100; i <= 110; i++) {
+  //     const id = 'indicador' + i;
+  //     const colorGuardado = localStorage.getItem(id);
+  //     if (colorGuardado) {
+        // const cuadro = document.querySelector(`#${id} .cuadro`);
+  //       const select = document.querySelector(`#${id} select`);
+  //       cuadro.className = 'cuadro ' + colorGuardado;
+  //       select.value = colorGuardado;
+  //     }
+  //   }
+  // };
 
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
