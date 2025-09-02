@@ -142,7 +142,7 @@ h1 {
   width: auto; /* o un porcentaje si quieres que escale */
   max-width: calc(100% - 10%); /* evita que se desborde */
   box-sizing: border-box;
-  margin-top: -900%;
+  margin-top: -923%;
 }
 .indicadores3{
   position: absolute; /* o relative, según tu layout */
@@ -150,11 +150,11 @@ h1 {
   width: auto; /* o un porcentaje si quieres que escale */
   max-width: calc(100% - 10%); /* evita que se desborde */
   box-sizing: border-box;
-  margin-top: -900%;
+  margin-top: -923%;
 }
 .indicador-tamaño {
   width: 260px;
-  max-width: 150%;
+  max-width: 200%;
 }
 
 
