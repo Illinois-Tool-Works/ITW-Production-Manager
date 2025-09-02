@@ -33,7 +33,7 @@ body2 {
   width: clamp(300px, 40%, 600px); /* Tamaño adaptable */
   max-width: 90vw;                /* Evita que se desborde en pantallas pequeñas */
   position: relative;
-  left: 30%;
+  left: 10%;
 }
 
 .button-group {
@@ -123,12 +123,17 @@ h1 {
   border-radius: 6px;
   position: relative;
   box-sizing: border-box;
-  left: -250%;
+  left: 10%;
    /*margin-top: 130%;*/ 
 
 }
 .indicadores{
-  margin-top: 45%;
+  position: absolute; /* o relative, según tu layout */
+  left: 10%;
+  width: auto; /* o un porcentaje si quieres que escale */
+  max-width: calc(100% - 10%); /* evita que se desborde */
+  box-sizing: border-box;
+  margin-top: 25%;
 }
 .indicador-tamaño {
   width: 260px;
