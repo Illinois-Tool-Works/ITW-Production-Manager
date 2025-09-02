@@ -402,7 +402,14 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
   XLSX.writeFile(libro, `registro_${new Date().toISOString().slice(0, 10)}.xlsx`);
 
   // 🧹 Eliminar registros
-  await remove(ref(db, 'registro'));
-  alert("Registro exportado y limpiado correctamente.");
+   try {
+    await remove(ref(db, 'registro'));
+    console.log("Registro eliminado correctamente.");
+    alert("Registro exportado y limpiado.");
+  } catch (error) {
+    console.error("Error al eliminar registro:", error.message);
+    alert("Hubo un problema al eliminar los registros.");
+  }
 });
+
 
