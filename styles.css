@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 .container {
-  background-color: rgba(39, 6, 251, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -136,6 +136,14 @@ h1 {
   box-sizing: border-box;
   margin-top: 30%;
 }
+.indicadores2{
+  position: absolute; /* o relative, según tu layout */
+  left: 200%;
+  width: auto; /* o un porcentaje si quieres que escale */
+  max-width: calc(100% - 10%); /* evita que se desborde */
+  box-sizing: border-box;
+  margin-top: -830%;
+}
 .indicador-tamaño {
   width: 260px;
   max-width: 100%;
@@ -182,6 +190,7 @@ h1 {
   align-items: center;
   gap: 0.5rem;
 }
+
 
 select,
 .cuadro,

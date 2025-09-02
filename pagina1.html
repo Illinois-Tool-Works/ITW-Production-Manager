@@ -15,10 +15,10 @@
 </div>
 
   <div class="indicadores" >
-  <div class mapa-indicadores>
-  <div class="indicador indicador-tamaño" id="indicador100" >
-  <div class="comentario-visible">Sin comentario</div>
-  <div class="grupo-horizontal">
+   <div class mapa-indicadores>
+   <div class="indicador indicador-tamaño" id="indicador100" >
+   <div class="comentario-visible">Sin comentario</div>
+   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador100')">
       <option value="gris">No plan</option>
       <option value="rojo">Paro</option>
@@ -33,7 +33,8 @@
            onkeydown="enviarComentario(event, this)"
            enterkeyhint="send"
            disabled>
-           <button onclick="desbloquearIndicador('indicador100')">🔒</button></div></div>
+           <button onclick="desbloquearIndicador('indicador100')">🔒</button></div>
+    </div> 
  <div class="indicador indicador-tamaño" id="indicador101">
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
@@ -160,6 +161,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador107')">🔒</button></div></div>
+
         <!-- <div class="indicador indicador-tamaño" id="indicador102" style="top: 110%; left: 0%;">
         <div class="comentario-visible">Sin comentario</div>
          <select onchange="cambiarColor(this, 'indicador102')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select>
@@ -194,8 +196,29 @@
        <div class="indicador" id="indicador130" style="top: 260px; left: 650px;"><span class="cuadro">43</span><select onchange="cambiarColor(this, 'indicador130')"><option value="gris">No plan</option><option value="rojo">Paro</option><option value="verde">Corriendo</option><option value="azul">Cambio de molde</option></select></div>
       </div> -->
   </div>
+  <div class="indicadores2">
+    <div class="indicador indicador-tamaño" id="indicador108">
+     <div class="comentario-visible">Sin comentario</div>
+      <div class="grupo-horizontal">
+        <select disabled onchange="cambiarColor(this, 'indicador108')">
+        <option value="gris">No plan</option>
+        <option value="rojo">Paro</option>
+        <option value="verde">Corriendo</option>
+        <option value="azul">Cambio de molde</option>
+        </select>
+          <span class="cuadro">108</span>
+            <input type="text"
+             class="comentario-input"
+             data-indicador="indicador108"
+             placeholder="Comentario..."
+             onkeydown="enviarComentario(event, this)"
+             enterkeyhint="send"
+             disabled>
+           <button onclick="desbloquearIndicador('indicador108')">🔒</button>
+     </div>
+   </div>
     <script type="module" src="Indicadores.js"></script>
-
+  </div>
   <script>
     function actualizarFechaHora() {
       const ahora = new Date();
