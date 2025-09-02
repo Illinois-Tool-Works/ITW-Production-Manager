@@ -34,6 +34,7 @@ body2 {
   max-width: 90vw;                /* Evita que se desborde en pantallas pequeñas */
   position: relative;
   left: 10%;
+  margin-top: 1%;
 }
 
 .button-group {
@@ -133,7 +134,7 @@ h1 {
   width: auto; /* o un porcentaje si quieres que escale */
   max-width: calc(100% - 10%); /* evita que se desborde */
   box-sizing: border-box;
-  margin-top: 35%;
+  margin-top: 30%;
 }
 .indicador-tamaño {
   width: 260px;
