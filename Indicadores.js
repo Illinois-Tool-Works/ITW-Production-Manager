@@ -369,5 +369,40 @@ window.desbloquearIndicador = async function (indicadorId) {
   alert(`Bienvenido, ${nombre}. Puedes editar el indicador ${indicadorId}.`);
 };
 
+////////////////////registro////////////////
+document.getElementById("btnRegistro").addEventListener("click", async () => {
+  const db = getDatabase();
+  const snapshot = await get(ref(db, 'registro'));
 
+  if (!snapshot.exists()) {
+    alert("No hay registros para exportar.");
+    return;
+  }
+
+  const registros = snapshot.val();
+  const filas = [];
+
+  Object.entries(registros).forEach(([indicadorId, entradas]) => {
+    Object.entries(entradas).forEach(([clave, datos]) => {
+      filas.push({
+        Indicador: indicadorId,
+        Estado: datos.estado,
+        Comentario: datos.texto,
+        Usuario: datos.usuario,
+        Fecha: datos.fecha
+      });
+    });
+  });
+
+  // 🧾 Generar Excel
+  const hoja = XLSX.utils.json_to_sheet(filas);
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, "Registro");
+
+  XLSX.writeFile(libro, `registro_${new Date().toISOString().slice(0, 10)}.xlsx`);
+
+  // 🧹 Eliminar registros
+  await remove(ref(db, 'registro'));
+  alert("Registro exportado y limpiado correctamente.");
+});
 
