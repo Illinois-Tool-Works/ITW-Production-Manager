@@ -138,15 +138,15 @@ h1 {
 }
 .indicadores2{
   position: absolute; /* o relative, según tu layout */
-  left: 200%;
+  left: 150%;
   width: auto; /* o un porcentaje si quieres que escale */
   max-width: calc(100% - 10%); /* evita que se desborde */
   box-sizing: border-box;
-  margin-top: -830%;
+  margin-top: -825%;
 }
 .indicador-tamaño {
   width: 260px;
-  max-width: 100%;
+  max-width: 150%;
 }
 
 
