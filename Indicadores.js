@@ -199,6 +199,12 @@ window.enviarComentario = async function (event, input) {
   const timestamp = new Date().toISOString();
 
   const db = getDatabase();
+  const comentarioData = {
+    texto: comentario,
+    usuario,
+    fecha: timestamp
+  };
+
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
   await update(indicadorRef, {
     texto: comentario,
@@ -206,11 +212,8 @@ window.enviarComentario = async function (event, input) {
     fecha: timestamp
   });
   const registroRef = ref(db, `registro/${indicadorId}`);
-    await push(registroRef, {
-    texto: comentario,
-    usuario,
-    fecha: timestamp
-  });
+   await push(registroRef, comentarioData);
+
 
   input.value = "";
   input.disabled = true;
