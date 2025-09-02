@@ -214,8 +214,26 @@
              onkeydown="enviarComentario(event, this)"
              enterkeyhint="send"
              disabled>
-           <button onclick="desbloquearIndicador('indicador108')">🔒</button>
-     </div>
+           <button onclick="desbloquearIndicador('indicador108')">🔒</button></div></div>
+
+           <div class="indicador indicador-tamaño" id="indicador109">
+  <div class="comentario-visible">Sin comentario</div>
+  <div class="grupo-horizontal">
+    <select disabled onchange="cambiarColor(this, 'indicador109')">
+      <option value="gris">No plan</option>
+      <option value="rojo">Paro</option>
+      <option value="verde">Corriendo</option>
+      <option value="azul">Cambio de molde</option>
+    </select>
+    <span class="cuadro">42</span>
+    <input type="text"
+           class="comentario-input"
+           data-indicador="indicador109"
+           placeholder="Comentario..."
+           onkeydown="enviarComentario(event, this)"
+           enterkeyhint="send"
+           disabled>
+           <button onclick="desbloquearIndicador('indicador109')">🔒</button></div></div>
    </div>
     <script type="module" src="Indicadores.js"></script>
   </div>
