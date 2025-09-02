@@ -126,6 +126,8 @@ h1 {
   box-sizing: border-box;
   left: 10%;
    /*margin-top: 130%;*/ 
+  width: 60%;
+  overflow-wrap: break-word;
 
 }
 .indicadores{
@@ -152,18 +154,18 @@ h1 {
   box-sizing: border-box;
   margin-top: -923%;
 }
-.indicador-tamaño {
+/* .indicador-tamaño {
   width: 260px;
   max-width: 200%;
-}
+} */
 
 
 /* Indicadores */
-.indicadores-wrapper {
+/* .indicadores-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1em;
-}
+} */
 
 .cuadro {
   width: 100px;
