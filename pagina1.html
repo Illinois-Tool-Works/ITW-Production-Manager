@@ -14,9 +14,9 @@
   </div>
 </div>
 
- <div class="indicadores" >
+  <div class="indicadores" >
   <div class mapa-indicadores>
-  <div class="indicador indicador-tamaño" id="indicador100" style="top: 150%; left: 10%;">
+  <div class="indicador indicador-tamaño" id="indicador100" >
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador100')">
@@ -34,7 +34,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador100')">🔒</button></div></div>
- <div class="indicador indicador-tamaño" id="indicador101" style="top: 200%; left: 10%;">
+ <div class="indicador indicador-tamaño" id="indicador101">
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador101')">
@@ -52,7 +52,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador102')">🔒</button></div></div>
- <div class="indicador indicador-tamaño" id="indicador102" style="top: 250%; left: 10%;">
+ <div class="indicador indicador-tamaño" id="indicador102" >
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador102')">
@@ -70,7 +70,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador102')">🔒</button></div></div>
-           <div class="indicador indicador-tamaño" id="indicador103" style="top: 300%; left: 10%;">
+           <div class="indicador indicador-tamaño" id="indicador103">
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador103')">
@@ -88,7 +88,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador103')">🔒</button></div></div>
-          <div class="indicador indicador-tamaño" id="indicador104" style="top: 300%; left: 10%;">
+          <div class="indicador indicador-tamaño" id="indicador104">
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador104')">
@@ -106,7 +106,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador104')">🔒</button></div></div>
-           <div class="indicador indicador-tamaño" id="indicador105" style="top: 300%; left: 10%;">
+           <div class="indicador indicador-tamaño" id="indicador105">
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador105')">
@@ -124,7 +124,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador105')">🔒</button></div></div>
-           <div class="indicador indicador-tamaño" id="indicador106" style="top: 300%; left: 10%;">
+           <div class="indicador indicador-tamaño" id="indicador106">
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador106')">
@@ -142,7 +142,7 @@
            enterkeyhint="send"
            disabled>
            <button onclick="desbloquearIndicador('indicador106')">🔒</button></div></div>
-           <div class="indicador indicador-tamaño" id="indicador107" style="top: 300%; left: 10%;">
+           <div class="indicador indicador-tamaño" id="indicador107">
   <div class="comentario-visible">Sin comentario</div>
   <div class="grupo-horizontal">
     <select disabled onchange="cambiarColor(this, 'indicador107')">
@@ -223,7 +223,7 @@
 
   // Al cargar la página, aplicar colores guardados
   window.onload = function () {
-    for (let i = 100; i <= 102; i++) {
+    for (let i = 100; i <= 110; i++) {
       const id = 'indicador' + i;
       const colorGuardado = localStorage.getItem(id);
       if (colorGuardado) {

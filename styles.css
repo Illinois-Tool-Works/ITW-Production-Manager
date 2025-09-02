@@ -32,6 +32,8 @@ body2 {
   text-align: center;
   width: clamp(300px, 40%, 600px); /* Tamaño adaptable */
   max-width: 90vw;                /* Evita que se desborde en pantallas pequeñas */
+  position: relative;
+  left: 30%;
 }
 
 .button-group {
@@ -114,13 +116,19 @@ h1 {
 } */
 
 .indicador {
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   padding: 1em;
   border: 1px solid #ccc;
-   min-height: 220px; /* asegura espacio vertical mínimo */
+   min-height: 100%; 
   border-radius: 6px;
   position: relative;
   box-sizing: border-box;
+  left: -250%;
+   /*margin-top: 130%;*/ 
+
+}
+.indicadores{
+  margin-top: 60%;
 }
 .indicador-tamaño {
   width: 260px;
@@ -142,7 +150,7 @@ h1 {
   color: #fff;
   text-align: center;
   line-height: 50px;
-  border-radius: 5%;
+  border-radius: 2%;
   font-weight: bold;
   font-size: clamp(1em, 6vw, 2.5em);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
