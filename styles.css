@@ -144,6 +144,14 @@ h1 {
   box-sizing: border-box;
   margin-top: -925%;
 }
+.indicadores3{
+  position: absolute; /* o relative, según tu layout */
+  left: 150%;
+  width: auto; /* o un porcentaje si quieres que escale */
+  max-width: calc(100% - 10%); /* evita que se desborde */
+  box-sizing: border-box;
+  margin-top: -925%;
+}
 .indicador-tamaño {
   width: 260px;
   max-width: 150%;
