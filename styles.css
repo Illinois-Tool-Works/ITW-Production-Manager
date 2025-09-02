@@ -25,7 +25,7 @@ body2 {
 }
 
 .container2 {
-  background-color: rgb(233, 232, 175);
+  background-color: rgb(190, 175, 233);
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -130,30 +130,30 @@ h1 {
   overflow-wrap: break-word;
 
 }
-.indicadores{
-  position: absolute; /* o relative, según tu layout */
+/* .indicadores{
+  position: absolute;
   left: 0%;
-  width: auto; /* o un porcentaje si quieres que escale */
-  max-width: calc(100% - 10%); /* evita que se desborde */
+  width: auto; 
+  max-width: calc(100% - 10%); 
   box-sizing: border-box;
   margin-top: 30%;
 }
 .indicadores2{
-  position: absolute; /* o relative, según tu layout */
+  position: absolute;
   left: 150%;
-  width: auto; /* o un porcentaje si quieres que escale */
-  max-width: calc(100% - 10%); /* evita que se desborde */
+  width: auto; 
+  max-width: calc(100% - 10%); 
   box-sizing: border-box;
   margin-top: -923%;
 }
 .indicadores3{
-  position: absolute; /* o relative, según tu layout */
+  position: absolute; 
   left: 300%;
-  width: auto; /* o un porcentaje si quieres que escale */
-  max-width: calc(100% - 10%); /* evita que se desborde */
+  width: auto; 
+  max-width: calc(100% - 10%);
   box-sizing: border-box;
   margin-top: -923%;
-}
+} */
 /* .indicador-tamaño {
   width: 260px;
   max-width: 200%;
