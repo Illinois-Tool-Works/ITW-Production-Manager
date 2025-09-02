@@ -250,9 +250,18 @@ function guardarComentario(inputElement) {
     console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
     inputElement.value = "";
   })
+
   .catch(error => {
     console.error(`Error al actualizar comentario en ${indicadorId}:`, error);
   });
+
+  const registroRef = push(ref(db, `registro/${indicadorId}`));
+  set(registroRef, {
+    estado: estado,
+    texto: comentario,
+    fecha: timestamp,
+    usuario: usuario 
+  })
 }
 
 // ✅ Exponer funciones si usas atributos inline
