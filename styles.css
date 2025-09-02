@@ -25,7 +25,7 @@ body2 {
 }
 
 .container2 {
-  background-color: rgb(175, 231, 233);
+  background-color: rgb(255, 255, 255);
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
@@ -126,7 +126,7 @@ h1 {
   box-sizing: border-box;
   left: 10%;
    /*margin-top: 130%;*/ 
-  width: 60%;
+  width: 80%;
   overflow-wrap: break-word;
 
 }
