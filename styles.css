@@ -174,7 +174,7 @@ h1 {
   background-color: #4a90e2;
   color: #fff;
   text-align: center;
-  line-height: 50px;
+  line-height: 75px;
   border-radius: 2%;
   font-weight: bold;
   font-size: clamp(1em, 6vw, 2.5em);
