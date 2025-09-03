@@ -41,7 +41,7 @@ function cambiarColor(select, id) {
 
 // Inicializar los primeros 10 indicadores si no existen
 function inicializarIndicadores(estados) {
-  for (let i = 1; i <= 130; i++) {
+  for (let i = 1; i <= 131; i++) {
     const id = `indicador${i}`;
     if (!estados || !estados[id]) {
       set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
@@ -289,7 +289,7 @@ function cargarComentario(indicadorId) {
 comentarioBox.textContent = `${data?.texto || "Sin comentario"} —${autor} ,${fechaFormateada}`;
   });
 }
-for (let i = 1; i < 130; i++) {
+for (let i = 1; i < 131; i++) {
   cargarComentario(`indicador${i}`);
 }
 
