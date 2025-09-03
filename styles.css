@@ -1,17 +1,24 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: white;
+   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   margin: 0;
+  margin: 0;
+  height: 100vh;
+  background-image: url('https://seeklogo.com/images/I/itw-logo-FD3AC83802-seeklogo.com.png'); /* Cambia esto por tu imagen */
+  background-size: cover;       /* La imagen cubre toda la pantalla */
+  background-repeat: no-repeat; /* Evita que se repita */
+  background-position: center;  /* Centra la imagen */
+
 }
 .container {
   background-color: rgb(255, 255, 255);
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 15px rgba(201, 198, 198, 0.4);
   text-align: center;
 }
 body2 {
