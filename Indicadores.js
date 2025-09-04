@@ -12,75 +12,69 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-// function cambiarColor(select, id) {
-//        select.disabled = true;
-//   const color = select.value;
-//   const div = document.getElementById(id);
-//   const cuadro = div.querySelector('.cuadro');
-//   if (cuadro) {
-//     cuadro.className = `cuadro ${color}`;
-//   }
-// }
-const estadosColor = {
-  gris: "No plan",
-  rojo: "Paro",
-  verde: "Corriendo",
-  azul: "Cambio de molde"
-};
 function cambiarColor(select, id) {
+       select.disabled = true;
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
   if (cuadro) {
     cuadro.className = `cuadro ${color}`;
   }
-
-  const input = div.querySelector('.comentario-input');
-  const usuario = input?.dataset?.usuario || "Desconocido";
-
-  const ahora = new Date();
-  const fechaHora = ahora.toLocaleString('es-MX', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
-
-  const estadosColor = {
-    gris: "No plan",
-    rojo: "Paro",
-    verde: "Corriendo",
-    azul: "Cambio de molde"
-  };
-
-  const estado = estadosColor[color] || color;
-
-  // 🔥 Guardar en Firebase
-  const refIndicador = ref(db, `indicadores/${id}`);
-  set(refIndicador, {
-    estado,
-    usuario,
-    fechaHora
-  });
-
-  console.log(`🕒 ${usuario} seleccionó "${estado}" en ${id} el ${fechaHora}`);
 }
-// elr comentarioVisible2 en firebase
-document.querySelectorAll(".indicador").forEach(indicador => {
-  const id = indicador.id;
-  const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
+// const estadosColor = {
+//   gris: "No plan",
+//   rojo: "Paro",
+//   verde: "Corriendo",
+//   azul: "Cambio de molde"
+// };
+// function cambiarColor(select, id) {
 
-  const refIndicador = ref(db, `indicadores/${id}`);
-  onValue(refIndicador, (snapshot) => {
-    const datos = snapshot.val();
-    if (!datos || !comentarioVisible2) return;
+//   const color = select.value;
+//   const div = document.getElementById(id);
+//   const cuadro = div.querySelector('.cuadro');
+//   if (cuadro) {
+//     cuadro.className = `cuadro ${color}`;
+//   }
 
-    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fechaHora}`;
-    comentarioVisible2.classList.remove("oculto");
-  });
-});
+//   const input = div.querySelector('.comentario-input');
+//   const usuario = input?.dataset?.usuario || "Desconocido";
+
+//   const ahora = new Date();
+//   const hora = ahora.toLocaleTimeString('es-MX', {
+//     hour: '2-digit',
+//     minute: '2-digit',
+//     second: '2-digit'
+//   });
+
+//   const estadosColor = {
+//     gris: "No plan",
+//     rojo: "Paro",
+//     verde: "Corriendo",
+//     azul: "Cambio de molde"
+//   };
+
+//   const estado = estadosColor[color] || color;
+
+//   const comentarioVisible2 = div.querySelector('.comentario-visible2');
+//   if (comentarioVisible2) {
+//     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
+//     comentarioVisible2.classList.remove("oculto");
+//   }
+
+//   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
+// }
+
+// Inicializar los primeros 10 indicadores si no existen
+function inicializarIndicadores(estados) {
+  for (let i = 1; i <= 140; i++) {
+    const id = `indicador${i}`;
+    if (!estados || !estados[id]) {
+      set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
+    }
+  }
+}
+import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+
 // document.addEventListener("DOMContentLoaded", () => {
 //   // Selecciona todos los contenedores de columnas
 //   const columnas = document.querySelectorAll('.indicadores');
@@ -186,11 +180,22 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!id) return;
 
       // Guardar cambios al seleccionar
-      select.addEventListener("change", () => {
-        const valor = select.value;
-        set(ref(db, `indicadores/${id}`), valor);
-        cambiarColor(select, id);
-      });
+     const ahora = new Date().toLocaleString('es-MX', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit'
+});
+
+const usuario = select.closest('.indicador').querySelector('.comentario-input')?.dataset?.usuario || "Desconocido";
+
+set(ref(db, `indicadores/${id}`), {
+  estado: valor,
+  usuario,
+  fechaHora: ahora
+});
     });
   });
 
@@ -351,50 +356,29 @@ document.addEventListener("DOMContentLoaded", () => {
   let edicionActiva = false;
   let nombreUsuario = null;
 
-  const activarBtn = document.getElementById("activarEdicion");
+  // Activar edición con validación
+  document.getElementById("activarEdicion").addEventListener("click", async () => {
+    const usuarioId = prompt("ID de usuario:");
+    const contraseña = prompt("Contraseña:");
 
-  activarBtn.addEventListener("click", async () => {
-    if (!edicionActiva) {
-      // Activar edición → solicitar credenciales
-      const usuarioId = prompt("ID de usuario:");
-      const contraseña = prompt("Contraseña:");
-
-      const nombre = await validarUsuario(usuarioId, contraseña);
-      if (!nombre) {
-        alert("Credenciales incorrectas. Comentarios bloqueados.");
-        return;
-      }
-
-      nombreUsuario = nombre;
-      edicionActiva = true;
-
-      activarBtn.classList.add("activo");
-      activarBtn.textContent = "Desactivar edición";
-      activarBtn.style.backgroundColor = "#dc3545"; // rojo
-      activarBtn.style.color = "white";
-
-      document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
-        el.disabled = false;
-        if (el.classList.contains("comentario-input")) {
-          el.dataset.usuario = nombreUsuario;
-        }
-      });
-
-      alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
-    } else {
-      // Desactivar edición → sin credenciales
-      edicionActiva = false;
-      nombreUsuario = null;
-
-      activarBtn.classList.remove("activo");
-      activarBtn.textContent = "Activar edición";
-      activarBtn.style.backgroundColor = ""; // color original
-      activarBtn.style.color = "";
-
-      document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
-        el.disabled = true;
-      });
+    const nombre = await validarUsuario(usuarioId, contraseña);
+    if (!nombre) {
+      alert("Credenciales incorrectas. Comentarios bloqueados.");
+      return;
     }
+
+    edicionActiva = true;
+    nombreUsuario = nombre;
+
+    // Habilitar todos los campos visibles
+    document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
+      el.disabled = false;
+      if (el.classList.contains("comentario-input")) {
+        el.dataset.usuario = nombreUsuario;
+      }
+    });
+
+    alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
   });
 
   // Mostrar campos al hacer clic en el cuadro
