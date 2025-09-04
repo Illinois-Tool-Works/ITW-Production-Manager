@@ -12,21 +12,21 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-// function cambiarColor(select, id) {
-//        select.disabled = true;
-//   const color = select.value;
-//   const div = document.getElementById(id);
-//   const cuadro = div.querySelector('.cuadro');
-//   if (cuadro) {
-//     cuadro.className = `cuadro ${color}`;
-//   }
-// }
-const estadosColor = {
-  gris: "No plan",
-  rojo: "Paro",
-  verde: "Corriendo",
-  azul: "Cambio de molde"
-};
+function cambiarColor(select, id) {
+       select.disabled = true;
+  const color = select.value;
+  const div = document.getElementById(id);
+  const cuadro = div.querySelector('.cuadro');
+  if (cuadro) {
+    cuadro.className = `cuadro ${color}`;
+  }
+}
+// const estadosColor = {
+//   gris: "No plan",
+//   rojo: "Paro",
+//   verde: "Corriendo",
+//   azul: "Cambio de molde"
+// };
 // function cambiarColor(select, id) {
 //   // select.disabled = true;
 
@@ -68,76 +68,77 @@ const estadosColor = {
 //   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" el ${fechaHora}`);
 // }
 
-function cambiarColor(select, id) {
-  const color = select.value;
-  const div = document.getElementById(id);
-  const cuadro = div.querySelector('.cuadro');
-  if (cuadro) {
-    cuadro.className = `cuadro ${color}`;
-  }
+// function cambiarColor(select, id) {
+  
+//   const color = select.value;
+//   const div = document.getElementById(id);
+//   const cuadro = div.querySelector('.cuadro');
+//   if (cuadro) {
+//     cuadro.className = `cuadro ${color}`;
+//   }
 
-  const input = div.querySelector('.comentario-input');
-  const usuario = input?.dataset?.usuario || "Desconocido";
+//   const input = div.querySelector('.comentario-input');
+//   const usuario = input?.dataset?.usuario || "Desconocido";
 
-  const fecha = new Date().toLocaleString('es-MX', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
+//   const fecha = new Date().toLocaleString('es-MX', {
+//     day: '2-digit',
+//     month: '2-digit',
+//     year: 'numeric',
+//     hour: '2-digit',
+//     minute: '2-digit',
+//     second: '2-digit'
+//   });
 
-  const estadosColor = {
-    gris: "No plan",
-    rojo: "Paro",
-    verde: "Corriendo",
-    azul: "Cambio de molde"
-  };
+//   const estadosColor = {
+//     gris: "No plan",
+//     rojo: "Paro",
+//     verde: "Corriendo",
+//     azul: "Cambio de molde"
+//   };
 
-  const estado = estadosColor[color] || color;
+//   const estado = estadosColor[color] || color;
 
-  // 🔥 Guardar en Firebase bajo comentariosIndicadores/{id}
-  const db = getDatabase();
-  const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
-  get(comentarioRef).then(snapshot => {
-    const datosPrevios = snapshot.val();
+//   // 🔥 Guardar en Firebase bajo comentariosIndicadores/{id}
+//   const db = getDatabase();
+//   const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
+//   get(comentarioRef).then(snapshot => {
+//     const datosPrevios = snapshot.val();
 
-    if (
-      datosPrevios &&
-      datosPrevios.estado === estado &&
-      datosPrevios.usuario === usuario
-    ) {
-      console.log(`🔄 No se guardó porque no hubo cambio en ${id}`);
-      return;
-    }
+//     if (
+//       datosPrevios &&
+//       datosPrevios.estado === estado &&
+//       datosPrevios.usuario === usuario
+//     ) {
+//       console.log(`🔄 No se guardó porque no hubo cambio en ${id}`);
+//       return;
+//     }
 
-    // ✅ Guardar en Firebase si hubo cambio
-    set(comentarioRef, {
-      estado,
-      usuario,
-      fecha
-    });
+//     // ✅ Guardar en Firebase si hubo cambio
+//     set(comentarioRef, {
+//       estado,
+//       usuario,
+//       fecha
+//     });
 
-    console.log(`✅ Estado guardado: ${usuario} → "${estado}" el ${fecha}`);
-  });
-}
-/////////////////////////// 
+//     console.log(`✅ Estado guardado: ${usuario} → "${estado}" el ${fecha}`);
+//   });
+// }
+// /////////////////////////// 
 
-//leer comentario-visible2
-document.querySelectorAll(".indicador").forEach(indicador => {
-  const id = indicador.id;
-  const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
+// //leer comentario-visible2
+// document.querySelectorAll(".indicador").forEach(indicador => {
+//   const id = indicador.id;
+//   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-  const refComentario = ref(db, `comentariosIndicadores/${id}`);
-  onValue(refComentario, (snapshot) => {
-    const datos = snapshot.val();
-    if (!datos || !comentarioVisible2) return;
+//   const refComentario = ref(db, `comentariosIndicadores/${id}`);
+//   onValue(refComentario, (snapshot) => {
+//     const datos = snapshot.val();
+//     if (!datos || !comentarioVisible2) return;
 
-    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-    // comentarioVisible2.classList.remove("oculto");
-  });
-});
+//     comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
+//     // comentarioVisible2.classList.remove("oculto");
+//   });
+// });
 
 
 
@@ -263,10 +264,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Guardar cambios al seleccionar
       select.addEventListener("change", () => {
-        const valor = select.value;
-        set(ref(db, `indicadores/${id}`), valor);
-        cambiarColor(select, id);
-      });
+  const valor = select.value;
+
+  // 🔄 Guardar solo el valor en la ruta principal
+  set(ref(db, `indicadores/${id}`), valor);
+
+  // ✅ Guardar estado completo en ruta secundaria
+  const input = select.closest('.indicador').querySelector('.comentario-input');
+  const usuario = input?.dataset?.usuario || "Desconocido";
+
+  const fechaHora = new Date().toLocaleString('es-MX', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  const estadosColor = {
+    gris: "No plan",
+    rojo: "Paro",
+    verde: "Corriendo",
+    azul: "Cambio de molde"
+  };
+
+  const estado = estadosColor[valor] || valor;
+
+  const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
+  set(comentarioRef, {
+    estado,
+    usuario,
+    fechaHora
+  });
+
+  cambiarColor(select, id);
+});
     });
   });
 
@@ -282,6 +315,19 @@ document.addEventListener("DOMContentLoaded", () => {
         cambiarColor(select, id);
       }
     });
+  });
+});
+document.querySelectorAll(".indicador").forEach(indicador => {
+  const id = indicador.id;
+  const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
+
+  const refComentario = ref(db, `comentariosIndicadores/${id}`);
+  onValue(refComentario, (snapshot) => {
+    const datos = snapshot.val();
+    if (!datos || !comentarioVisible2) return;
+
+    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fechaHora}`;
+    comentarioVisible2.classList.remove("oculto");
   });
 });
 
