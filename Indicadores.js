@@ -418,7 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const indicador = document.getElementById("indicador48");
 
   cuadro.addEventListener("click", (e) => {
-    e.stopPropagation(); // evita que el clic se propague al documento
+    e.stopPropagation(); // evita que el clic se 
     const ocultos = indicador.querySelectorAll(".oculto");
     ocultos.forEach(el => {
       el.classList.remove("oculto");
