@@ -47,12 +47,14 @@ function cambiarColor(select, id) {
     second: '2-digit'
   });
 
-  const estado = estadosColor[color] || color;
+  const estadosColor = {
+    gris: "No plan",
+    rojo: "Paro",
+    verde: "Corriendo",
+    azul: "Cambio de molde"
+  };
 
-  const comentarioVisible = div.querySelector('.comentario-visible');
-  if (comentarioVisible) {
-    comentarioVisible.textContent = `Último cambio: ${usuario} → "${estado}" a las ${hora}`;
-  }
+  const estado = estadosColor[color] || color;
 
   const comentarioVisible2 = div.querySelector('.comentario-visible2');
   if (comentarioVisible2) {
@@ -62,16 +64,6 @@ function cambiarColor(select, id) {
 
   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
 }
-// Inicializar los primeros 10 indicadores si no existen
-function inicializarIndicadores(estados) {
-  for (let i = 1; i <= 140; i++) {
-    const id = `indicador${i}`;
-    if (!estados || !estados[id]) {
-      set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
-    }
-  }
-}
-
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
 // document.addEventListener("DOMContentLoaded", () => {
