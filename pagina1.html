@@ -125,53 +125,57 @@
              disabled>
       </div>
     </div>
+      </div></div>
 
     <!-- Columna 3 -->
    <div class="col-12 col-md-3 mb-3">
       <div id="indicadores3" class="indicadores" class="d-flex flex-column gap-3">
-        <div class="indicador indicador-tamaño" id="indicador44" class="indicador bg-light p-2 rounded shadow-sm">
-     <div class="comentario-visible">Sin comentario</div>
+           <div class="indicador indicador-tamaño" id="indicador44" class="indicador bg-light p-2 rounded shadow-sm">
+     <div class="comentario-visible oculto">Sin comentario</div>
       <div class="grupo-horizontal">
-        <select disabled onchange="cambiarColor(this, 'indicador44')">
+        <select class="oculto" disabled onchange="cambiarColor(this, 'indicador44')">
         <option value="gris">No plan</option>
         <option value="rojo">Paro</option>
         <option value="verde">Corriendo</option>
         <option value="azul">Cambio de molde</option>
         </select>
-          <span class="cuadro">44</span>
+          <span class="cuadro" data-indicador="indicador44">108</span>
             <input type="text"
-             class="comentario-input"
+             class="comentario-input oculto"
              data-indicador="indicador44"
              placeholder="Comentario..."
              onkeydown="enviarComentario(event, this)"
              enterkeyhint="send"
              disabled>
-           <button onclick="desbloquearIndicador('indicador44')">🔒</button></div></div>
-       
+      </div>
+    </div>
+
       </div>
     </div>
         <!-- Columna 4 -->
    <div class="col-12 col-md-3 mb-3">
       <div id="indicadores4" class="indicadores" class="d-flex flex-column gap-3">
-        <div class="indicador indicador-tamaño" id="indicador43" class="indicador bg-light p-2 rounded shadow-sm">
-     <div class="comentario-visible">Sin comentario</div>
+        
+           <div class="indicador indicador-tamaño" id="indicador43" class="indicador bg-light p-2 rounded shadow-sm">
+     <div class="comentario-visible oculto">Sin comentario</div>
       <div class="grupo-horizontal">
-        <select disabled onchange="cambiarColor(this, 'indicador43')">
+        <select class="oculto" disabled onchange="cambiarColor(this, 'indicador43')">
         <option value="gris">No plan</option>
         <option value="rojo">Paro</option>
         <option value="verde">Corriendo</option>
         <option value="azul">Cambio de molde</option>
         </select>
-          <span class="cuadro">43</span>
+          <span class="cuadro" data-indicador="indicador43">108</span>
             <input type="text"
-             class="comentario-input"
+             class="comentario-input oculto"
              data-indicador="indicador43"
              placeholder="Comentario..."
              onkeydown="enviarComentario(event, this)"
              enterkeyhint="send"
              disabled>
-           <button onclick="desbloquearIndicador('indicador43')">🔒</button></div></div>
-        
+      </div>
+    </div>
+
       </div>
     </div>
   </div>
