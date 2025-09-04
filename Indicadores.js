@@ -462,3 +462,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+////////////////////////////
+document.addEventListener("DOMContentLoaded", () => {
+  const activarBtn = document.getElementById("activarCampos");
+
+  activarBtn.addEventListener("click", () => {
+    const selects = document.querySelectorAll(".indicador select");
+    const inputs = document.querySelectorAll(".indicador input");
+
+    selects.forEach(select => select.disabled = false);
+    inputs.forEach(input => input.disabled = false);
+  });
+});
+ 
