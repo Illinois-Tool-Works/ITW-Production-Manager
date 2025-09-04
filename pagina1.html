@@ -107,9 +107,9 @@
    <div class="col-12 col-md-3 mb-3">
       <div id="indicadores2" class="indicadores" class="d-flex flex-column gap-3">
         <div class="indicador indicador-tamaño" id="indicador108" class="indicador bg-light p-2 rounded shadow-sm">
-     <div class="comentario-visible">Sin comentario</div>
+     <div class="comentario-visible oculto">Sin comentario</div>
       <div class="grupo-horizontal">
-        <select disabled onchange="cambiarColor(this, 'indicador108')">
+        <select clase="oculto" disabled onchange="cambiarColor(this, 'indicador108')">
         <option value="gris">No plan</option>
         <option value="rojo">Paro</option>
         <option value="verde">Corriendo</option>
@@ -117,13 +117,12 @@
         </select>
           <span class="cuadro">108</span>
             <input type="text"
-             class="comentario-input"
+             class="comentario-input oculto"
              data-indicador="indicador108"
              placeholder="Comentario..."
              onkeydown="enviarComentario(event, this)"
              enterkeyhint="send"
              disabled>
-           <button onclick="desbloquearIndicador('indicador108')">🔒</button></div></div>
       </div>
     </div>
 
