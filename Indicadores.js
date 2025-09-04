@@ -27,9 +27,48 @@ const estadosColor = {
   verde: "Corriendo",
   azul: "Cambio de molde"
 };
-function cambiarColor(select, id) {
-  select.disabled = true;
+// function cambiarColor(select, id) {
+//   // select.disabled = true;
 
+//   const color = select.value;
+//   const div = document.getElementById(id);
+//   const cuadro = div.querySelector('.cuadro');
+//   if (cuadro) {
+//     cuadro.className = `cuadro ${color}`;
+//   }
+
+//   const input = div.querySelector('.comentario-input');
+//   const usuario = input?.dataset?.usuario || "Desconocido";
+
+//   const ahora = new Date();
+//   const fechaHora = ahora.toLocaleString('es-MX', {
+//     day: '2-digit',
+//     month: '2-digit',
+//     year: 'numeric',
+//     hour: '2-digit',
+//     minute: '2-digit',
+//     second: '2-digit'
+//   });
+
+//   const estadosColor = {
+//     gris: "No plan",
+//     rojo: "Paro",
+//     verde: "Corriendo",
+//     azul: "Cambio de molde"
+//   };
+
+//   const estado = estadosColor[color] || color;
+
+//   const comentarioVisible2 = div.querySelector('.comentario-visible2');
+//   if (comentarioVisible2) {
+//     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" el ${fechaHora}`;
+//     // comentarioVisible2.classList.remove("oculto");
+//   }
+
+//   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" el ${fechaHora}`);
+// }
+
+function cambiarColor(select, id) {
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
@@ -40,8 +79,7 @@ function cambiarColor(select, id) {
   const input = div.querySelector('.comentario-input');
   const usuario = input?.dataset?.usuario || "Desconocido";
 
-  const ahora = new Date();
-  const fechaHora = ahora.toLocaleString('es-MX', {
+  const fecha = new Date().toLocaleString('es-MX', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -59,14 +97,40 @@ function cambiarColor(select, id) {
 
   const estado = estadosColor[color] || color;
 
-  const comentarioVisible2 = div.querySelector('.comentario-visible2');
-  if (comentarioVisible2) {
-    comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" el ${fechaHora}`;
-    comentarioVisible2.classList.remove("oculto");
-  }
+  // 🔥 Guardar en Firebase bajo comentariosIndicadores/{id}
+  const db = getDatabase();
+  const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
+  set(comentarioRef, {
+    estado,
+    usuario,
+    fecha
+  });
 
-  console.log(`🕒 ${usuario} cambió ${id} a "${estado}" el ${fechaHora}`);
+  console.log(`✅ Estado guardado: ${usuario} → "${estado}" el ${fecha}`);
 }
+/////////////////////////// 
+
+//leer comentario-visible2
+document.querySelectorAll(".indicador").forEach(indicador => {
+  const id = indicador.id;
+  const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
+
+  const refComentario = ref(db, `comentariosIndicadores/${id}`);
+  onValue(refComentario, (snapshot) => {
+    const datos = snapshot.val();
+    if (!datos || !comentarioVisible2) return;
+
+    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
+    comentarioVisible2.classList.remove("oculto");
+  });
+});
+
+
+
+
+
+
+
 // Inicializar los primeros 10 indicadores si no existen
 function inicializarIndicadores(estados) {
   for (let i = 1; i <= 140; i++) {
