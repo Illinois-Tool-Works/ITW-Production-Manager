@@ -12,16 +12,45 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+// function cambiarColor(select, id) {
+//        select.disabled = true;
+//   const color = select.value;
+//   const div = document.getElementById(id);
+//   const cuadro = div.querySelector('.cuadro');
+//   if (cuadro) {
+//     cuadro.className = `cuadro ${color}`;
+//   }
+// }
 function cambiarColor(select, id) {
-       select.disabled = true;
+  // Aplica el color al cuadro
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
   if (cuadro) {
     cuadro.className = `cuadro ${color}`;
   }
-}
 
+  // Obtener el nombre del usuario desde el input
+  const input = div.querySelector('.comentario-input');
+  const usuario = input?.dataset?.usuario || "Desconocido";
+
+  // Obtener la hora actual
+  const ahora = new Date();
+  const hora = ahora.toLocaleTimeString('es-MX', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  // Mostrar el registro en el comentario-visible
+  const comentarioVisible = div.querySelector('.comentario-visible');
+  if (comentarioVisible) {
+    comentarioVisible.textContent = `Último cambio: ${usuario} → "${color}" a las ${hora}`;
+  }
+
+  // Opcional: guardar en Firebase o log interno si lo deseas
+  console.log(`🕒 ${usuario} cambió ${id} a "${color}" a las ${hora}`);
+}
 
 // Inicializar los primeros 10 indicadores si no existen
 function inicializarIndicadores(estados) {
