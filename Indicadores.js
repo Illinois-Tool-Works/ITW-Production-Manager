@@ -100,30 +100,44 @@ function cambiarColor(select, id) {
   // 🔥 Guardar en Firebase bajo comentariosIndicadores/{id}
   const db = getDatabase();
   const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
-  set(comentarioRef, {
-    estado,
-    usuario,
-    fecha
-  });
+  get(comentarioRef).then(snapshot => {
+    const datosPrevios = snapshot.val();
 
-  console.log(`✅ Estado guardado: ${usuario} → "${estado}" el ${fecha}`);
+    if (
+      datosPrevios &&
+      datosPrevios.estado === estado &&
+      datosPrevios.usuario === usuario
+    ) {
+      console.log(`🔄 No se guardó porque no hubo cambio en ${id}`);
+      return;
+    }
+
+    // ✅ Guardar en Firebase si hubo cambio
+    set(comentarioRef, {
+      estado,
+      usuario,
+      fecha
+    });
+
+    console.log(`✅ Estado guardado: ${usuario} → "${estado}" el ${fecha}`);
+  });
 }
 /////////////////////////// 
 
-// //leer comentario-visible2
-// document.querySelectorAll(".indicador").forEach(indicador => {
-//   const id = indicador.id;
-//   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
+//leer comentario-visible2
+document.querySelectorAll(".indicador").forEach(indicador => {
+  const id = indicador.id;
+  const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-//   const refComentario = ref(db, `comentariosIndicadores/${id}`);
-//   onValue(refComentario, (snapshot) => {
-//     const datos = snapshot.val();
-//     if (!datos || !comentarioVisible2) return;
+  const refComentario = ref(db, `comentariosIndicadores/${id}`);
+  onValue(refComentario, (snapshot) => {
+    const datos = snapshot.val();
+    if (!datos || !comentarioVisible2) return;
 
-//     comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-//     comentarioVisible2.classList.remove("oculto");
-//   });
-// });
+    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
+    // comentarioVisible2.classList.remove("oculto");
+  });
+});
 
 
 
