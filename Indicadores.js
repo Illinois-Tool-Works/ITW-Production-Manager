@@ -46,14 +46,6 @@ function cambiarColor(select, id) {
     minute: '2-digit',
     second: '2-digit'
   });
-
-  const estado = estadosColor[color] || color;
-
-  const comentarioVisible = div.querySelector('.comentario-visible');
-  if (comentarioVisible) {
-    comentarioVisible.textContent = `Último cambio: ${usuario} → "${estado}" a las ${hora}`;
-  }
-
   const comentarioVisible2 = div.querySelector('.comentario-visible2');
   if (comentarioVisible2) {
     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
