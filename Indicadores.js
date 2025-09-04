@@ -304,15 +304,31 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
 }
 document.addEventListener("DOMContentLoaded", () => {
   let edicionActiva = false;
+  let nombreUsuario = null;
 
-  // Activar edición global
-  document.getElementById("activarEdicion").addEventListener("click", () => {
+  // Activar edición con validación
+  document.getElementById("activarEdicion").addEventListener("click", async () => {
+    const usuarioId = prompt("ID de usuario:");
+    const contraseña = prompt("Contraseña:");
+
+    const nombre = await validarUsuario(usuarioId, contraseña);
+    if (!nombre) {
+      alert("Credenciales incorrectas. Comentarios bloqueados.");
+      return;
+    }
+
     edicionActiva = true;
+    nombreUsuario = nombre;
 
     // Habilitar todos los campos visibles
     document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
       el.disabled = false;
+      if (el.classList.contains("comentario-input")) {
+        el.dataset.usuario = nombreUsuario;
+      }
     });
+
+    alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
   });
 
   // Mostrar campos al hacer clic en el cuadro
@@ -328,6 +344,9 @@ document.addEventListener("DOMContentLoaded", () => {
         el.classList.remove("oculto");
         if (edicionActiva) {
           el.disabled = false;
+          if (el.classList.contains("comentario-input")) {
+            el.dataset.usuario = nombreUsuario;
+          }
         }
       });
     });
