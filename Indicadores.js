@@ -58,7 +58,7 @@ function cambiarColor(select, id) {
   const comentarioVisible2 = div.querySelector('.comentario-visible2');
   if (comentarioVisible2) {
     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
-    comentarioVisible2.classList.remove("oculto");
+    // comentarioVisible2.classList.remove("oculto");
   }
 
   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
