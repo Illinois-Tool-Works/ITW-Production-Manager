@@ -28,6 +28,7 @@ const estadosColor = {
   azul: "Cambio de molde"
 };
 function cambiarColor(select, id) {
+  select.disabled = true;
 
   const color = select.value;
   const div = document.getElementById(id);
@@ -40,7 +41,10 @@ function cambiarColor(select, id) {
   const usuario = input?.dataset?.usuario || "Desconocido";
 
   const ahora = new Date();
-  const hora = ahora.toLocaleTimeString('es-MX', {
+  const fechaHora = ahora.toLocaleString('es-MX', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'
@@ -57,13 +61,12 @@ function cambiarColor(select, id) {
 
   const comentarioVisible2 = div.querySelector('.comentario-visible2');
   if (comentarioVisible2) {
-    comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
-    // comentarioVisible2.classList.remove("oculto");
+    comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" el ${fechaHora}`;
+    comentarioVisible2.classList.remove("oculto");
   }
 
-  console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
+  console.log(`🕒 ${usuario} cambió ${id} a "${estado}" el ${fechaHora}`);
 }
-import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
 // document.addEventListener("DOMContentLoaded", () => {
 //   // Selecciona todos los contenedores de columnas
