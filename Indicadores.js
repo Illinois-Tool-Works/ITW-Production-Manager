@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (e) => {
     document.querySelectorAll(".indicador").forEach(indicador => {
       if (!indicador.contains(e.target)) {
-        const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
+        const visibles = indicador.querySelectorAll("select, input, .comentario-visible, .comentario-visible2");
         visibles.forEach(el => {
           el.classList.add("oculto");
           el.disabled = true;
