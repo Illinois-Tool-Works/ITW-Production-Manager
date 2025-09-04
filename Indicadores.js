@@ -28,7 +28,8 @@ const estadosColor = {
   azul: "Cambio de molde"
 };
 function cambiarColor(select, id) {
-  // Aplica el color al cuadro
+  select.disabled = true;
+
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
@@ -36,11 +37,9 @@ function cambiarColor(select, id) {
     cuadro.className = `cuadro ${color}`;
   }
 
-  // Obtener el nombre del usuario desde el input
   const input = div.querySelector('.comentario-input');
   const usuario = input?.dataset?.usuario || "Desconocido";
 
-  // Obtener la hora actual
   const ahora = new Date();
   const hora = ahora.toLocaleTimeString('es-MX', {
     hour: '2-digit',
@@ -48,16 +47,19 @@ function cambiarColor(select, id) {
     second: '2-digit'
   });
 
-  // Obtener el nombre descriptivo del estado
   const estado = estadosColor[color] || color;
 
-  // Mostrar el registro en el comentario-visible
   const comentarioVisible = div.querySelector('.comentario-visible');
   if (comentarioVisible) {
     comentarioVisible.textContent = `Último cambio: ${usuario} → "${estado}" a las ${hora}`;
   }
 
-  // Opcional: log en consola
+  const comentarioVisible2 = div.querySelector('.comentario-visible2');
+  if (comentarioVisible2) {
+    comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
+    comentarioVisible2.classList.remove("oculto");
+  }
+
   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
 }
 // Inicializar los primeros 10 indicadores si no existen
