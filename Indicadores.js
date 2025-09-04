@@ -423,31 +423,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const id = cuadro.dataset.indicador;
       const indicador = document.getElementById(id);
-      const ocultos = indicador.querySelectorAll(".oculto");
 
-      ocultos.forEach(el => {
-        el.classList.remove("oculto");
-        if (el.tagName === "SELECT" || el.tagName === "INPUT") {
-          el.disabled = false;
-        }
-      });
+      // Ocultar el anterior si hay uno activo
+      if (indicadorActivo && indicadorActivo !== indicador) {
+        ocultarIndicador(indicadorActivo);
+      }
 
+      mostrarIndicador(indicador);
       indicadorActivo = indicador;
     });
   });
 
-  // Ocultar si se hace clic fuera del indicador activo
+  // Ocultar indicador activo si se hace clic fuera
   document.addEventListener("click", (e) => {
     if (indicadorActivo && !indicadorActivo.contains(e.target)) {
-      const visibles = indicadorActivo.querySelectorAll("select, input, .comentario-visible");
-      visibles.forEach(el => {
-        el.classList.add("oculto");
-        if (el.tagName === "SELECT" || el.tagName === "INPUT") {
-          el.disabled = true;
-        }
-      });
+      ocultarIndicador(indicadorActivo);
       indicadorActivo = null;
     }
   });
-});
 
+  function mostrarIndicador(indicador) {
+    const ocultos = indicador.querySelectorAll(".oculto");
+    ocultos.forEach(el => {
+      el.classList.remove("oculto");
+      if (el.tagName === "SELECT" || el.tagName === "INPUT") {
+        el.disabled = false;
+      }
+    });
+  }
+
+  function ocultarIndicador(indicador) {
+    const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
+    visibles.forEach(el => {
+      el.classList.add("oculto");
+      if (el.tagName === "SELECT" || el.tagName === "INPUT") {
+        el.disabled = true;
+      }
+    });
+  }
+});
