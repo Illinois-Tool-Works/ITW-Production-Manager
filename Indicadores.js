@@ -28,7 +28,7 @@ const estadosColor = {
   azul: "Cambio de molde"
 };
 function cambiarColor(select, id) {
-  select.disabled = true;
+  // select.disabled = true;
 
   const color = select.value;
   const div = document.getElementById(id);
@@ -239,7 +239,7 @@ window.enviarComentario = async function (event, input) {
 
 
   input.value = "";
-  input.disabled = true;
+  // input.disabled = true;
   alert(`Comentario actualizado por ${usuario} en ${indicadorId}`);
 };
 
