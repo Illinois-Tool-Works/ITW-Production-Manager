@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 🔄 Guardar solo el valor en la ruta principal
   set(ref(db, `indicadores/${id}`), valor);
 
-  // ✅ Datos para comentarios y registro
+  // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
   const usuario = input?.dataset?.usuario || "Desconocido";
 
@@ -291,23 +291,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const estado = estadosColor[valor] || valor;
 
-  const db = getDatabase();
-
-  // ✅ Actualizar comentario actual
   const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
   set(comentarioRef, {
     estado,
     usuario,
     fechaHora
   });
-
-  // ✅ Agregar nuevo registro histórico
-  const registroRef = ref(db, `registroindicadores/${id}`);
+const registroRef = ref(db, `registroindicadores/${id}`);
   push(registroRef, {
     estado,
     usuario,
     fechaHora
   });
+
 
   cambiarColor(select, id);
 });
