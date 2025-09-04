@@ -345,29 +345,50 @@ document.addEventListener("DOMContentLoaded", () => {
   let edicionActiva = false;
   let nombreUsuario = null;
 
-  // Activar edición con validación
-  document.getElementById("activarEdicion").addEventListener("click", async () => {
-    const usuarioId = prompt("ID de usuario:");
-    const contraseña = prompt("Contraseña:");
+  const activarBtn = document.getElementById("activarEdicion");
 
-    const nombre = await validarUsuario(usuarioId, contraseña);
-    if (!nombre) {
-      alert("Credenciales incorrectas. Comentarios bloqueados.");
-      return;
-    }
+  activarBtn.addEventListener("click", async () => {
+    if (!edicionActiva) {
+      // Activar edición → solicitar credenciales
+      const usuarioId = prompt("ID de usuario:");
+      const contraseña = prompt("Contraseña:");
 
-    edicionActiva = true;
-    nombreUsuario = nombre;
-
-    // Habilitar todos los campos visibles
-    document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
-      el.disabled = false;
-      if (el.classList.contains("comentario-input")) {
-        el.dataset.usuario = nombreUsuario;
+      const nombre = await validarUsuario(usuarioId, contraseña);
+      if (!nombre) {
+        alert("Credenciales incorrectas. Comentarios bloqueados.");
+        return;
       }
-    });
 
-    alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
+      nombreUsuario = nombre;
+      edicionActiva = true;
+
+      activarBtn.classList.add("activo");
+      activarBtn.textContent = "Desactivar edición";
+      activarBtn.style.backgroundColor = "#dc3545"; // rojo
+      activarBtn.style.color = "white";
+
+      document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
+        el.disabled = false;
+        if (el.classList.contains("comentario-input")) {
+          el.dataset.usuario = nombreUsuario;
+        }
+      });
+
+      alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
+    } else {
+      // Desactivar edición → sin credenciales
+      edicionActiva = false;
+      nombreUsuario = null;
+
+      activarBtn.classList.remove("activo");
+      activarBtn.textContent = "Activar edición";
+      activarBtn.style.backgroundColor = ""; // color original
+      activarBtn.style.color = "";
+
+      document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
+        el.disabled = true;
+      });
+    }
   });
 
   // Mostrar campos al hacer clic en el cuadro
@@ -395,7 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (e) => {
     document.querySelectorAll(".indicador").forEach(indicador => {
       if (!indicador.contains(e.target)) {
-        const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
+        const visibles = indicador.querySelectorAll("select, input, .comentario-visible, .comentario-visible2");
         visibles.forEach(el => {
           el.classList.add("oculto");
           el.disabled = true;
