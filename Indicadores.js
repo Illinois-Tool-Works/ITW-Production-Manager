@@ -413,14 +413,16 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
 });
 
 //////////////////////////////
-function mostrarTodo(id) {
-  const contenedor = document.getElementById(id);
-  const ocultos = contenedor.querySelectorAll('.oculto');
+function activarIndicador48() {
+  const comentario = document.querySelector('#indicador48 .comentario-visible');
+  const select = document.querySelector('#indicador48 select');
+  const input = document.querySelector('#indicador48 input');
 
-  ocultos.forEach(el => {
-    el.classList.remove('oculto');
-    if (el.tagName === 'SELECT' || el.tagName === 'INPUT') {
-      el.disabled = false;
-    }
-  });
+  comentario.classList.remove('oculto');
+  select.classList.remove('oculto');
+  input.classList.remove('oculto');
+
+  select.disabled = false;
+  input.disabled = false;
 }
+
