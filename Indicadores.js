@@ -302,30 +302,50 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
     }, { onlyOnce: true });
   });
 }
-window.desbloquearTodosIndicadores = async function () {
-  const usuarioId = prompt("ID de usuario:");
-  const contraseña = prompt("Contraseña:");
+document.addEventListener("DOMContentLoaded", () => {
+  let edicionActiva = false;
 
-  const nombre = await validarUsuario(usuarioId, contraseña);
-  if (!nombre) {
-    alert("Credenciales incorrectas. Comentarios bloqueados.");
-    return;
-  }
+  // Activar edición global
+  document.getElementById("activarEdicion").addEventListener("click", () => {
+    edicionActiva = true;
 
-  const inputs = document.querySelectorAll('.comentario-input');
-  const selects = document.querySelectorAll('.indicador select');
-
-  inputs.forEach(input => {
-    input.disabled = false;
-    input.dataset.usuario = nombre;
+    // Habilitar todos los campos visibles
+    document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
+      el.disabled = false;
+    });
   });
 
-  selects.forEach(select => {
-    select.disabled = false;
+  // Mostrar campos al hacer clic en el cuadro
+  document.querySelectorAll(".cuadro").forEach(cuadro => {
+    cuadro.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const id = cuadro.dataset.indicador;
+      const indicador = document.getElementById(id);
+      const ocultos = indicador.querySelectorAll(".oculto");
+
+      ocultos.forEach(el => {
+        el.classList.remove("oculto");
+        if (edicionActiva) {
+          el.disabled = false;
+        }
+      });
+    });
   });
 
-  alert(`Bienvenido, ${nombre}. Puedes editar todos los indicadores.`);
-};
+  // Ocultar campos si se hace clic fuera
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll(".indicador").forEach(indicador => {
+      if (!indicador.contains(e.target)) {
+        const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
+        visibles.forEach(el => {
+          el.classList.add("oculto");
+          el.disabled = true;
+        });
+      }
+    });
+  });
+});
 // window.desbloquearIndicador = async function (indicadorId) {
 //   const usuarioId = prompt("ID de usuario:");
 //   const contraseña = prompt("Contraseña:");
