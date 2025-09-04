@@ -28,7 +28,6 @@ const estadosColor = {
   azul: "Cambio de molde"
 };
 function cambiarColor(select, id) {
-  select.disabled = true;
 
   const color = select.value;
   const div = document.getElementById(id);
@@ -62,7 +61,7 @@ function cambiarColor(select, id) {
   const comentarioVisible2 = div.querySelector('.comentario-visible2');
   if (comentarioVisible2) {
     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" el ${fechaHora}`;
-    comentarioVisible2.classList.remove("oculto");
+    // comentarioVisible2.classList.remove("oculto");
   }
 
   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" el ${fechaHora}`);
