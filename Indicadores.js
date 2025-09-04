@@ -413,18 +413,10 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
 });
 
 //////////////////////////////
-function mostrarOcultos(id) {
-  const contenedor = document.getElementById(id);
-  const ocultos = contenedor.querySelectorAll('.oculto');
-  ocultos.forEach(el => {
-    el.classList.remove('oculto');
-    if (el.tagName === 'SELECT' || el.tagName === 'INPUT') {
-      el.disabled = false; // reactiva los campos si estaban deshabilitados
-    }
-  });
-}
 document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("cuadro48").addEventListener("click", () => {
-    mostrarOcultos("indicador48");
+  const cuadro = document.getElementById("cuadro48");
+  cuadro.addEventListener("click", () => {
+    document.getElementById("select48").classList.remove("oculto");
+    document.getElementById("input48").classList.remove("oculto");
   });
 });
