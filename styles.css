@@ -8,10 +8,7 @@ body {
   margin: 0;
   margin: 0;
   height: 100vh;
-  background-image: url('https://seeklogo.com/images/I/itw-logo-FD3AC83802-seeklogo.com.png'); /* Cambia esto por tu imagen */
-  background-size: cover;       /* La imagen cubre toda la pantalla */
-  background-repeat: no-repeat; /* Evita que se repita */
-  background-position: center;  /* Centra la imagen */
+  overflow-x: hidden;
 
 }
 .container {
@@ -283,7 +280,7 @@ select,
   display: none;
 
 }
-/* .comentario-visible {
+ /* .comentario-visible {
   margin-top: 6px;
   font-size: 14px;
   color: #444;
@@ -292,16 +289,22 @@ select,
   border-radius: 4px;
   max-width: 200px;
   white-space: pre-wrap;
-} */
+}  */
 .mapa-indicadores {
   position: relative;
   width: 300%;
-  height: 5000px; /* ajusta según tu plano */
+  height: 5000px; 
   overflow: auto;
 }
 
-/* Colores personalizados */
+
 .rojo { background-color: red; }
 .verde { background-color: green; }
 .gris  { background-color: gray; }
 .azul  { background-color: blue; }
+
+/* //////////////// */
+
+.oculto {
+  display: none;
+}

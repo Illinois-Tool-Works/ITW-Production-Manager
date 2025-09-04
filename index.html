@@ -4,6 +4,30 @@
   <meta charset="UTF-8">
   <title>Manager</title>
   <link rel="stylesheet" href="styles.css">
+
+  <meta charset="UTF-8">
+  <title>Fondo con imagen externa</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-image: url('https://seeklogo.com/images/I/itw-logo-FD3AC83802-seeklogo.com.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed; /* Opcional: mantiene el fondo fijo al hacer scroll */
+    }
+
+    /* Fallback para dispositivos que no cargan bien la imagen */
+    @media (max-width: 576px) {
+      body {
+        background-size: contain;
+        background-position: top;
+      }
+    }
+  </style>
+
 </head>
 <body>
   <div class="container">

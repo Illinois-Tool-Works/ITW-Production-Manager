@@ -412,4 +412,15 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
   }
 });
 
+//////////////////////////////
+function mostrarOcultos(id) {
+  const contenedor = document.getElementById(id);
+  const ocultos = contenedor.querySelectorAll('.oculto');
+  ocultos.forEach(el => {
+    el.classList.remove('oculto');
+    if (el.tagName === 'SELECT' || el.tagName === 'INPUT') {
+      el.disabled = false; // reactiva los campos si estaban deshabilitados
+    }
+  });
+}
 
