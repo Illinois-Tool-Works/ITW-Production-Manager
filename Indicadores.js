@@ -180,21 +180,28 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!id) return;
 
       // Guardar cambios al seleccionar
-     const ahora = new Date().toLocaleString('es-MX', {
-  day: '2-digit',
-  month: '2-digit',
-  year: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit'
-});
+     select.addEventListener("change", () => {
+  const valor = select.value;
 
-const usuario = select.closest('.indicador').querySelector('.comentario-input')?.dataset?.usuario || "Desconocido";
+  const ahora = new Date().toLocaleString('es-MX', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
 
-set(ref(db, `indicadores/${id}`), {
-  estado: valor,
-  usuario,
-  fechaHora: ahora
+  const usuario = select.closest('.indicador')
+    .querySelector('.comentario-input')?.dataset?.usuario || "Desconocido";
+
+  set(ref(db, `indicadores/${id}`), {
+    estado: valor,
+    usuario,
+    fechaHora: ahora
+  });
+
+  cambiarColor(select, id);
 });
     });
   });
