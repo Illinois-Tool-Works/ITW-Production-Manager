@@ -28,7 +28,6 @@ const estadosColor = {
   azul: "Cambio de molde"
 };
 function cambiarColor(select, id) {
-
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
@@ -58,15 +57,30 @@ function cambiarColor(select, id) {
 
   const estado = estadosColor[color] || color;
 
-  const comentarioVisible2 = div.querySelector('.comentario-visible2');
-  if (comentarioVisible2) {
-    comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" el ${fechaHora}`;
-    // comentarioVisible2.classList.remove("oculto");
-  }
+  // 🔥 Guardar en Firebase
+  const refIndicador = ref(db, `indicadores/${id}`);
+  set(refIndicador, {
+    estado,
+    usuario,
+    fechaHora
+  });
 
-  console.log(`🕒 ${usuario} cambió ${id} a "${estado}" el ${fechaHora}`);
+  console.log(`🕒 ${usuario} seleccionó "${estado}" en ${id} el ${fechaHora}`);
 }
+// elr comentarioVisible2 en firebase
+document.querySelectorAll(".indicador").forEach(indicador => {
+  const id = indicador.id;
+  const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
+  const refIndicador = ref(db, `indicadores/${id}`);
+  onValue(refIndicador, (snapshot) => {
+    const datos = snapshot.val();
+    if (!datos || !comentarioVisible2) return;
+
+    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fechaHora}`;
+    comentarioVisible2.classList.remove("oculto");
+  });
+});
 // document.addEventListener("DOMContentLoaded", () => {
 //   // Selecciona todos los contenedores de columnas
 //   const columnas = document.querySelectorAll('.indicadores');
