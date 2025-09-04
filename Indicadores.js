@@ -423,4 +423,8 @@ function mostrarOcultos(id) {
     }
   });
 }
-
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("cuadro48").addEventListener("click", () => {
+    mostrarOcultos("indicador48");
+  });
+});
