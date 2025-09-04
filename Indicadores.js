@@ -57,7 +57,7 @@ function cambiarColor(select, id) {
   const comentarioVisible2 = div.querySelector('.comentario-visible2');
   if (comentarioVisible2) {
     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
-    comentarioVisible2.classList.remove("oculto");
+    // comentarioVisible2.classList.remove("oculto");
   }
 
   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
@@ -545,3 +545,41 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 ////////////////////////////
+
+window.enviarEstado = async function (selectElement) {
+  const indicadorId = selectElement.closest('.indicador')?.id;
+  if (!indicadorId) return;
+
+  const usuario = selectElement.closest('.indicador')
+    .querySelector('.comentario-input')?.dataset?.usuario || "desconocido";
+
+  const color = selectElement.value;
+
+  const estadosColor = {
+    gris: "No plan",
+    rojo: "Paro",
+    verde: "Corriendo",
+    azul: "Cambio de molde"
+  };
+
+  const estado = estadosColor[color] || color;
+
+  const timestamp = new Date().toISOString();
+
+  const db = getDatabase();
+  const estadoData = {
+    estado,
+    usuario,
+    fecha: timestamp
+  };
+
+  const indicadorRef = ref(db, `indicadores/${indicadorId}`);
+  await update(indicadorRef, estadoData);
+
+  const registroRef = ref(db, `registro/${indicadorId}`);
+  await push(registroRef, estadoData);
+
+  selectElement.disabled = true;
+
+  alert(`Estado actualizado por ${usuario} en ${indicadorId}: ${estado}`);
+};
