@@ -309,3 +309,8 @@ select,
 .oculto {
   display: none;
 }
+
+#activarEdicion.activo {
+  background-color: #dc3545; /* rojo */
+  color: white;
+}
