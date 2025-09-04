@@ -21,7 +21,16 @@
 //     cuadro.className = `cuadro ${color}`;
 //   }
 // }
+const estadosColor = {
+  gris: "No plan",
+  rojo: "Paro",
+  verde: "Corriendo",
+  azul: "Cambio de molde"
+};
 function cambiarColor(select, id) {
+  // Deshabilita el select después del cambio
+  select.disabled = true;
+
   // Aplica el color al cuadro
   const color = select.value;
   const div = document.getElementById(id);
@@ -42,16 +51,18 @@ function cambiarColor(select, id) {
     second: '2-digit'
   });
 
+  // Obtener el nombre descriptivo del estado
+  const estado = estadosColor[color] || color;
+
   // Mostrar el registro en el comentario-visible
   const comentarioVisible = div.querySelector('.comentario-visible');
   if (comentarioVisible) {
-    comentarioVisible.textContent = `Último cambio: ${usuario} → "${color}" a las ${hora}`;
+    comentarioVisible.textContent = `Último cambio: ${usuario} → "${estado}" a las ${hora}`;
   }
 
-  // Opcional: guardar en Firebase o log interno si lo deseas
-  console.log(`🕒 ${usuario} cambió ${id} a "${color}" a las ${hora}`);
+  // Opcional: log en consola
+  console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
 }
-
 // Inicializar los primeros 10 indicadores si no existen
 function inicializarIndicadores(estados) {
   for (let i = 1; i <= 140; i++) {
