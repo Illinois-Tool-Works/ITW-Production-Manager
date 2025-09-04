@@ -354,6 +354,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       activarBtn.classList.add("activo");
       activarBtn.textContent = "Desactivar edición";
+      activarBtn.style.backgroundColor = "#dc3545"; // rojo
+      activarBtn.style.color = "white";
 
       document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
         el.disabled = false;
@@ -370,11 +372,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
       activarBtn.classList.remove("activo");
       activarBtn.textContent = "Activar edición";
+      activarBtn.style.backgroundColor = ""; // color original
+      activarBtn.style.color = "";
 
       document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
         el.disabled = true;
       });
     }
+  });
+
+  // Mostrar campos al hacer clic en el cuadro
+  document.querySelectorAll(".cuadro").forEach(cuadro => {
+    cuadro.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const id = cuadro.dataset.indicador;
+      const indicador = document.getElementById(id);
+      const ocultos = indicador.querySelectorAll(".oculto");
+
+      ocultos.forEach(el => {
+        el.classList.remove("oculto");
+        if (edicionActiva) {
+          el.disabled = false;
+          if (el.classList.contains("comentario-input")) {
+            el.dataset.usuario = nombreUsuario;
+          }
+        }
+      });
+    });
+  });
+
+  // Ocultar campos si se hace clic fuera
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll(".indicador").forEach(indicador => {
+      if (!indicador.contains(e.target)) {
+        const visibles = indicador.querySelectorAll("select, input, .comentario-visible, .comentario-visible2");
+        visibles.forEach(el => {
+          el.classList.add("oculto");
+          el.disabled = true;
+        });
+      }
+    });
   });
 });
 // window.desbloquearIndicador = async function (indicadorId) {
