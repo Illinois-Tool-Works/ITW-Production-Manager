@@ -28,9 +28,6 @@ const estadosColor = {
   azul: "Cambio de molde"
 };
 function cambiarColor(select, id) {
-  // Deshabilita el select después del cambio
-  select.disabled = true;
-
   // Aplica el color al cuadro
   const color = select.value;
   const div = document.getElementById(id);
