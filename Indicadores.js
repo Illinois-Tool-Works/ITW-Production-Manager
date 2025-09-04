@@ -415,17 +415,29 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
 //////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
   const cuadro = document.getElementById("cuadro48");
+  const indicador = document.getElementById("indicador48");
 
-  cuadro.addEventListener("click", () => {
-    const indicador = document.getElementById("indicador48");
+  cuadro.addEventListener("click", (e) => {
+    e.stopPropagation(); // evita que el clic se propague al documento
     const ocultos = indicador.querySelectorAll(".oculto");
-
     ocultos.forEach(el => {
       el.classList.remove("oculto");
       if (el.tagName === "SELECT" || el.tagName === "INPUT") {
         el.disabled = false;
       }
     });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!indicador.contains(e.target)) {
+      const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
+      visibles.forEach(el => {
+        el.classList.add("oculto");
+        if (el.tagName === "SELECT" || el.tagName === "INPUT") {
+          el.disabled = true;
+        }
+      });
+    }
   });
 });
 
