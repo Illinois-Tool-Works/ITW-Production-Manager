@@ -12,58 +12,56 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-function cambiarColor(select, id) {
-       select.disabled = true;
-  const color = select.value;
-  const div = document.getElementById(id);
-  const cuadro = div.querySelector('.cuadro');
-  if (cuadro) {
-    cuadro.className = `cuadro ${color}`;
-  }
-}
-// const estadosColor = {
-//   gris: "No plan",
-//   rojo: "Paro",
-//   verde: "Corriendo",
-//   azul: "Cambio de molde"
-// };
 // function cambiarColor(select, id) {
-
+//        select.disabled = true;
 //   const color = select.value;
 //   const div = document.getElementById(id);
 //   const cuadro = div.querySelector('.cuadro');
 //   if (cuadro) {
 //     cuadro.className = `cuadro ${color}`;
 //   }
-
-//   const input = div.querySelector('.comentario-input');
-//   const usuario = input?.dataset?.usuario || "Desconocido";
-
-//   const ahora = new Date();
-//   const hora = ahora.toLocaleTimeString('es-MX', {
-//     hour: '2-digit',
-//     minute: '2-digit',
-//     second: '2-digit'
-//   });
-
-//   const estadosColor = {
-//     gris: "No plan",
-//     rojo: "Paro",
-//     verde: "Corriendo",
-//     azul: "Cambio de molde"
-//   };
-
-//   const estado = estadosColor[color] || color;
-
-//   const comentarioVisible2 = div.querySelector('.comentario-visible2');
-//   if (comentarioVisible2) {
-//     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
-//     comentarioVisible2.classList.remove("oculto");
-//   }
-
-//   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
 // }
+const estadosColor = {
+  gris: "No plan",
+  rojo: "Paro",
+  verde: "Corriendo",
+  azul: "Cambio de molde"
+};
+function cambiarColor(select, id) {
+  select.disabled = true;
 
+  const color = select.value;
+  const div = document.getElementById(id);
+  const cuadro = div.querySelector('.cuadro');
+  if (cuadro) {
+    cuadro.className = `cuadro ${color}`;
+  }
+
+  const input = div.querySelector('.comentario-input');
+  const usuario = input?.dataset?.usuario || "Desconocido";
+
+  const ahora = new Date();
+  const hora = ahora.toLocaleTimeString('es-MX', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  const estado = estadosColor[color] || color;
+
+  const comentarioVisible = div.querySelector('.comentario-visible');
+  if (comentarioVisible) {
+    comentarioVisible.textContent = `Último cambio: ${usuario} → "${estado}" a las ${hora}`;
+  }
+
+  const comentarioVisible2 = div.querySelector('.comentario-visible2');
+  if (comentarioVisible2) {
+    comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" a las ${hora}`;
+    comentarioVisible2.classList.remove("oculto");
+  }
+
+  console.log(`🕒 ${usuario} cambió ${id} a "${estado}" a las ${hora}`);
+}
 // Inicializar los primeros 10 indicadores si no existen
 function inicializarIndicadores(estados) {
   for (let i = 1; i <= 140; i++) {
@@ -73,6 +71,7 @@ function inicializarIndicadores(estados) {
     }
   }
 }
+
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
 // document.addEventListener("DOMContentLoaded", () => {
@@ -180,29 +179,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!id) return;
 
       // Guardar cambios al seleccionar
-     select.addEventListener("change", () => {
-  const valor = select.value;
-
-  const ahora = new Date().toLocaleString('es-MX', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
-
-  const usuario = select.closest('.indicador')
-    .querySelector('.comentario-input')?.dataset?.usuario || "Desconocido";
-
-  set(ref(db, `indicadores/${id}`), {
-    estado: valor,
-    usuario,
-    fechaHora: ahora
-  });
-
-  cambiarColor(select, id);
-});
+      select.addEventListener("change", () => {
+        const valor = select.value;
+        set(ref(db, `indicadores/${id}`), valor);
+        cambiarColor(select, id);
+      });
     });
   });
 
@@ -226,6 +207,7 @@ function enviarComentario(event, inputElement) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
     guardarComentario(inputElement);
+    inputElement.disabled = true;
   }
 }
 
@@ -413,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("click", (e) => {
     document.querySelectorAll(".indicador").forEach(indicador => {
       if (!indicador.contains(e.target)) {
-        const visibles = indicador.querySelectorAll("select, input, .comentario-visible, .comentario-visible2");
+        const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
         visibles.forEach(el => {
           el.classList.add("oculto");
           el.disabled = true;
@@ -531,15 +513,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
- function ocultarIndicador(indicador) {
-  const visibles = indicador.querySelectorAll("select, input, .comentario-visible, .comentario-visible2");
-  visibles.forEach(el => {
-    el.classList.add("oculto");
-    if (el.tagName === "SELECT" || el.tagName === "INPUT") {
-      el.disabled = true;
-    }
-  });
-}
-
+  function ocultarIndicador(indicador) {
+    const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
+    visibles.forEach(el => {
+      el.classList.add("oculto");
+      if (el.tagName === "SELECT" || el.tagName === "INPUT") {
+        el.disabled = true;
+      }
+    });
+  }
 });
 ////////////////////////////
