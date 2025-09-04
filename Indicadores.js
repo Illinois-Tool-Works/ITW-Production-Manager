@@ -1,12 +1,5 @@
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-
-  import { getDatabase, ref, set, onValue, push, update, remove} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js'; // ¡Asegúrate de incluir 'ref' y 'set' y onValue!
-
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
+  import { getDatabase, ref, set, onValue, push, update, remove} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js';
   const firebaseConfig = {
     apiKey: "AIzaSyD-2BTqppd41YhQfpTXz280tzY9PlKwWNY",
     authDomain: "indicadores-45c63.firebaseapp.com",
@@ -16,18 +9,9 @@
     messagingSenderId: "1060474160227",
     appId: "1:1060474160227:web:af59ffeca9a1c67c96e456"
   };
-
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-//   document.addEventListener("DOMContentLoaded", () => {
-//   set(ref(db, 'pruebaEstado'), 'corriendo');
-//   console.log('Dato enviado: corriendo');
-// });
-// Exponer al ámbito global
 
-
-// Función para aplicar el color visualmente al cuadro
 function cambiarColor(select, id) {
        select.disabled = true;
   const color = select.value;
@@ -318,31 +302,55 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
     }, { onlyOnce: true });
   });
 }
-window.desbloquearIndicador = async function (indicadorId) {
+window.desbloquearTodosIndicadores = async function () {
   const usuarioId = prompt("ID de usuario:");
   const contraseña = prompt("Contraseña:");
 
   const nombre = await validarUsuario(usuarioId, contraseña);
   if (!nombre) {
-    alert("Credenciales incorrectas. Comentario bloqueado.");
+    alert("Credenciales incorrectas. Comentarios bloqueados.");
     return;
   }
 
-  const indicador = document.getElementById(indicadorId);
-  if (!indicador) {
-    alert(`No se encontró el indicador "${indicadorId}".`);
-    return;
-  }
+  const inputs = document.querySelectorAll('.comentario-input');
+  const selects = document.querySelectorAll('.indicador select');
 
-  const input = indicador.querySelector('.comentario-input');
-  const select = indicador.querySelector('select');
-
+  inputs.forEach(input => {
     input.disabled = false;
     input.dataset.usuario = nombre;
-    select.disabled = false;
+  });
 
-  alert(`Bienvenido, ${nombre}. Puedes editar el indicador ${indicadorId}.`);
+  selects.forEach(select => {
+    select.disabled = false;
+  });
+
+  alert(`Bienvenido, ${nombre}. Puedes editar todos los indicadores.`);
 };
+// window.desbloquearIndicador = async function (indicadorId) {
+//   const usuarioId = prompt("ID de usuario:");
+//   const contraseña = prompt("Contraseña:");
+
+//   const nombre = await validarUsuario(usuarioId, contraseña);
+//   if (!nombre) {
+//     alert("Credenciales incorrectas. Comentario bloqueado.");
+//     return;
+//   }
+
+//   const indicador = document.getElementById(indicadorId);
+//   if (!indicador) {
+//     alert(`No se encontró el indicador "${indicadorId}".`);
+//     return;
+//   }
+
+//   const input = indicador.querySelector('.comentario-input');
+//   const select = indicador.querySelector('select');
+
+//     input.disabled = false;
+//     input.dataset.usuario = nombre;
+//     select.disabled = false;
+
+//   alert(`Bienvenido, ${nombre}. Puedes editar el indicador ${indicadorId}.`);
+// };
 
 ////////////////////registro////////////////
 document.getElementById("btnRegistro").addEventListener("click", async () => {
