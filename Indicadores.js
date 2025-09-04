@@ -413,10 +413,3 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
 });
 
 //////////////////////////////
-document.addEventListener("DOMContentLoaded", () => {
-  const cuadro = document.getElementById("cuadro48");
-  cuadro.addEventListener("click", () => {
-    document.getElementById("select48").classList.remove("oculto");
-    document.getElementById("input48").classList.remove("oculto");
-  });
-});
