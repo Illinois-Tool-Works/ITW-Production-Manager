@@ -13,7 +13,7 @@
   const db = getDatabase(app);
 
 function cambiarColor(select, id) {
-       select.disabled = true;
+      //  select.disabled = true;
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
     usuario,
     fechaHora
   });
-const registroRef = ref(db, `registroindicadores/${id}`);
+const registroRef = ref(db, `registro/${id}`);
   push(registroRef, {
     estado,
     usuario,
