@@ -199,6 +199,10 @@ h1 {
   color: #333;
 }
 
+.comentario-visible2 {
+  display: block !important;
+}
+
 .grupo-horizontal {
   display: flex;
   flex-wrap: wrap;
