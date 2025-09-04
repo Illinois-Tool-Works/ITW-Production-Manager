@@ -413,16 +413,4 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
 });
 
 //////////////////////////////
-function activarIndicador48() {
-  const comentario = document.querySelector('#indicador48 .comentario-visible');
-  const select = document.querySelector('#indicador48 select');
-  const input = document.querySelector('#indicador48 input');
-
-  comentario.classList.remove('oculto');
-  select.classList.remove('oculto');
-  input.classList.remove('oculto');
-
-  select.disabled = false;
-  input.disabled = false;
-}
 
