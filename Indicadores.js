@@ -318,31 +318,6 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
     }, { onlyOnce: true });
   });
 }
-
-// window.desbloquearComentarioInput = async function () {
-//   const usuarioId = prompt("ID de usuario:");
-//   const contraseña = prompt("Contraseña:");
-
-//   const nombre = await validarUsuario(usuarioId, contraseña);
-//   if (!nombre) {
-//     alert("Credenciales incorrectas. Comentario bloqueado.");
-//     return;
-//   }
-  
-
-// const input = document.querySelector('.comentario-input');
-//   const indicadorId = input.dataset.indicador;
-//   const indicador = document.getElementById(indicadorId);
-//   const select = indicador?.querySelector("select");
-
-//   input.disabled = false;
-//   input.dataset.usuario = nombre;
-
-//   select.disabled = false; // ✅ habilita el select
-
-//   alert(`Bienvenido, ${nombre}. Puedes escribir tu comentario.`);
-// };
-
 window.desbloquearIndicador = async function (indicadorId) {
   const usuarioId = prompt("ID de usuario:");
   const contraseña = prompt("Contraseña:");
@@ -463,15 +438,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 ////////////////////////////
-document.addEventListener("DOMContentLoaded", () => {
-  const activarBtn = document.getElementById("activarCampos");
-
-  activarBtn.addEventListener("click", () => {
-    const selects = document.querySelectorAll(".indicador select");
-    const inputs = document.querySelectorAll(".indicador input");
-
-    selects.forEach(select => select.disabled = false);
-    inputs.forEach(input => input.disabled = false);
-  });
-});
- 
