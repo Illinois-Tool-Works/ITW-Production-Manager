@@ -178,8 +178,8 @@ h1 {
   background-color: #4a90e2;
   color: #fff;
   text-align: center;
-  line-height: 50px;
-  border-radius: 50%;
+  line-height: 40px;
+  border-radius: 2%;
   font-weight: bold;
   font-size: clamp(1em, 6vw, 2.5em);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
