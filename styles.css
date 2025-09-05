@@ -120,14 +120,12 @@ h1 {
   gap: 1em;
 } */
 .indicador {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  overflow-wrap: break-word;
 }
+
 /* .indicador {
   margin-bottom: 2em;
   padding: 1em;
@@ -212,7 +210,9 @@ h1 {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+  width: 100%;
 }
+
 
 .grupo-horizontal > * {
   flex: 0 1 auto;
@@ -222,11 +222,21 @@ h1 {
 select,
 .cuadro,
 .comentario-input {
+  flex: 0 1 auto; /* 👈 evita que crezcan más allá de su contenido */
+  min-width: 100px;
+  max-width: 100%; /* 👈 asegura que no se desborden */
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+/* select,
+.cuadro,
+.comentario-input {
   flex: 1 1 auto;
   min-width: 100px;
   padding: 0.4rem;
   box-sizing: border-box;
-}
+} */
 
 /* .comentario-input {
   width: 159px;     
