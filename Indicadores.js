@@ -356,11 +356,12 @@ window.enviarComentario = async function (event, input) {
   const indicadorId = input.dataset.indicador;
   const usuario = input.dataset.usuario || "desconocido";
   const timestamp = new Date().toISOString();
-  const area = indicador.dataset.area;
+
+  const indicador = document.getElementById(indicadorId);
+  const area = indicador?.dataset.area || "desconocida";
 
   const db = getDatabase();
   const comentarioData = {
-    area: area,
     texto: comentario,
     usuario,
     fecha: timestamp
@@ -372,7 +373,7 @@ window.enviarComentario = async function (event, input) {
     usuario,
     fecha: timestamp
   });
-  const registroRef = ref(db, `registro/${indicadorId}`);
+  const registroRef = ref(db, `registro/area${area}/${indicadorId}`);
    await push(registroRef, comentarioData);
 
 
