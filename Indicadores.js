@@ -485,6 +485,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let nombreUsuario = null;
 
   const activarBtn = document.getElementById("activarEdicion");
+  const exportarBtn = document.getElementById("btnRegistro");
+
+  // Ocultar el botón al cargar
+  exportarBtn.style.display = "none";
 
   activarBtn.addEventListener("click", async () => {
     if (!edicionActiva) {
@@ -506,6 +510,8 @@ document.addEventListener("DOMContentLoaded", () => {
       activarBtn.style.backgroundColor = "#dc3545"; // rojo
       activarBtn.style.color = "white";
 
+      exportarBtn.style.display = "inline-block"; // 👈 Mostrar botón
+
       document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
         el.disabled = false;
         if (el.classList.contains("comentario-input")) {
@@ -513,16 +519,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
+      // alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
     } else {
       // Desactivar edición → sin credenciales
       edicionActiva = false;
       nombreUsuario = null;
 
       activarBtn.classList.remove("activo");
-      activarBtn.textContent = "Activar edición";
+      activarBtn.textContent = "Admin";
       activarBtn.style.backgroundColor = ""; // color original
       activarBtn.style.color = "";
+
+      exportarBtn.style.display = "none"; // 👈 Ocultar botón
 
       document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
         el.disabled = true;
