@@ -214,8 +214,9 @@ h1 {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow-wrap: break-word;
+  overflow: hidden; /* 👈 evita que contenido expandido se desborde */
 }
+
 .grupo-horizontal {
   display: flex;
   flex-wrap: wrap;
@@ -232,13 +233,17 @@ h1 {
 
 select,
 .cuadro,
-.comentario-input {
-  flex: 0 1 auto; /* 👈 evita que crezcan más allá de su contenido */
-  min-width: 100px;
-  max-width: 100%; /* 👈 asegura que no se desborden */
-  padding: 0.4rem;
+.comentario-input,
+.comentario-visible,
+.comentario-visible2 {
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+
 
 /* select,
 .cuadro,
