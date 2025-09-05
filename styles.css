@@ -230,7 +230,7 @@ h1 {
 select,
 .comentario-input {
   width: 100%;
-  max-width: 100%;
+  max-width: 80%;
   box-sizing: border-box;
   overflow-wrap: break-word;
   white-space: nowrap;
