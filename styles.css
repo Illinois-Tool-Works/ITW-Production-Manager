@@ -171,6 +171,9 @@ h1 {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1em;
 } */
+.mt-vh {
+  margin-top: 15vh;
+}
 
 .cuadro {
   width: 300px;
