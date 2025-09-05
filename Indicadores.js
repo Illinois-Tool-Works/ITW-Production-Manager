@@ -607,7 +607,8 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
         Estado: datos.estado,
         Comentario: datos.texto,
         Usuario: datos.usuario,
-        Fecha: datos.fecha
+        Fecha: datos.fecha,
+        FechaHora: datos.fechaHora
       });
     });
   });
