@@ -201,7 +201,7 @@ h1 {
   font-size: 0.9rem;
   color: #333;
    min-height: 30px;
-  max-height: 100px;
+  max-height: 80px;
   overflow-y: auto;
 }
 
