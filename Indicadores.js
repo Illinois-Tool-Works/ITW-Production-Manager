@@ -754,6 +754,6 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
     });
 
     // Expandir solo la columna activa
-    columna.classList.add('expandida');
+    // columna.classList.add('expandida');
   });
 });

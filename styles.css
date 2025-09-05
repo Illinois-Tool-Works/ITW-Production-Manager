@@ -228,6 +228,8 @@ h1 {
 }
 
 select,
+.comentario-visible,
+.comentario-visible2,
 .comentario-input {
   width: 100%;
   max-width: 80%;
