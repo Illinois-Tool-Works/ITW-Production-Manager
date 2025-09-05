@@ -232,8 +232,10 @@ h1 {
 }
 
 select,
+.comentario-visible,
+.comentario-visible2,
 .comentario-input {
-  width: 100%;
+  width: 50%;
   max-width: 80%;
   box-sizing: border-box;
   overflow-wrap: break-word;
