@@ -210,13 +210,6 @@ h1 {
   min-width: 0;
 }
 
-.indicadores {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow: hidden; /* 👈 evita que contenido expandido se desborde */
-}
-
 .grupo-horizontal {
   display: flex;
   flex-wrap: wrap;
@@ -232,9 +225,7 @@ h1 {
 }
 
 select,
-.comentario-input,
-.comentario-visible,
-.comentario-visible2 {
+.comentario-input {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
