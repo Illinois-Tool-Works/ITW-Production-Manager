@@ -343,7 +343,7 @@ function enviarComentario(event, inputElement) {
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
     guardarComentario(inputElement);
-    inputElement.disabled = true;
+    // inputElement.disabled = true;
   }
 }
 
