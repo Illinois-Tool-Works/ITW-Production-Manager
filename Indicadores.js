@@ -544,18 +544,29 @@ document.addEventListener("DOMContentLoaded", () => {
       e.stopPropagation();
 
       const id = cuadro.dataset.indicador;
-      const indicador = document.getElementById(id);
-      const ocultos = indicador.querySelectorAll(".oculto");
+    const indicador = document.getElementById(id);
 
-      ocultos.forEach(el => {
-        el.classList.remove("oculto");
-        if (edicionActiva) {
-          el.disabled = false;
-          if (el.classList.contains("comentario-input")) {
-            el.dataset.usuario = nombreUsuario;
-          }
+    // Ocultar todos los demás campos
+    document.querySelectorAll(".indicador").forEach(ind => {
+      if (ind !== indicador) {
+        ind.querySelectorAll("select, input, .comentario-visible, .comentario-visible2").forEach(el => {
+          el.classList.add("oculto");
+          el.disabled = true;
+        });
+      }
+    });
+// Mostrar campos del indicador activo
+    const ocultos = indicador.querySelectorAll(".oculto");
+    ocultos.forEach(el => {
+      el.classList.remove("oculto");
+      if (edicionActiva) {
+        el.disabled = false;
+        if (el.classList.contains("comentario-input")) {
+          el.dataset.usuario = nombreUsuario;
         }
-      });
+      }
+    });
+
     });
   });
 

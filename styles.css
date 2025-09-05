@@ -119,8 +119,16 @@ h1 {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1em;
 } */
-
 .indicador {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+/* .indicador {
   margin-bottom: 2em;
   padding: 1em;
   border: 1px solid #ccc;
@@ -129,12 +137,12 @@ h1 {
   position: relative;
   box-sizing: border-box;
   left: 10%;
-   /*margin-top: 130%;*/ 
+  margin-top: 130%;
   width: 100%;
   overflow-wrap: break-word;
   text-align: center;
 
-}
+} */
   /* .indicadores5{
   position: absolute;
   left: 50%;
@@ -199,7 +207,6 @@ h1 {
   color: #333;
 }
 
-
 .grupo-horizontal {
   display: flex;
   flex-wrap: wrap;
@@ -208,8 +215,7 @@ h1 {
 }
 
 .grupo-horizontal > * {
-  flex-grow: 0;
-  flex-shrink: 1;
+  flex: 0 1 auto;
   min-width: 0;
 }
 
