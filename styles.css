@@ -201,6 +201,10 @@ h1 {
   font-size: 0.9rem;
   color: #333;
 }
+.comentario-visible2 {
+  font-size: 0.9rem;
+  color: #333;
+}
 .indicador {
   width: 100%;
   max-width: 100%;
@@ -228,8 +232,6 @@ h1 {
 }
 
 select,
-.comentario-visible,
-.comentario-visible2,
 .comentario-input {
   width: 100%;
   max-width: 80%;
@@ -258,9 +260,9 @@ select,
   left: 63px;  
   font-size: 20px;
 } */
-.comentario-visible {
+/* .comentario-visible {
   font-size: 20px; 
-}
+} */
 
 
 /* .indicador select {
