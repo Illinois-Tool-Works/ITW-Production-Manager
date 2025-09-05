@@ -742,3 +742,18 @@ window.enviarEstado = async function (selectElement) {
 
   alert(`Estado actualizado por ${usuario} en ${indicadorId}: ${estado}`);
 };
+document.querySelectorAll('.cuadro').forEach(cuadro => {
+  cuadro.addEventListener('click', () => {
+    const indicadorId = cuadro.dataset.indicador;
+    const indicador = document.getElementById(indicadorId);
+    const columna = indicador.closest('.columna-indicador');
+
+    // Remover expansión de todas las columnas
+    document.querySelectorAll('.columna-indicador').forEach(col => {
+      col.classList.remove('expandida');
+    });
+
+    // Expandir solo la columna activa
+    columna.classList.add('expandida');
+  });
+});
