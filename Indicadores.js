@@ -671,7 +671,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function ocultarIndicador(indicador) {
-    const visibles = indicador.querySelectorAll("select, input, .comentario-visible");
+    const visibles = indicador.querySelectorAll("select, input, .comentario-visible,.comentario-visible2");
     visibles.forEach(el => {
       el.classList.add("oculto");
       if (el.tagName === "SELECT" || el.tagName === "INPUT") {
