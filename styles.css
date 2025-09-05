@@ -196,14 +196,18 @@ h1 {
   gap: 0.75em;
   flex-wrap: wrap;
 }
-.comentario-visible2,
-.comentario-visible {
-  font-size: 0.9rem;
-  color: #333;
-   min-height: 30px;
-  max-height: 60px;
-  overflow-y: auto;
-  display: block; /* o inline-block si prefieres */
+.comentario-visible,
+.comentario-visible2 {
+  display: inline-block;
+  width: 200px;
+  height: 60px;
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 
