@@ -198,17 +198,22 @@ h1 {
 }
 .comentario-visible,
 .comentario-visible2 {
-  display: inline-block;
-  width: 200px;
-  height: 60px;
+  display: block;
+  width: 100%;               /* ocupa todo el ancho de la columna */
+  max-width: 100%;           /* asegura que no se desborde */
+  min-height: 60px;          /* altura mínima para mantener estructura */
+  max-height: 150px;         /* altura máxima antes de activar scroll */
   padding: 0.5rem;
   background-color: #f8f9fa;
   border: 1px solid #ccc;
-  overflow: visible;
-  text-overflow: ellipsis;
-  white-space: normal;
   box-sizing: border-box;
+
+  overflow-y: auto;          /* scroll vertical si el texto excede */
+  overflow-x: hidden;        /* evita scroll horizontal */
+  white-space: normal;       /* permite saltos de línea */
+  word-break: break-word;    /* rompe palabras largas */
 }
+
 
 
 
