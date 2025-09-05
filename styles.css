@@ -196,7 +196,7 @@ h1 {
   gap: 0.75em;
   flex-wrap: wrap;
 }
-
+.comentario-visible2,
 .comentario-visible {
   font-size: 0.9rem;
   color: #333;
@@ -205,6 +205,22 @@ h1 {
   font-size: 0.9rem;
   color: #333;
 }
+@media (max-width: 768px) {
+  .comentario-visible,
+  .comentario-visible2 {
+    font-size: 1rem;
+    color: #333;
+  }
+}
+
+@media (min-width: 992px) {
+  .comentario-visible,
+  .comentario-visible2 {
+    font-size: 0.8rem;
+    color: #333;
+  }
+}
+
 .indicador {
   width: 100%;
   max-width: 100%;
@@ -232,10 +248,8 @@ h1 {
 }
 
 select,
-.comentario-visible,
-.comentario-visible2,
 .comentario-input {
-  width: 50%;
+  width: 100%;
   max-width: 80%;
   box-sizing: border-box;
   overflow-wrap: break-word;
