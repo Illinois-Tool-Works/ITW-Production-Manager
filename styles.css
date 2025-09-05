@@ -200,26 +200,12 @@ h1 {
 .comentario-visible {
   font-size: 0.9rem;
   color: #333;
-}
-.comentario-visible2 {
-  font-size: 0.9rem;
-  color: #333;
-}
-@media (max-width: 768px) {
-  .comentario-visible,
-  .comentario-visible2 {
-    font-size: 0.5rem;
-    color: #333;
-  }
+   min-height: 30px;
+  max-height: 100px;
+  overflow-y: auto;
 }
 
-@media (min-width: 992px) {
-  .comentario-visible,
-  .comentario-visible2 {
-    font-size: 0.8rem;
-    color: #333;
-  }
-}
+
 
 .indicador {
   width: 100%;
