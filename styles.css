@@ -208,7 +208,7 @@ h1 {
 @media (max-width: 768px) {
   .comentario-visible,
   .comentario-visible2 {
-    font-size: 1rem;
+    font-size: 0.5rem;
     color: #333;
   }
 }
