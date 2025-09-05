@@ -119,12 +119,6 @@ h1 {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1em;
 } */
-.indicador {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-wrap: break-word;
-}
 
 /* .indicador {
   margin-bottom: 2em;
@@ -204,7 +198,12 @@ h1 {
   font-size: 0.9rem;
   color: #333;
 }
-
+.indicador {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
 .grupo-horizontal {
   display: flex;
   flex-wrap: wrap;
