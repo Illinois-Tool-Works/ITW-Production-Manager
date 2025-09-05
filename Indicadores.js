@@ -356,9 +356,11 @@ window.enviarComentario = async function (event, input) {
   const indicadorId = input.dataset.indicador;
   const usuario = input.dataset.usuario || "desconocido";
   const timestamp = new Date().toISOString();
+  const area = indicador.dataset.area;
 
   const db = getDatabase();
   const comentarioData = {
+    area: area,
     texto: comentario,
     usuario,
     fecha: timestamp
@@ -620,15 +622,15 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
 
   XLSX.writeFile(libro, `registro_${new Date().toISOString().slice(0, 10)}.xlsx`);
 
-  // 🧹 Eliminar registros
-   try {
-    await remove(ref(db, 'registro'));
-    console.log("Registro eliminado correctamente.");
-    alert("Registro exportado y limpiado.");
-  } catch (error) {
-    console.error("Error al eliminar registro:", error.message);
-    alert("Hubo un problema al eliminar los registros.");
-  }
+  // // 🧹 Eliminar registros
+  //  try {
+  //   await remove(ref(db, 'registro'));
+  //   console.log("Registro eliminado correctamente.");
+  //   alert("Registro exportado y limpiado.");
+  // } catch (error) {
+  //   console.error("Error al eliminar registro:", error.message);
+  //   alert("Hubo un problema al eliminar los registros.");
+  // }
 });
 
 //////////////////////////////
