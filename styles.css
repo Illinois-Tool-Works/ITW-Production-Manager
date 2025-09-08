@@ -378,8 +378,30 @@ select,
 }
 
 .grupo-indicadores {
-   background-color: transparent;
-  border-left: 4px solid #5c11116f;
+  position: relative;
+  background-color: transparent;
+  border-left: 4px solid #5c1111;
+  padding: 1rem 0; /* espacio vertical para que los bordes no se peguen al contenido */
 }
 
+/* Borde superior desvanecido */
+.grupo-indicadores::before,
+.grupo-indicadores::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, #5c1111, transparent);
+}
+
+/* Borde superior */
+.grupo-indicadores::before {
+  top: 0;
+}
+
+/* Borde inferior */
+.grupo-indicadores::after {
+  bottom: 0;
+}
 
