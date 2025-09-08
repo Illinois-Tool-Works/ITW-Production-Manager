@@ -560,8 +560,8 @@ backBtn.style.display = "inline-block"; // visible por defecto
 
     try {
       await remove(ref(db, 'registro'));
+      await remove(ref(db, 'registroindicadores'));
       console.log("Registro eliminado correctamente.");
-      alert("Registro exportado y limpiado.");
     } catch (error) {
       console.error("Error al eliminar registro:", error.message);
       alert("Hubo un problema al eliminar los registros.");
