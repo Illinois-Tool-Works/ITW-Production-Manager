@@ -379,12 +379,13 @@ select,
 
 .grupo-indicadores {
   position: relative;
-  background-color: rgb(250, 204, 204);
+  background-color: rgb(229, 250, 204);
   border-left: 4px solid #5c1111;
   padding: 1rem 0; /* espacio vertical para que los bordes no se peguen al contenido */
     width: 100%;
   transition: width 0.3s ease;
-
+ align-items: center; /* 👈 centra horizontalmente */
+  gap: 1rem; /* espacio entre indicadores */
 }
 
 /* Borde superior desvanecido */
