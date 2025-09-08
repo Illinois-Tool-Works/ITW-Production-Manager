@@ -400,12 +400,23 @@ function guardarComentario(inputElement) {
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
+   // 👉 Formatear fecha estilo indicador
+  const fechaFormateada = new Date(timestampISO).toLocaleString("es-MX", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  });
+
 
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   set(comentarioRef, {
     estado: estado,
     texto: comentario,
-    fecha: timestamp,
+    fecha: timestamp,//ISO
     usuario: usuario 
   })
   .then(() => {
@@ -421,7 +432,7 @@ function guardarComentario(inputElement) {
   set(registroRef, {
     estado: estado,
     texto: comentario,
-    fecha: timestamp,
+     fecha: fechaFormateada, //formato personalizado
     usuario: usuario 
   })
 }
