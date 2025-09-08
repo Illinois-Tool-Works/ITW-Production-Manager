@@ -409,6 +409,6 @@ Borde superior */
 } */
 
 .reducido-derecha {
-  width: 90%;
+  width: 80%;
   transition: width 0.3s ease;
 }
