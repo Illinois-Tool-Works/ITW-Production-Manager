@@ -684,7 +684,7 @@ if (location.pathname.includes("pagina1.html")) {
         Estado: datos.estado,
         Comentario: datos.texto,
         Usuario: datos.usuario,
-        FechaComentario: datos.fecha,
+        Fecha: datos.fecha,
         FechaIndicador: datos.fechaHora
       });
     });
