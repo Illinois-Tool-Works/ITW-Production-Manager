@@ -72,6 +72,7 @@
  <div class="col-12 col-md-3 mb-3">
       <div id="indicadores5" class="indicadores d-flex flex-column gap-3">
         <!-- Indicadores individuales -->
+     <div class="grupo-indicadores grupo-produccion mb-4 p-3 rounded shadow-sm">     
         <div  id="indicador123" class="indicador" >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
@@ -126,6 +127,26 @@
     <input type="text"
            class="comentario-input oculto"
            data-indicador="indicador97"
+           placeholder="Comentario..."
+           onkeydown="enviarComentario(event, this)"
+           enterkeyhint="send"
+           disabled>
+           </div>
+    </div>
+     <div  id="indicador114" class="indicador" >
+   <div class="comentario-visible2 oculto">Sin estado</div>
+   <div class="grupo-horizontal">
+    <select class="oculto" disabled onchange="cambiarColor(this, 'indicador114') ">
+      <option value="gris">No plan</option>
+      <option value="rojo">Paro</option>
+      <option value="verde">Corriendo</option>
+      <option value="azul">Cambio de molde</option>
+    </select>
+    <span class="cuadro" data-indicador="indicador114">114</span>
+    <div class="comentario-visible oculto">Sin comentario</div>
+    <input type="text"
+           class="comentario-input oculto"
+           data-indicador="indicador114"
            placeholder="Comentario..."
            onkeydown="enviarComentario(event, this)"
            enterkeyhint="send"
@@ -212,7 +233,7 @@
            disabled>
            </div>
     </div> 
-    <div  id="indicador101" class="indicador" >
+    <div  id="indicador101" class="indicador " >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
     <select class="oculto" disabled onchange="cambiarColor(this, 'indicador101') ">
@@ -221,7 +242,7 @@
       <option value="verde">Corriendo</option>
       <option value="azul">Cambio de molde</option>
     </select>
-    <span class="cuadro" data-indicador="indicador101">10</span>
+    <span class="cuadro" data-indicador="indicador101">101</span>
     <div class="comentario-visible oculto">Sin comentario</div>
     <input type="text"
            class="comentario-input oculto"
@@ -232,6 +253,9 @@
            disabled>
            </div>
     </div> 
+     </div>
+
+
     <div  id="indicador117" class="indicador" >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
@@ -332,7 +356,7 @@
            disabled>
            </div>
     </div> 
-    <div  id="indicador91" class="indicador" >
+    <div  id="indicador91" class="indicador " >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
     <select class="oculto" disabled onchange="cambiarColor(this, 'indicador91') ">
@@ -352,6 +376,9 @@
            disabled>
            </div>
     </div> 
+
+
+
     <div  id="indicador126" class="indicador" >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
@@ -452,7 +479,7 @@
            disabled>
            </div>
     </div> 
-    <div  id="indicador106" class="indicador" >
+    <div  id="indicador106" class="indicador " >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
     <select class="oculto" disabled onchange="cambiarColor(this, 'indicador106') ">
@@ -472,6 +499,8 @@
            disabled>
            </div>
     </div> 
+
+
     <div  id="indicador112" class="indicador" >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
@@ -758,7 +787,7 @@
            disabled>
            </div>
     </div> 
-    <div  id="indicador125" class="indicador" >
+    <div  id="indicador125" class="indicador " >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
     <select class="oculto" disabled onchange="cambiarColor(this, 'indicador125') ">
@@ -778,6 +807,9 @@
            disabled>
            </div>
     </div> 
+
+
+
      <div  id="indicador73" class="indicador" >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
@@ -898,6 +930,8 @@
            disabled>
            </div>
     </div> 
+
+
     <div  id="indicador94" class="indicador" >
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
@@ -984,7 +1018,7 @@
     <!-- Columna 3 -->
    <div class="col-12 col-md-3 mb-3">
       <div id="indicadores7" class="indicadores d-flex flex-column gap-3">
-<div  id="indicador98" class="indicador" >
+<div  id="indicador98" class="indicador">
    <div class="comentario-visible2 oculto">Sin estado</div>
    <div class="grupo-horizontal">
     <select class="oculto" disabled onchange="cambiarColor(this, 'indicador98') ">
