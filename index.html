@@ -59,6 +59,19 @@
     setInterval(actualizarFechaHora, 1000);
     actualizarFechaHora();
   </script>
+   <script>
+    const qrTarget = "https://github.com/Illinois-Tool-Works/ITW-Production-Manager";
+    const qrDiv = document.getElementById("qrGitHub");
+
+    new QRCode(qrDiv, {
+      text: qrTarget,
+      width: 160,
+      height: 160,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 </body>
