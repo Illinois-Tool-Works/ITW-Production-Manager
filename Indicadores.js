@@ -645,6 +645,14 @@ backBtn.style.display = "inline-block"; // visible por defecto
 document.getElementById("btnRegistro").addEventListener("click", async () => {
   const db = getDatabase();
   const snapshot = await get(ref(db, 'registro'));
+  
+  // Detectar área según el nombre de la página
+let areaActual = "Área desconocida";
+if (location.pathname.includes("pagina1.html")) {
+  areaActual = "Área 1";
+} else if (location.pathname.includes("pagina2.html")) {
+  areaActual = "Área 2";
+}
 
   if (!snapshot.exists()) {
     alert("No hay registros para exportar.");
@@ -655,13 +663,15 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
   const filas = [];
 
   Object.entries(registros).forEach(([indicadorId, entradas]) => {
+     const area = mapaIndicadores[indicadorId] || "Área desconocida";
     Object.entries(entradas).forEach(([clave, datos]) => {
       filas.push({
+         Área: area,
         Indicador: indicadorId,
         Estado: datos.estado,
         Comentario: datos.texto,
         Usuario: datos.usuario,
-        Fecha: datos.fecha,
+        Fecha: datos.fecha + datos.fechaHora,
         FechaHora: datos.fechaHora
       });
     });
@@ -674,15 +684,6 @@ document.getElementById("btnRegistro").addEventListener("click", async () => {
 
   XLSX.writeFile(libro, `registro_${new Date().toISOString().slice(0, 10)}.xlsx`);
 
-  // // 🧹 Eliminar registros
-  //  try {
-  //   await remove(ref(db, 'registro'));
-  //   console.log("Registro eliminado correctamente.");
-  //   alert("Registro exportado y limpiado.");
-  // } catch (error) {
-  //   console.error("Error al eliminar registro:", error.message);
-  //   alert("Hubo un problema al eliminar los registros.");
-  // }
 });
 
 //////////////////////////////
@@ -789,3 +790,15 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
     // columna.classList.add('expandida');
   });
 });
+
+///////////////////////////////
+const mapaIndicadores = {
+  48: "Área 1",
+  49: "Área 1",
+  50: "Área 1",
+  123: "Área 2",
+  118: "Área 2",
+  97: "Área 2",
+  // y así sucesivamente...
+};
+
