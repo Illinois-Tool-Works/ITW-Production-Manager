@@ -333,7 +333,7 @@ document.querySelectorAll(".indicador").forEach(indicador => {
     const datos = snapshot.val();
     if (!datos || !comentarioVisible2) return;
 
-    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fechaHora}`;
+    comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
     // comentarioVisible2.classList.remove("oculto");
   });
 });
