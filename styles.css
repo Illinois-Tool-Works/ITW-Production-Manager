@@ -387,29 +387,3 @@ select,
  align-items: center; /* 👈 centra horizontalmente */
   gap: 1rem; /* espacio entre indicadores */
 }
-
-/* Borde superior desvanecido */
-/* .grupo-indicadores::before,
-.grupo-indicadores::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 90%;
-  height: 4px;
-  background: linear-gradient(to right, #5c1111, transparent);
-}
-
-Borde superior */
-/* .grupo-indicadores::before {
-  top: 0;
-} */
-
-/* Borde inferior */
-/* .grupo-indicadores::after {
-  bottom: 0;
-} */
- .reducido-derecha {
-  transform: scaleX(0.9); /* reduce visualmente el ancho a 90% */
-  transform-origin: left; /* mantiene el borde izquierdo fijo */
-  transition: transform 0.3s ease;
-}
