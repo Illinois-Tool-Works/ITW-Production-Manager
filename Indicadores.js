@@ -895,7 +895,6 @@ const mapaIndicadores = {
   131: "Área 2",
   // y así sucesivamente...
 };
-
 document.querySelectorAll(".indicador").forEach(indicador => {
   indicador.addEventListener("click", () => {
     const grupo = indicador.closest(".grupo-indicadores");
