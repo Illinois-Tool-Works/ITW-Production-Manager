@@ -663,7 +663,9 @@ if (location.pathname.includes("pagina1.html")) {
   const filas = [];
 
   Object.entries(registros).forEach(([indicadorId, entradas]) => {
-     const area = mapaIndicadores[indicadorId] || "Área desconocida";
+  const idNumerico = indicadorId.replace("indicador", ""); // extrae solo el número
+  const area = mapaIndicadores[idNumerico] || "Área desconocida";
+
     Object.entries(entradas).forEach(([clave, datos]) => {
       filas.push({
          Área: area,
@@ -671,8 +673,8 @@ if (location.pathname.includes("pagina1.html")) {
         Estado: datos.estado,
         Comentario: datos.texto,
         Usuario: datos.usuario,
-        Fecha: datos.fecha + datos.fechaHora,
-        FechaHora: datos.fechaHora
+        FechaComentario: datos.fecha + datos.fechaHora,
+        FechaIndicador: datos.fechaHora
       });
     });
   });
