@@ -390,7 +390,7 @@ select,
   content: "";
   position: absolute;
   left: 0;
-  width: 100%;
+  width: 90%;
   height: 4px;
   background: linear-gradient(to right, #5c1111, transparent);
 }
