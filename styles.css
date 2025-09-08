@@ -362,5 +362,8 @@ select,
 }
 /*qr*/
 #qrGitHub {
-  margin-top: 10%;
+  top: 10px;
+  left: 10px;
+  z-index: 1050; /* por encima de modales y tooltips */
 }
+
