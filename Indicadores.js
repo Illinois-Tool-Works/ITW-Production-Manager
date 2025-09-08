@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const input = select.closest('.indicador').querySelector('.comentario-input');
   const usuario = input?.dataset?.usuario || "Desconocido";
 
-  const fechaHora = new Date().toLocaleString('es-MX', {
+  const fecha = new Date().toLocaleString('es-MX', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -295,13 +295,13 @@ document.addEventListener("DOMContentLoaded", () => {
   set(comentarioRef, {
     estado,
     usuario,
-    fechaHora
+    fecha
   });
 const registroRef = ref(db, `registro/${id}`);
   push(registroRef, {
     estado,
     usuario,
-    fechaHora
+    fecha
   });
 
 
