@@ -537,11 +537,12 @@ backBtn.style.display = "inline-block"; // visible por defecto
       // eliminarBtn.style.display = "inline-block"; // 👈 Mostrar botón eliminar
       backBtn.style.display = "none"; // 👈 Ocultar botón Back
 
-if (nombre === "luis") {
-      eliminarBtn.style.display = "inline-block";
-    } else {
-      eliminarBtn.style.display = "none";
-    }
+if (nombre.trim().toLowerCase() === "luis") {
+  eliminarBtn.style.display = "inline-block";
+} else {
+  eliminarBtn.style.display = "none";
+}
+
 
       document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
         el.disabled = false;
