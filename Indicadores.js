@@ -888,15 +888,4 @@ const mapaIndicadores = {
   131: "Área 2",
   // y así sucesivamente...
 };
-//////////////////////////////////qr//////////////
-const qrTarget = "https://github.com/Illinois-Tool-Works/ITW-Production-Manager";
-const qrDiv = document.getElementById("qrGitHub");
 
-new QRCode(qrDiv, {
-  text: qrTarget,
-  width: 160,
-  height: 160,
-  colorDark: "#000000",
-  colorLight: "#ffffff",
-  correctLevel: QRCode.CorrectLevel.H
-});
