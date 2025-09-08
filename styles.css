@@ -379,7 +379,7 @@ select,
 
 .grupo-indicadores {
   position: relative;
-  background-color: white;
+  background-color: rgb(174, 168, 168);
   border-left: 4px solid #5c1111;
   padding: 1rem 0; /* espacio vertical para que los bordes no se peguen al contenido */
     width: 100%;
@@ -409,6 +409,6 @@ Borde superior */
 } */
 
 .reducido-derecha {
-  width: 80%;
+  width: 70%;
   transition: width 0.3s ease;
 }
