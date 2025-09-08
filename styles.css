@@ -378,7 +378,7 @@ select,
 }
 
 .grupo-indicadores {
-  background-color: #f8f9fa;
+   background-color: transparent;
   border-left: 4px solid #5c1111;
 }
 
