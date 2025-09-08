@@ -896,3 +896,12 @@ const mapaIndicadores = {
   // y así sucesivamente...
 };
 
+document.querySelectorAll(".indicador").forEach(indicador => {
+  indicador.addEventListener("click", () => {
+    const grupo = indicador.closest(".grupo-indicadores");
+    if (grupo) {
+      grupo.classList.add("reducido-derecha");
+    }
+  });
+});
+

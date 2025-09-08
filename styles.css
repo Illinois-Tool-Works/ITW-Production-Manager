@@ -379,13 +379,16 @@ select,
 
 .grupo-indicadores {
   position: relative;
-  background-color: transparent;
+  background-color: white;
   border-left: 4px solid #5c1111;
   padding: 1rem 0; /* espacio vertical para que los bordes no se peguen al contenido */
+    width: 100%;
+  transition: width 0.3s ease;
+
 }
 
 /* Borde superior desvanecido */
-.grupo-indicadores::before,
+/* .grupo-indicadores::before,
 .grupo-indicadores::after {
   content: "";
   position: absolute;
@@ -395,13 +398,17 @@ select,
   background: linear-gradient(to right, #5c1111, transparent);
 }
 
-/* Borde superior */
-.grupo-indicadores::before {
+Borde superior */
+/* .grupo-indicadores::before {
   top: 0;
-}
+} */
 
 /* Borde inferior */
-.grupo-indicadores::after {
+/* .grupo-indicadores::after {
   bottom: 0;
-}
+} */
 
+.reducido-derecha {
+  width: 90%;
+  transition: width 0.3s ease;
+}
