@@ -486,9 +486,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const activarBtn = document.getElementById("activarEdicion");
   const exportarBtn = document.getElementById("btnRegistro");
+  const backBtn = document.querySelector(".btn-secondary");
+  const eliminarBtn = document.createElement("button");
+
 
   // Ocultar el botón al cargar
   exportarBtn.style.display = "none";
+backBtn.style.display = "inline-block"; // visible por defecto
+
+// Configurar botón de eliminación
+  eliminarBtn.id = "btnEliminar";
+  eliminarBtn.className = "btn btn-danger mt-0.9 ms-2";
+  eliminarBtn.textContent = "Eliminar registro";
+  eliminarBtn.style.display = "none"; // oculto inicialmente
+  document.querySelector(".button-group").appendChild(eliminarBtn);
+
 
   activarBtn.addEventListener("click", async () => {
     if (!edicionActiva) {
@@ -511,6 +523,8 @@ document.addEventListener("DOMContentLoaded", () => {
       activarBtn.style.color = "white";
 
       exportarBtn.style.display = "inline-block"; // 👈 Mostrar botón
+      eliminarBtn.style.display = "inline-block"; // 👈 Mostrar botón eliminar
+      backBtn.style.display = "none"; // 👈 Ocultar botón Back
 
       document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
         el.disabled = false;
@@ -531,11 +545,29 @@ document.addEventListener("DOMContentLoaded", () => {
       activarBtn.style.color = "";
 
       exportarBtn.style.display = "none"; // 👈 Ocultar botón
+       eliminarBtn.style.display = "none"; // 👈 Ocultar botón eliminar
+      backBtn.style.display = "inline-block"; // 👈 Mostrar botón Back
+
 
       document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
         el.disabled = true;
       });
     }
+     // 🧹 Lógica de eliminación con confirmación
+  eliminarBtn.addEventListener("click", async () => {
+    const confirmacion = confirm("¿Estás seguro de que quieres borrar el registro?");
+    if (!confirmacion) return;
+
+    try {
+      await remove(ref(db, 'registro'));
+      console.log("Registro eliminado correctamente.");
+      alert("Registro exportado y limpiado.");
+    } catch (error) {
+      console.error("Error al eliminar registro:", error.message);
+      alert("Hubo un problema al eliminar los registros.");
+    }
+  });
+
   });
 
   // Mostrar campos al hacer clic en el cuadro
