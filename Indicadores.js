@@ -401,7 +401,7 @@ function guardarComentario(inputElement) {
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
    // 👉 Formatear fecha estilo indicador
-  const fechaFormateada = new Date(timestampISO).toLocaleString("es-MX", {
+  const fechaFormateada = new Date(timestamp).toLocaleString("es-MX", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
