@@ -360,3 +360,7 @@ select,
   background-color: #dc3545; /* rojo */
   color: white;
 }
+/*qr*/
+#qrGitHub {
+  margin-top: 10%;
+}
