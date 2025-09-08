@@ -366,4 +366,14 @@ select,
   left: 10px;
   z-index: 1050; /* por encima de modales y tooltips */
 }
+/* Ocultar o reubicar en pantallas pequeñas */
+@media (max-width: 600px) {
+  #qrGitHub {
+    position: static;
+    margin: 10px auto;
+    display: block;
+    width: 80px;
+    height: 80px;
+  }
+}
 
