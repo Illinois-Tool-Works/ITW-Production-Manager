@@ -721,6 +721,17 @@ if (location.pathname.includes("pagina1.html")) {
     });
   });
 
+   // 🔹 Ordenar por área y luego por fecha
+  const filasOrdenadas = filas.sort((a, b) => {
+    if (a.Área < b.Área) return -1;
+    if (a.Área > b.Área) return 1;
+
+    // Si el área es igual, ordenar por fecha
+    const fechaA = new Date(a.Fecha.replace(/a\.m\.|p\.m\./, match => match === "p.m." ? "PM" : "AM"));
+    const fechaB = new Date(b.Fecha.replace(/a\.m\.|p\.m\./, match => match === "p.m." ? "PM" : "AM"));
+    return fechaA - fechaB;
+  });
+
   // 🧾 Generar Excel
   const hoja = XLSX.utils.json_to_sheet(filas);
   const libro = XLSX.utils.book_new();
