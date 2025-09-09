@@ -157,7 +157,6 @@ window.enviarComentario = async function (event, input) {
   const db = getDatabase();
   const comentarioData = {
     texto: comentario,
-    usuario,
     fecha: timestamp,
     fecha,
     nombre: usuario
@@ -166,7 +165,6 @@ window.enviarComentario = async function (event, input) {
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
   await update(indicadorRef, {
     texto: comentario,
-    usuario,
     fecha: timestamp,
     fecha,
     nombre: usuario
