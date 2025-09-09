@@ -491,7 +491,12 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
     }, { onlyOnce: true });
   });
 }
+
 document.addEventListener("DOMContentLoaded", () => {
+  // 🔹 Identificador único por ventana
+  const tabId = Date.now().toString();
+  sessionStorage.setItem("tabId", tabId);
+
   let edicionActiva = false;
   let nombreUsuario = null;
 
@@ -500,22 +505,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.querySelector(".btn-secondary");
   const eliminarBtn = document.createElement("button");
 
-
-  // Ocultar el botón al cargar
   exportarBtn.style.display = "none";
-backBtn.style.display = "inline-block"; // visible por defecto
+  backBtn.style.display = "inline-block";
 
-// Configurar botón de eliminación
   eliminarBtn.id = "btnEliminar";
   eliminarBtn.className = "btn btn-danger mt-0.9 ms-2";
   eliminarBtn.textContent = "Eliminar registro";
-  eliminarBtn.style.display = "none"; // oculto inicialmente
+  eliminarBtn.style.display = "none";
   document.querySelector(".button-group").appendChild(eliminarBtn);
-
 
   activarBtn.addEventListener("click", async () => {
     if (!edicionActiva) {
-      // Activar edición → solicitar credenciales
       const usuarioId = prompt("ID de usuario:");
       const contraseña = prompt("Contraseña:");
 
@@ -526,23 +526,21 @@ backBtn.style.display = "inline-block"; // visible por defecto
       }
 
       nombreUsuario = nombre;
+      localStorage.setItem("controlActivo", tabId);
+
+      if (localStorage.getItem("controlActivo") !== tabId) return;
+
       edicionActiva = true;
 
       activarBtn.classList.add("activo");
       activarBtn.textContent = "Desactivar edición";
-      activarBtn.style.backgroundColor = "#dc3545"; // rojo
+      activarBtn.style.backgroundColor = "#dc3545";
       activarBtn.style.color = "white";
 
-      exportarBtn.style.display = "inline-block"; // 👈 Mostrar botón
-      // eliminarBtn.style.display = "inline-block"; // 👈 Mostrar botón eliminar
-      backBtn.style.display = "none"; // 👈 Ocultar botón Back
+      exportarBtn.style.display = "inline-block";
+      backBtn.style.display = "none";
 
-if (nombre.trim().toLowerCase() === "luis") {
-  eliminarBtn.style.display = "inline-block";
-} else {
-  eliminarBtn.style.display = "none";
-}
-
+      eliminarBtn.style.display = nombre.trim().toLowerCase() === "luis" ? "inline-block" : "none";
 
       document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
         el.disabled = false;
@@ -550,77 +548,103 @@ if (nombre.trim().toLowerCase() === "luis") {
           el.dataset.usuario = nombreUsuario;
         }
       });
-
-      // alert(`Bienvenido, ${nombreUsuario}. Puedes editar los indicadores visibles.`);
     } else {
-      // Desactivar edición → sin credenciales
       edicionActiva = false;
       nombreUsuario = null;
+      localStorage.removeItem("controlActivo");
 
       activarBtn.classList.remove("activo");
       activarBtn.textContent = "Admin";
-      activarBtn.style.backgroundColor = ""; // color original
+      activarBtn.style.backgroundColor = "";
       activarBtn.style.color = "";
 
-      exportarBtn.style.display = "none"; // 👈 Ocultar botón
-       eliminarBtn.style.display = "none"; // 👈 Ocultar botón eliminar
-      backBtn.style.display = "inline-block"; // 👈 Mostrar botón Back
-
+      exportarBtn.style.display = "none";
+      eliminarBtn.style.display = "none";
+      backBtn.style.display = "inline-block";
 
       document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
         el.disabled = true;
       });
     }
-     // 🧹 Lógica de eliminación con confirmación
-  eliminarBtn.addEventListener("click", async () => {
-    const confirmacion = confirm("¿Estás seguro de que quieres borrar el registro?");
-    if (!confirmacion) return;
+  });
 
-    try {
-      await remove(ref(db, 'registro'));
-      await remove(ref(db, 'registroindicadores'));
-      console.log("Registro eliminado correctamente.");
-    } catch (error) {
-      console.error("Error al eliminar registro:", error.message);
-      alert("Hubo un problema al eliminar los registros.");
+  // 🔹 Escuchar si otra ventana toma el control
+  window.addEventListener("storage", (e) => {
+    if (e.key === "controlActivo" && e.newValue !== tabId) {
+      edicionActiva = false;
+      nombreUsuario = null;
+
+      activarBtn.classList.remove("activo");
+      activarBtn.textContent = "Admin";
+      activarBtn.style.backgroundColor = "";
+      activarBtn.style.color = "";
+
+      exportarBtn.style.display = "none";
+      eliminarBtn.style.display = "none";
+      backBtn.style.display = "inline-block";
+
+      document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
+        el.disabled = true;
+      });
     }
   });
 
+  // 🔹 Limpiar control si esta ventana se cierra
+  window.addEventListener("beforeunload", () => {
+    if (localStorage.getItem("controlActivo") === tabId) {
+      localStorage.removeItem("controlActivo");
+    }
   });
 
-  // Mostrar campos al hacer clic en el cuadro
+  // 🔹 Lógica de eliminación con confirmación
+  if (!eliminarBtn.dataset.listenerAgregado) {
+    eliminarBtn.addEventListener("click", async () => {
+      const confirmacion = confirm("¿Estás seguro de que quieres borrar el registro?");
+      if (!confirmacion) return;
+
+      try {
+        await remove(ref(db, 'registro'));
+        await remove(ref(db, 'registroindicadores'));
+        console.log("Registro eliminado correctamente.");
+      } catch (error) {
+        console.error("Error al eliminar registro:", error.message);
+        alert("Hubo un problema al eliminar los registros.");
+      }
+    });
+    eliminarBtn.dataset.listenerAgregado = "true";
+  }
+
+  // 🔹 Mostrar campos al hacer clic en el cuadro
   document.querySelectorAll(".cuadro").forEach(cuadro => {
     cuadro.addEventListener("click", (e) => {
       e.stopPropagation();
 
       const id = cuadro.dataset.indicador;
-    const indicador = document.getElementById(id);
+      const indicador = document.getElementById(id);
 
-    // Ocultar todos los demás campos
-    document.querySelectorAll(".indicador").forEach(ind => {
-      if (ind !== indicador) {
-        ind.querySelectorAll("select, input, .comentario-visible, .comentario-visible2").forEach(el => {
-          el.classList.add("oculto");
-          el.disabled = true;
-        });
-      }
-    });
-// Mostrar campos del indicador activo
-    const ocultos = indicador.querySelectorAll(".oculto");
-    ocultos.forEach(el => {
-      el.classList.remove("oculto");
-      if (edicionActiva) {
-        el.disabled = false;
-        if (el.classList.contains("comentario-input")) {
-          el.dataset.usuario = nombreUsuario;
+      document.querySelectorAll(".indicador").forEach(ind => {
+        if (ind !== indicador) {
+          ind.querySelectorAll("select, input, .comentario-visible, .comentario-visible2").forEach(el => {
+            el.classList.add("oculto");
+            el.disabled = true;
+          });
         }
-      }
-    });
+      });
 
+      const ocultos = indicador.querySelectorAll(".oculto");
+      ocultos.forEach(el => {
+        el.classList.remove("oculto");
+        if (edicionActiva) {
+          el.disabled = false;
+          if (el.classList.contains("comentario-input")) {
+            el.dataset.usuario = nombreUsuario;
+          }
+        }
+      });
     });
   });
 
-  // Ocultar campos si se hace clic fuera
+  // 🔹 Ocultar campos si se hace clic fuera
   document.addEventListener("click", (e) => {
     document.querySelectorAll(".indicador").forEach(indicador => {
       if (!indicador.contains(e.target)) {
