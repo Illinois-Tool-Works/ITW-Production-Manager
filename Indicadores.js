@@ -21,124 +21,6 @@ function cambiarColor(select, id) {
     cuadro.className = `cuadro ${color}`;
   }
 }
-// const estadosColor = {
-//   gris: "No plan",
-//   rojo: "Paro",
-//   verde: "Corriendo",
-//   azul: "Cambio de molde"
-// };
-// function cambiarColor(select, id) {
-//   // select.disabled = true;
-
-//   const color = select.value;
-//   const div = document.getElementById(id);
-//   const cuadro = div.querySelector('.cuadro');
-//   if (cuadro) {
-//     cuadro.className = `cuadro ${color}`;
-//   }
-
-//   const input = div.querySelector('.comentario-input');
-//   const usuario = input?.dataset?.usuario || "Desconocido";
-
-//   const ahora = new Date();
-//   const fechaHora = ahora.toLocaleString('es-MX', {
-//     day: '2-digit',
-//     month: '2-digit',
-//     year: 'numeric',
-//     hour: '2-digit',
-//     minute: '2-digit',
-//     second: '2-digit'
-//   });
-
-//   const estadosColor = {
-//     gris: "No plan",
-//     rojo: "Paro",
-//     verde: "Corriendo",
-//     azul: "Cambio de molde"
-//   };
-
-//   const estado = estadosColor[color] || color;
-
-//   const comentarioVisible2 = div.querySelector('.comentario-visible2');
-//   if (comentarioVisible2) {
-//     comentarioVisible2.textContent = `Registro: ${usuario} seleccionó "${estado}" el ${fechaHora}`;
-//     // comentarioVisible2.classList.remove("oculto");
-//   }
-
-//   console.log(`🕒 ${usuario} cambió ${id} a "${estado}" el ${fechaHora}`);
-// }
-
-// function cambiarColor(select, id) {
-  
-//   const color = select.value;
-//   const div = document.getElementById(id);
-//   const cuadro = div.querySelector('.cuadro');
-//   if (cuadro) {
-//     cuadro.className = `cuadro ${color}`;
-//   }
-
-//   const input = div.querySelector('.comentario-input');
-//   const usuario = input?.dataset?.usuario || "Desconocido";
-
-//   const fecha = new Date().toLocaleString('es-MX', {
-//     day: '2-digit',
-//     month: '2-digit',
-//     year: 'numeric',
-//     hour: '2-digit',
-//     minute: '2-digit',
-//     second: '2-digit'
-//   });
-
-//   const estadosColor = {
-//     gris: "No plan",
-//     rojo: "Paro",
-//     verde: "Corriendo",
-//     azul: "Cambio de molde"
-//   };
-
-//   const estado = estadosColor[color] || color;
-
-//   // 🔥 Guardar en Firebase bajo comentariosIndicadores/{id}
-//   const db = getDatabase();
-//   const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
-//   get(comentarioRef).then(snapshot => {
-//     const datosPrevios = snapshot.val();
-
-//     if (
-//       datosPrevios &&
-//       datosPrevios.estado === estado &&
-//       datosPrevios.usuario === usuario
-//     ) {
-//       console.log(`🔄 No se guardó porque no hubo cambio en ${id}`);
-//       return;
-//     }
-
-//     // ✅ Guardar en Firebase si hubo cambio
-//     set(comentarioRef, {
-//       estado,
-//       usuario,
-//       fecha
-//     });
-
-//     console.log(`✅ Estado guardado: ${usuario} → "${estado}" el ${fecha}`);
-//   });
-// }
-// /////////////////////////// 
-
-// //leer comentario-visible2
-// document.querySelectorAll(".indicador").forEach(indicador => {
-//   const id = indicador.id;
-//   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
-
-//   const refComentario = ref(db, `comentariosIndicadores/${id}`);
-//   onValue(refComentario, (snapshot) => {
-//     const datos = snapshot.val();
-//     if (!datos || !comentarioVisible2) return;
-
-//     comentarioVisible2.textContent = `Registro: ${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-//     // comentarioVisible2.classList.remove("oculto");
-//   });
-// });
 
 
 
@@ -158,95 +40,7 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   // Selecciona todos los contenedores de columnas
-//   const columnas = document.querySelectorAll('.indicadores');
 
-//   // Recorre cada columna
-//   columnas.forEach(contenedor => {
-//     const selects = contenedor.querySelectorAll('.indicador select');
-
-//     // Guardar cambios al seleccionar
-//     selects.forEach(select => {
-//       const id = select.closest('.indicador').id;
-//       select.addEventListener("change", () => {
-//         const valor = select.value;
-//         set(ref(db, `indicadores/${id}`), valor);
-//         cambiarColor(select, id);
-//       });
-//     });
-
-//     // Lectura en tiempo real desde Firebase
-//     onValue(ref(db, 'indicadores'), (snapshot) => {
-//       const estados = snapshot.val();
-//       if (!estados) return;
-
-//       selects.forEach(select => {
-//         const id = select.closest('.indicador').id;
-//         if (estados[id]) {
-//           select.value = estados[id];
-//           cambiarColor(select, id);
-//         }
-//       });
-//     });
-//   });
-// });
-// document.addEventListener("DOMContentLoaded", () => {
-//   const contenedor = document.querySelector('.indicadores');
-//   const selects = contenedor.querySelectorAll('.indicador select');
-
-//   // Guardar cambios al seleccionar
-//   selects.forEach(select => {
-//     const id = select.closest('.indicador').id;
-//     select.addEventListener("change", () => {
-//       const valor = select.value;
-//       set(ref(db, `indicadores/${id}`), valor);
-//       cambiarColor(select, id);
-//     });
-//   });
-
-//   // 🔄 Aquí es donde agregas la lectura en tiempo real
-//   onValue(ref(db, 'indicadores'), (snapshot) => {
-//     const estados = snapshot.val();
-//     if (!estados) return;
-
-//     selects.forEach(select => {
-//       const id = select.closest('.indicador').id;
-//       if (estados[id]) {
-//         select.value = estados[id];
-//         cambiarColor(select, id);
-//       }
-//     });
-//     /////////////////////////////////////////////////////////////////////////////
-    
-//   });
-
-//   // Guardar cambios al seleccionar
-//   selects.forEach(select => {
-//     const id = select.closest('.indicador').id;
-//     select.addEventListener("change", () => {
-//       const valor = select.value;
-//       set(ref(db, `indicadores/${id}`), valor);
-//       cambiarColor(select, id);
-//     });
-//   });
-// });
-
-
-
-// // Detectar cambios y guardar en Firebase
-// document.addEventListener("DOMContentLoaded", () => {
-//   const contenedor = document.querySelector('.indicadores');
-//   const selects = contenedor.querySelectorAll('.indicador select');
-//   selects.forEach(select => {
-//     const id = select.closest('.indicador').id;
-//     select.addEventListener("change", () => {
-//       const valor = select.value;
-//       set(ref(db, `indicadores/${id}`), valor);
-//       cambiarColor(select, id);
-//     });
-//   });
-// });
 document.addEventListener("DOMContentLoaded", () => {
   // Selecciona todos los contenedores de columnas
   const columnas = document.querySelectorAll('.indicadores');
@@ -490,8 +284,8 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
       }
     }, { onlyOnce: true });
   });
+  
 }
-
 document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Identificador único por ventana
   const tabId = Date.now().toString();
@@ -520,11 +314,47 @@ document.addEventListener("DOMContentLoaded", () => {
       const contraseña = prompt("Contraseña:");
 
       const nombre = await validarUsuario(usuarioId, contraseña);
-      if (!nombre) {
-        alert("Credenciales incorrectas. Comentarios bloqueados.");
-        return;
-      }
+if (!nombre) {
+  alert("Credenciales incorrectas. Comentarios bloqueados.");
+  return;
+}
 
+// 🔐 Sincronizar con Firebase Authentication
+const emailFicticio = `${usuarioId}@tusistema.com`;
+const password = contraseña;
+
+try {
+  const userCredential = await firebase.auth().createUserWithEmailAndPassword(emailFicticio, password);
+  const uid = userCredential.user.uid;
+
+  // Registrar en /usuarios si aún no existe
+  const refUsuario = ref(db, `usuarios/${uid}`);
+  onValue(refUsuario, (snapshot) => {
+    if (!snapshot.exists()) {
+      set(refUsuario, {
+        nombre: nombre,
+        usuarioId: usuarioId
+      });
+    }
+  }, { onlyOnce: true });
+
+  console.log("Usuario creado en Firebase Auth:", uid);
+} catch (error) {
+  if (error.code === 'auth/email-already-in-use') {
+    try {
+      const userCredential = await firebase.auth().signInWithEmailAndPassword(emailFicticio, password);
+      console.log("Usuario autenticado:", userCredential.user.uid);
+    } catch (err) {
+      console.error("Error al iniciar sesión:", err.message);
+      alert("Error al autenticar con Firebase.");
+      return;
+    }
+  } else {
+    console.error("Error al crear usuario:", error.message);
+    alert("Error al registrar usuario en Firebase.");
+    return;
+  }
+}
       nombreUsuario = nombre;
       localStorage.setItem("controlActivo", tabId);
 
