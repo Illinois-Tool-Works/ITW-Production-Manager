@@ -1,7 +1,5 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
   import { getDatabase, ref, set, onValue, push, update, remove} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js';
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyD-2BTqppd41YhQfpTXz280tzY9PlKwWNY",
     authDomain: "indicadores-45c63.firebaseapp.com",
@@ -11,11 +9,8 @@
     messagingSenderId: "1060474160227",
     appId: "1:1060474160227:web:af59ffeca9a1c67c96e456"
   };
-
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
-  const auth = getAuth(app); // Esto es lo nuevo
 
 function cambiarColor(select, id) {
       //  select.disabled = true;
@@ -319,49 +314,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const contraseña = prompt("Contraseña:");
 
       const nombre = await validarUsuario(usuarioId, contraseña);
-if (!nombre) {
-  alert("Credenciales incorrectas. Comentarios bloqueados.");
-  return;
-}
+      if (!nombre) {
+        alert("Credenciales incorrectas. Comentarios bloqueados.");
+        return;
+      }
 
-// 🔐 Sincronizar con Firebase Authentication
-const emailFicticio = `${usuarioId}@tusistema.com`;
-const password = contraseña;
-
-try {
-const userCredential = await createUserWithEmailAndPassword(auth, emailFicticio, password);
-
-  const uid = userCredential.user.uid;
-
-  // Registrar en /usuarios si aún no existe
-  const refUsuario = ref(db, `usuarios/${uid}`);
-  onValue(refUsuario, (snapshot) => {
-    if (!snapshot.exists()) {
-      set(refUsuario, {
-        nombre: nombre,
-        usuarioId: usuarioId
-      });
-    }
-  }, { onlyOnce: true });
-
-  console.log("Usuario creado en Firebase Auth:", uid);
-} catch (error) {
-  if (error.code === 'auth/email-already-in-use') {
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, emailFicticio, password);
-
-      console.log("Usuario autenticado:", userCredential.user.uid);
-    } catch (err) {
-      console.error("Error al iniciar sesión:", err.message);
-      alert("Error al autenticar con Firebase.");
-      return;
-    }
-  } else {
-    console.error("Error al crear usuario:", error.message);
-    alert("Error al registrar usuario en Firebase.");
-    return;
-  }
-}
       nombreUsuario = nombre;
       localStorage.setItem("controlActivo", tabId);
 
