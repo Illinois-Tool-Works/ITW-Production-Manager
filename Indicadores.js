@@ -153,19 +153,23 @@ window.enviarComentario = async function (event, input) {
 
   const indicador = document.getElementById(indicadorId);
   const area = indicador?.dataset.area || "desconocida";
+  const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
+
 
   const db = getDatabase();
   const comentarioData = {
     texto: comentario,
     usuario,
     fecha: timestamp,
+     usuarioId    // clave usada por reglas
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
   await update(indicadorRef, {
     texto: comentario,
     usuario,
-    fecha: timestamp
+    fecha: timestamp,
+     usuarioId    // clave usada por reglas
   });
   const registroRef = ref(db, `registro/area${area}/${indicadorId}`);
    await push(registroRef, comentarioData);
