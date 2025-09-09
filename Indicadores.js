@@ -459,7 +459,7 @@ function cargarComentario(indicadorId) {
 }
 );
 
-comentarioBox.textContent = `${data?.texto || "Sin comentario"} —${autor} ,${fechaFormateada}`;
+comentarioBox.textContent = `"${data?.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
   });
 }
 for (let i = 1; i < 140; i++) {
