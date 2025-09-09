@@ -379,8 +379,8 @@ select,
 
 .grupo-indicadores {
   position: relative;
-  background-color: rgb(229, 250, 204);
-  border-left: 4px solid #5c1111;
+  background-color: rgb(232, 235, 228);
+  border-left: 4px solid #5c111156;
   padding: 1rem 0; /* espacio vertical para que los bordes no se peguen al contenido */
     width: 100%;
   transition: width 0.3s ease;
