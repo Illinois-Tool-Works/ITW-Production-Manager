@@ -1,5 +1,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
   import { getDatabase, ref, set, onValue, push, update, remove} from 'https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyD-2BTqppd41YhQfpTXz280tzY9PlKwWNY",
     authDomain: "indicadores-45c63.firebaseapp.com",
@@ -9,8 +11,11 @@
     messagingSenderId: "1060474160227",
     appId: "1:1060474160227:web:af59ffeca9a1c67c96e456"
   };
+
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+
+  const auth = getAuth(app); // Esto es lo nuevo
 
 function cambiarColor(select, id) {
       //  select.disabled = true;
@@ -324,7 +329,8 @@ const emailFicticio = `${usuarioId}@tusistema.com`;
 const password = contraseña;
 
 try {
-  const userCredential = await firebase.auth().createUserWithEmailAndPassword(emailFicticio, password);
+const userCredential = await createUserWithEmailAndPassword(auth, emailFicticio, password);
+
   const uid = userCredential.user.uid;
 
   // Registrar en /usuarios si aún no existe
@@ -342,7 +348,8 @@ try {
 } catch (error) {
   if (error.code === 'auth/email-already-in-use') {
     try {
-      const userCredential = await firebase.auth().signInWithEmailAndPassword(emailFicticio, password);
+      const userCredential = await signInWithEmailAndPassword(auth, emailFicticio, password);
+
       console.log("Usuario autenticado:", userCredential.user.uid);
     } catch (err) {
       console.error("Error al iniciar sesión:", err.message);
