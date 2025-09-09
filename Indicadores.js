@@ -89,15 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
   set(comentarioRef, {
     estado,
     usuario,
-    fecha,
-  usuarioId
+    fecha
   });
 const registroRef = ref(db, `registro/${id}`);
   push(registroRef, {
     estado,
     usuario,
-    fecha,
-  usuarioId
+    fecha
   });
 
 
@@ -213,9 +211,7 @@ function guardarComentario(inputElement) {
     estado: estado,
     texto: comentario,
     fecha: timestamp,//ISO
-    usuario: usuario,
-    usuarioId: usuarioId // ID validado, usado por las reglas
-
+    usuario: usuario 
   })
   .then(() => {
     console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
@@ -231,9 +227,7 @@ function guardarComentario(inputElement) {
     estado: estado,
     texto: comentario,
      fecha: fechaFormateada, //formato personalizado
-    usuario: usuario, 
-    usuarioId: usuarioId // ID validado, usado por las reglas
-
+    usuario: usuario 
   })
 }
 
