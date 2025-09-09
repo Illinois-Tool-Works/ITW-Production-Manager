@@ -376,6 +376,52 @@ select,
     height: 80px;
   }
 }
+.clipboard-wrapper {
+   position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1050; /* Igual que el QR */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none; /* Evita interferencias si el QR*/
+}
+
+/* Estilo visual tipo portapapeles */
+#qrGitHub.clipboard-style {
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 12px;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  pointer-events: auto; /* Permite interacción solo con el QR */
+
+}
+
+/* Adaptación en pantallas pequeñas */
+@media (max-width: 600px) {
+  .clipboard-wrapper {
+    position: static;
+    margin: 10px auto;
+  }
+
+  #qrGitHub.clipboard-style {
+    width: 80px;
+    height: 80px;
+    padding: 6px;
+  }
+
+  #qrGitHub.clipboard-style::before {
+    width: 40px;
+    height: 8px;
+  }
+}
 
 .grupo-indicadores {
   position: relative;
