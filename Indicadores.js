@@ -66,6 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
   const usuario = input?.dataset?.usuario || "Desconocido";
+  const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
+
 
   const fecha = new Date().toLocaleString('es-MX', {
     day: '2-digit',
@@ -89,13 +91,15 @@ document.addEventListener("DOMContentLoaded", () => {
   set(comentarioRef, {
     estado,
     usuario,
-    fecha
+    fecha,
+    usuarioId
   });
 const registroRef = ref(db, `registro/${id}`);
   push(registroRef, {
     estado,
     usuario,
-    fecha
+    fecha,
+    usuarioId
   });
 
 
