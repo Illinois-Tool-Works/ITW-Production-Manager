@@ -387,3 +387,10 @@ select,
  align-items: center; /* 👈 centra horizontalmente */
   gap: 1rem; /* espacio entre indicadores */
 }
+
+@media (min-width: 1200px) {
+  .row-limitada {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
