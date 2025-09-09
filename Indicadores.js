@@ -66,8 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
   const usuario = input?.dataset?.usuario || "Desconocido";
-  const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
-
 
   const fecha = new Date().toLocaleString('es-MX', {
     day: '2-digit',
@@ -91,15 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
   set(comentarioRef, {
     estado,
     usuario,
-    fecha,
-    usuarioId
+    fecha
   });
 const registroRef = ref(db, `registro/${id}`);
   push(registroRef, {
     estado,
     usuario,
-    fecha,
-    usuarioId
+    fecha
   });
 
 
@@ -157,23 +153,19 @@ window.enviarComentario = async function (event, input) {
 
   const indicador = document.getElementById(indicadorId);
   const area = indicador?.dataset.area || "desconocida";
-  const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
-
 
   const db = getDatabase();
   const comentarioData = {
     texto: comentario,
     usuario,
-    fecha: timestamp,
-     usuarioId    // clave usada por reglas
+    fecha: timestamp
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
   await update(indicadorRef, {
     texto: comentario,
     usuario,
-    fecha: timestamp,
-     usuarioId    // clave usada por reglas
+    fecha: timestamp
   });
   const registroRef = ref(db, `registro/area${area}/${indicadorId}`);
    await push(registroRef, comentarioData);
@@ -202,7 +194,6 @@ function guardarComentario(inputElement) {
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
-  const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
    // 👉 Formatear fecha estilo indicador
   const fechaFormateada = new Date(timestamp).toLocaleString("es-MX", {
     day: "2-digit",
@@ -220,8 +211,7 @@ function guardarComentario(inputElement) {
     estado: estado,
     texto: comentario,
     fecha: timestamp,//ISO
-    usuario: usuario,
-    usuarioId
+    usuario: usuario 
   })
   .then(() => {
     console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
@@ -237,8 +227,7 @@ function guardarComentario(inputElement) {
     estado: estado,
     texto: comentario,
      fecha: fechaFormateada, //formato personalizado
-    usuario: usuario,
-    usuarioId 
+    usuario: usuario 
   })
 }
 
@@ -297,6 +286,7 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
   });
   
 }
+
 document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Identificador único por ventana
   const tabId = Date.now().toString();
@@ -608,7 +598,6 @@ window.enviarEstado = async function (selectElement) {
 
   const usuario = selectElement.closest('.indicador')
     .querySelector('.comentario-input')?.dataset?.usuario || "desconocido";
-const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
 
   const color = selectElement.value;
 
@@ -627,8 +616,7 @@ const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
   const estadoData = {
     estado,
     usuario,
-    fecha: timestamp,
-    usuarioId
+    fecha: timestamp
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
