@@ -202,6 +202,7 @@ function guardarComentario(inputElement) {
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
+  const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
    // 👉 Formatear fecha estilo indicador
   const fechaFormateada = new Date(timestamp).toLocaleString("es-MX", {
     day: "2-digit",
@@ -219,7 +220,8 @@ function guardarComentario(inputElement) {
     estado: estado,
     texto: comentario,
     fecha: timestamp,//ISO
-    usuario: usuario 
+    usuario: usuario,
+    usuarioId
   })
   .then(() => {
     console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
@@ -235,7 +237,8 @@ function guardarComentario(inputElement) {
     estado: estado,
     texto: comentario,
      fecha: fechaFormateada, //formato personalizado
-    usuario: usuario 
+    usuario: usuario,
+    usuarioId 
   })
 }
 
@@ -605,6 +608,7 @@ window.enviarEstado = async function (selectElement) {
 
   const usuario = selectElement.closest('.indicador')
     .querySelector('.comentario-input')?.dataset?.usuario || "desconocido";
+const usuarioId = usuarioIdValidado || "desconocido";   // clave técnica
 
   const color = selectElement.value;
 
@@ -623,7 +627,8 @@ window.enviarEstado = async function (selectElement) {
   const estadoData = {
     estado,
     usuario,
-    fecha: timestamp
+    fecha: timestamp,
+    usuarioId
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
