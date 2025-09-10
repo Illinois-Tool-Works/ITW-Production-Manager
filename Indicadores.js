@@ -677,6 +677,9 @@ const mapaIndicadores = {
   43: "Área 1",
   10: "Área 1",
   9: "Área 1",
+  128: "Área 1",
+  129: "Área 1",
+  131: "Área 1",
   123: "Área 2",
   118: "Área 2",
   97: "Área 2",
@@ -724,9 +727,6 @@ const mapaIndicadores = {
   107: "Área 2",
   98: "Área 2",
   96: "Área 2",
-  128: "Área 2",
-  129: "Área 2",
-  131: "Área 2",
   // y así sucesivamente...
 };
 document.querySelectorAll(".indicador").forEach(indicador => {
