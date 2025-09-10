@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         await remove(ref(db, 'registro'));
-        await remove(ref(db, 'registroindicadores'));
+        // await remove(ref(db, 'registroindicadores'));
         console.log("Registro eliminado correctamente.");
       } catch (error) {
         console.error("Error al eliminar registro:", error.message);
