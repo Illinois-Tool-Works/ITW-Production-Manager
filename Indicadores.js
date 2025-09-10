@@ -384,30 +384,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 🔹 Limpiar control si esta ventana se cierra
-  window.addEventListener("beforeunload", () => {
-    if (localStorage.getItem("controlActivo") === tabId) {
-      localStorage.removeItem("controlActivo");
+ // 🔹 Limpiar control si esta ventana se cierra
+window.addEventListener("beforeunload", () => {
+  if (localStorage.getItem("controlActivo") === tabId) {
+    localStorage.removeItem("controlActivo");
+  }
+});
+
+// 🔹 Lógica de eliminación con confirmación
+if (!eliminarBtn.dataset.listenerAgregado) {
+  eliminarBtn.addEventListener("click", async () => {
+    const confirmacion = confirm("¿Estás seguro de que quieres borrar todos los registros internos?");
+    if (!confirmacion) return;
+
+    try {
+      // 🔸 Eliminar hijos de 'registro'
+      const registroRef = ref(db, 'registro');
+      const snapshotRegistro = await get(registroRef);
+      if (snapshotRegistro.exists()) {
+        const hijos = snapshotRegistro.val();
+        for (const indicadorId in hijos) {
+          await remove(ref(db, `registro/${indicadorId}`));
+        }
+      }
+
+      // 🔸 Eliminar hijos de 'registroindicadores'
+      const indicadoresRef = ref(db, 'registroindicadores');
+      const snapshotIndicadores = await get(indicadoresRef);
+      if (snapshotIndicadores.exists()) {
+        const hijos = snapshotIndicadores.val();
+        for (const indicadorId in hijos) {
+          await remove(ref(db, `registroindicadores/${indicadorId}`));
+        }
+      }
+
+      console.log("Todos los registros internos fueron eliminados correctamente.");
+    } catch (error) {
+      console.error("Error al eliminar registros:", error.message);
+      alert("Hubo un problema al eliminar los registros.");
     }
   });
 
-  // 🔹 Lógica de eliminación con confirmación
-  if (!eliminarBtn.dataset.listenerAgregado) {
-    eliminarBtn.addEventListener("click", async () => {
-      const confirmacion = confirm("¿Estás seguro de que quieres borrar el registro?");
-      if (!confirmacion) return;
-
-      try {
-        await remove(ref(db, 'registro'));
-        await remove(ref(db, 'registroindicadores'));
-        console.log("Registro eliminado correctamente.");
-      } catch (error) {
-        console.error("Error al eliminar registro:", error.message);
-        alert("Hubo un problema al eliminar los registros.");
-      }
-    });
-    eliminarBtn.dataset.listenerAgregado = "true";
-  }
+  eliminarBtn.dataset.listenerAgregado = "true";
+}
 
   // 🔹 Mostrar campos al hacer clic en el cuadro
   document.querySelectorAll(".cuadro").forEach(cuadro => {
