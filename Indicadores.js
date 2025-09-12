@@ -772,29 +772,34 @@ function contarEstadosPorArea(indicadores, mapa) {
 
 
 // 🎨 Render en el contenedor fijo
-function renderEstadosPorArea(conteo) {
+function renderEstadosPorArea({ total, porArea }) {
   const container = document.getElementById("conteoEstados");
   container.innerHTML = "";
 
-  // 🔢 Totales generales
-  for (const estado in conteo.total) {
+  // 🔢 Total general
+  const totalHeader = document.createElement("div");
+  totalHeader.className = "fw-bold mb-1";
+  totalHeader.textContent = "Total:";
+  container.appendChild(totalHeader);
+
+  for (const estado in total) {
     const badge = document.createElement("span");
-    badge.className = `badge fs-6 me-2 bg-${colorBootstrap(estado)}`;
-    badge.textContent = `Total ${estado}: ${conteo.total[estado]}`;
+    badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
+    badge.textContent = `${total[estado]}`;
     container.appendChild(badge);
   }
 
   // 🗂 Por área
-  for (const area in conteo.porArea) {
+  for (const area in porArea) {
     const areaHeader = document.createElement("div");
-    areaHeader.className = "mt-2 fw-bold";
-    areaHeader.textContent = area;
+    areaHeader.className = "fw-bold mt-3 mb-1";
+    areaHeader.textContent = `${area}:`;
     container.appendChild(areaHeader);
 
-    for (const estado in conteo.porArea[area]) {
+    for (const estado in porArea[area]) {
       const badge = document.createElement("span");
-      badge.className = `badge fs-6 me-2 bg-${colorBootstrap(estado)}`;
-      badge.textContent = `${estado}: ${conteo.porArea[area][estado]}`;
+      badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
+      badge.textContent = `${porArea[area][estado]}`;
       container.appendChild(badge);
     }
   }
