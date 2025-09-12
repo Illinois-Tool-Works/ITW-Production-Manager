@@ -745,26 +745,25 @@ const estadosColor = {
   verde: "Corriendo",
   azul: "Cambio de molde"
 };
-function contarVerdesPorArea(indicadores, mapa) {
+function contarEstadosPorArea(indicadores, mapa) {
   const conteo = {
-    total: 0,
-    "Área 1": 0,
-    "Área 2": 0
+    total: {},
+    porArea: {}
   };
 
   for (const id in indicadores) {
     const estado = indicadores[id];
-
-    // Extrae el número del ID, por ejemplo "indicador100" → 100
     const idNum = parseInt(id.replace("indicador", ""));
     const area = mapa[idNum];
 
-    console.log(`ID: ${id} → Num: ${idNum} → Estado: ${estado} → Área: ${area}`);
+    if (!estado || !area) continue;
 
-    if (estado === "verde" && area) {
-      conteo.total++;
-      conteo[area] = (conteo[area] || 0) + 1;
-    }
+    // Conteo total por estado
+    conteo.total[estado] = (conteo.total[estado] || 0) + 1;
+
+    // Conteo por área y estado
+    if (!conteo.porArea[area]) conteo.porArea[area] = {};
+    conteo.porArea[area][estado] = (conteo.porArea[area][estado] || 0) + 1;
   }
 
   return conteo;
@@ -773,16 +772,43 @@ function contarVerdesPorArea(indicadores, mapa) {
 
 
 // 🎨 Render en el contenedor fijo
-function renderVerdesPorArea(conteo) {
+function renderEstadosPorArea(conteo) {
   const container = document.getElementById("conteoEstados");
-  container.innerHTML = `
-    <span class="badge bg-success fs-6 me-2">Total: ${conteo.total}</span>
-    <span class="badge bg-success fs-6 me-2">Área 1: ${conteo["Área 1"]}</span>
-    <span class="badge bg-success fs-6">Área 2: ${conteo["Área 2"]}</span>
-  `;
+  container.innerHTML = "";
+
+  // 🔢 Totales generales
+  for (const estado in conteo.total) {
+    const badge = document.createElement("span");
+    badge.className = `badge fs-6 me-2 bg-${colorBootstrap(estado)}`;
+    badge.textContent = `Total ${estado}: ${conteo.total[estado]}`;
+    container.appendChild(badge);
+  }
+
+  // 🗂 Por área
+  for (const area in conteo.porArea) {
+    const areaHeader = document.createElement("div");
+    areaHeader.className = "mt-2 fw-bold";
+    areaHeader.textContent = area;
+    container.appendChild(areaHeader);
+
+    for (const estado in conteo.porArea[area]) {
+      const badge = document.createElement("span");
+      badge.className = `badge fs-6 me-2 bg-${colorBootstrap(estado)}`;
+      badge.textContent = `${estado}: ${conteo.porArea[area][estado]}`;
+      container.appendChild(badge);
+    }
+  }
 }
 
-
+function colorBootstrap(estado) {
+  switch (estado) {
+    case "verde": return "success";
+    case "rojo": return "danger";
+    case "azul": return "primary";
+    case "gris": return "secondary";
+    default: return "dark";
+  }
+}
 // 🔄 Escucha en tiempo real desde Firebase
 const indicadoresRef = ref(db, "indicadores");
 
@@ -790,6 +816,6 @@ onValue(indicadoresRef, (snapshot) => {
   const indicadores = snapshot.val();
   if (!indicadores) return;
 
-  const conteo = contarVerdesPorArea(indicadores, mapaIndicadores);
-  renderVerdesPorArea(conteo);
+  const conteo = contarEstadosPorArea(indicadores, mapaIndicadores);
+  renderEstadosPorArea(conteo);
 });
