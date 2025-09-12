@@ -737,4 +737,57 @@ document.querySelectorAll(".indicador").forEach(indicador => {
     }
   });
 });
+const estadosColor = {
+  gris: "No plan",
+  rojo: "Paro",
+  verde: "Corriendo",
+  azul: "Cambio de molde"
+};
+// Conteo por área y estado legible
+function contarPorAreaYEstado(indicadores, mapaIndicadores, estadosColor) {
+  const resultado = {};
+
+  for (const id in indicadores) {
+    const color = indicadores[id];
+    const area = mapaIndicadores[id];
+    const estado = estadosColor[color] || color;
+
+    if (!area) continue;
+
+    if (!resultado[area]) resultado[area] = {};
+    resultado[area][estado] = (resultado[area][estado] || 0) + 1;
+  }
+
+  return resultado;
+}
+
+// Render en el dashboard
+function renderDashboard(conteo) {
+  const container = document.getElementById("dashboard");
+  container.innerHTML = "";
+
+  for (const area in conteo) {
+    const card = document.createElement("div");
+    card.className = "card mb-3 shadow-sm";
+
+    const header = `<div class="card-header fw-bold bg-light">${area}</div>`;
+    const body = Object.entries(conteo[area])
+      .map(([estado, count]) => `<span class="badge bg-primary me-2">${estado}: ${count}</span>`)
+      .join("");
+
+    card.innerHTML = `${header}<div class="card-body">${body}</div>`;
+    container.appendChild(card);
+  }
+}
+
+// Escucha en tiempo real
+const indicadoresRef = ref(db, "indicadores");
+
+onValue(indicadoresRef, (snapshot) => {
+  const indicadores = snapshot.val();
+  if (!indicadores) return;
+
+  const conteo = contarPorAreaYEstado(indicadores, mapaIndicadores, estadosColor);
+  renderDashboard(conteo);
+});
 
