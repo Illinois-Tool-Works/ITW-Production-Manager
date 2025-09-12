@@ -14,6 +14,8 @@
 
 function cambiarColor(select, id) {
       //  select.disabled = true;
+      console.log("Indicadores.js conectado correctamente");
+
   const color = select.value;
   const div = document.getElementById(id);
   const cuadro = div.querySelector('.cuadro');
@@ -767,6 +769,8 @@ const indicadoresRef = ref(db, "indicadores");
 
 onValue(indicadoresRef, (snapshot) => {
   const indicadores = snapshot.val();
+  console.log("Datos recibidos desde Firebase:", indicadores); // 👈 Aquí
+
   if (!indicadores) return;
 
   const totalVerdes = contarVerdes(indicadores);
