@@ -748,39 +748,44 @@ const estadosColor = {
 function contarVerdesPorArea(indicadores, mapa) {
   const conteo = {
     area1: 0,
-    area2: 0
+    area2: 0,
+    total: 0
   };
 
   for (const id in indicadores) {
     const estado = indicadores[id];
     const area = mapa[id];
 
-    if (estado === "verde" && area) {
-      conteo[area] = (conteo[area] || 0) + 1;
+    if (estado === "verde") {
+      conteo.total++;
+      if (area) {
+        conteo[area] = (conteo[area] || 0) + 1;
+      }
     }
   }
 
   return conteo;
 }
 
+
 // 🎨 Render en el contenedor fijo
-function renderVerdes(total) {
+function renderVerdesPorArea(conteo) {
   const container = document.getElementById("conteoEstados");
-  container.innerHTML = `<span class="badge bg-success fs-5">Corriendo: ${total}</span>
-  <span class="badge bg-success fs-6 me-2">Área 1: ${conteo.area1}</span>
+  container.innerHTML = `
+    <span class="badge bg-success fs-6 me-2">Total: ${conteo.total}</span>
+    <span class="badge bg-success fs-6 me-2">Área 1: ${conteo.area1}</span>
     <span class="badge bg-success fs-6">Área 2: ${conteo.area2}</span>
-`;
+  `;
 }
+
 
 // 🔄 Escucha en tiempo real desde Firebase
 const indicadoresRef = ref(db, "indicadores");
 
 onValue(indicadoresRef, (snapshot) => {
   const indicadores = snapshot.val();
-  console.log("Datos recibidos desde Firebase:", indicadores); // 👈 Aquí
-
   if (!indicadores) return;
 
-  const totalVerdes = contarVerdes(indicadores);
-  renderVerdes(totalVerdes);
+  const conteo = contarVerdesPorArea(indicadores, mapaIndicadores);
+  renderVerdesPorArea(conteo);
 });
