@@ -754,8 +754,12 @@ function contarVerdesPorArea(indicadores, mapa) {
 
   for (const id in indicadores) {
     const estado = indicadores[id];
-    const idNum = parseInt(id); // 👈 convierte "48" a 48
+
+    // Extrae el número del ID, por ejemplo "indicador100" → 100
+    const idNum = parseInt(id.replace("indicador", ""));
     const area = mapa[idNum];
+
+    console.log(`ID: ${id} → Num: ${idNum} → Estado: ${estado} → Área: ${area}`);
 
     if (estado === "verde" && area) {
       conteo.total++;
