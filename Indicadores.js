@@ -745,11 +745,11 @@ const estadosColor = {
   verde: "Corriendo",
   azul: "Cambio de molde"
 };
-function contarEstadosPorArea(indicadores, mapa) {
-  const conteo = {
-    total: {},
-    porArea: {}
-  };
+
+const areaActual = document.body.dataset.area || null;
+function contarEstados(indicadores, mapa, areaActual) {
+  const total = {};
+  const porArea = {};
 
   for (const id in indicadores) {
     const estado = indicadores[id];
@@ -758,30 +758,36 @@ function contarEstadosPorArea(indicadores, mapa) {
 
     if (!estado || !area) continue;
 
-    // Conteo total por estado
-    conteo.total[estado] = (conteo.total[estado] || 0) + 1;
+    // Si estamos en una página de área específica, filtrar
+    if (areaActual && area !== areaActual) continue;
 
-    // Conteo por área y estado
-    if (!conteo.porArea[area]) conteo.porArea[area] = {};
-    conteo.porArea[area][estado] = (conteo.porArea[area][estado] || 0) + 1;
+    // Conteo total
+    total[estado] = (total[estado] || 0) + 1;
+
+    // Conteo por área (solo en página principal)
+    if (!areaActual) {
+      if (!porArea[area]) porArea[area] = {};
+      porArea[area][estado] = (porArea[area][estado] || 0) + 1;
+    }
   }
 
-  return conteo;
+  return { total, porArea };
 }
 
 
 
 // 🎨 Render en el contenedor fijo
-function renderEstadosPorArea({ total, porArea }) {
+function renderConteo({ total, porArea }, areaActual) {
   const container = document.getElementById("conteoEstados");
   container.innerHTML = "";
 
-  // 🔢 Total general
-  const totalHeader = document.createElement("div");
-  totalHeader.className = "fw-bold mb-1";
-  totalHeader.textContent = "Total:";
-  container.appendChild(totalHeader);
+  // 🔢 Encabezado
+  const header = document.createElement("div");
+  header.className = "fw-bold mb-1";
+  header.textContent = areaActual ? `${areaActual}:` : "Total:";
+  container.appendChild(header);
 
+  // 🔢 Totales
   for (const estado in total) {
     const badge = document.createElement("span");
     badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
@@ -789,18 +795,20 @@ function renderEstadosPorArea({ total, porArea }) {
     container.appendChild(badge);
   }
 
-  // 🗂 Por área
-  for (const area in porArea) {
-    const areaHeader = document.createElement("div");
-    areaHeader.className = "fw-bold mt-3 mb-1";
-    areaHeader.textContent = `${area}:`;
-    container.appendChild(areaHeader);
+  // 🗂 Desglose por área (solo en página principal)
+  if (!areaActual) {
+    for (const area in porArea) {
+      const areaHeader = document.createElement("div");
+      areaHeader.className = "fw-bold mt-3 mb-1";
+      areaHeader.textContent = `${area}:`;
+      container.appendChild(areaHeader);
 
-    for (const estado in porArea[area]) {
-      const badge = document.createElement("span");
-      badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
-      badge.textContent = `${porArea[area][estado]}`;
-      container.appendChild(badge);
+      for (const estado in porArea[area]) {
+        const badge = document.createElement("span");
+        badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
+        badge.textContent = `${porArea[area][estado]}`;
+        container.appendChild(badge);
+      }
     }
   }
 }
@@ -821,6 +829,6 @@ onValue(indicadoresRef, (snapshot) => {
   const indicadores = snapshot.val();
   if (!indicadores) return;
 
-  const conteo = contarEstadosPorArea(indicadores, mapaIndicadores);
-  renderEstadosPorArea(conteo);
+  const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+  renderConteo(conteo, areaActual);
 });
