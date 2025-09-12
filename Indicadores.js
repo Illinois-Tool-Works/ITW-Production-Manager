@@ -747,20 +747,19 @@ const estadosColor = {
 };
 function contarVerdesPorArea(indicadores, mapa) {
   const conteo = {
-    area1: 0,
-    area2: 0,
-    total: 0
+    total: 0,
+    "Área 1": 0,
+    "Área 2": 0
   };
 
   for (const id in indicadores) {
     const estado = indicadores[id];
-    const area = mapa[id];
+    const idNum = parseInt(id); // 👈 convierte "48" a 48
+    const area = mapa[idNum];
 
-    if (estado === "verde") {
+    if (estado === "verde" && area) {
       conteo.total++;
-      if (area) {
-        conteo[area] = (conteo[area] || 0) + 1;
-      }
+      conteo[area] = (conteo[area] || 0) + 1;
     }
   }
 
@@ -768,13 +767,14 @@ function contarVerdesPorArea(indicadores, mapa) {
 }
 
 
+
 // 🎨 Render en el contenedor fijo
 function renderVerdesPorArea(conteo) {
   const container = document.getElementById("conteoEstados");
   container.innerHTML = `
     <span class="badge bg-success fs-6 me-2">Total: ${conteo.total}</span>
-    <span class="badge bg-success fs-6 me-2">Área 1: ${conteo.area1}</span>
-    <span class="badge bg-success fs-6">Área 2: ${conteo.area2}</span>
+    <span class="badge bg-success fs-6 me-2">Área 1: ${conteo["Área 1"]}</span>
+    <span class="badge bg-success fs-6">Área 2: ${conteo["Área 2"]}</span>
   `;
 }
 
