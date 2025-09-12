@@ -746,7 +746,15 @@ const estadosColor = {
   azul: "Cambio de molde"
 };
 
-const areaActual = document.body.dataset.area || null;
+let areaActual = null;
+
+// Si existe <body2>, úsalo para obtener el área
+const body2 = document.querySelector("body2");
+if (body2) {
+  areaActual = body2.dataset.area || null;
+}
+
+// Función para contar estados
 function contarEstados(indicadores, mapa, areaActual) {
   const total = {};
   const porArea = {};
@@ -758,7 +766,7 @@ function contarEstados(indicadores, mapa, areaActual) {
 
     if (!estado || !area) continue;
 
-    // Si estamos en una página de área específica, filtrar
+    // Filtrar si estamos en una página de área específica
     if (areaActual && area !== areaActual) continue;
 
     // Conteo total
@@ -771,23 +779,26 @@ function contarEstados(indicadores, mapa, areaActual) {
     }
   }
 
+
+
   return { total, porArea };
 }
 
 
 
 // 🎨 Render en el contenedor fijo
+// Render adaptativo
 function renderConteo({ total, porArea }, areaActual) {
   const container = document.getElementById("conteoEstados");
   container.innerHTML = "";
 
-  // 🔢 Encabezado
+  // Encabezado
   const header = document.createElement("div");
   header.className = "fw-bold mb-1";
   header.textContent = areaActual ? `${areaActual}:` : "Total:";
   container.appendChild(header);
 
-  // 🔢 Totales
+  // Totales
   for (const estado in total) {
     const badge = document.createElement("span");
     badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
@@ -795,7 +806,8 @@ function renderConteo({ total, porArea }, areaActual) {
     container.appendChild(badge);
   }
 
-  // 🗂 Desglose por área (solo en página principal)
+
+ // Desglose por área (solo en página principal)
   if (!areaActual) {
     for (const area in porArea) {
       const areaHeader = document.createElement("div");
@@ -811,6 +823,7 @@ function renderConteo({ total, porArea }, areaActual) {
       }
     }
   }
+
 }
 
 function colorBootstrap(estado) {
@@ -832,3 +845,4 @@ onValue(indicadoresRef, (snapshot) => {
   const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
   renderConteo(conteo, areaActual);
 });
+
