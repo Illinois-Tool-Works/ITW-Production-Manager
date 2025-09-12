@@ -743,10 +743,6 @@ const estadosColor = {
   verde: "Corriendo",
   azul: "Cambio de molde"
 };
-// Firebase setup
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
-
 // 🔍 Función para contar cuántos están en "verde"
 function contarVerdes(indicadores) {
   let totalVerdes = 0;
