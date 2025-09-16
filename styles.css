@@ -445,10 +445,13 @@ select,
 body.sin-volver .btn-secondary {
   display: none !important;
 }
+
 @media (min-width: 768px) and (max-width: 991.98px) {
   #indicadorResumen {
-    right: 10%;
-    bottom: 5%;
-    max-width: 300px; /* opcional para evitar que se vea demasiado ancho */
+    right: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    bottom: 20px !important;
+    max-width: 90vw;
   }
 }
