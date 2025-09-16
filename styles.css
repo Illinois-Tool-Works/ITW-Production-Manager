@@ -446,12 +446,12 @@ body.sin-volver .btn-secondary {
   display: none !important;
 }
 
-@media (min-width: 768px) and (max-width: 991.98px) {
+@media (min-width: 1200px) {
   #indicadorResumen {
     right: auto !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
-    bottom: 20px !important;
-    max-width: 90vw;
+    bottom: 40px !important;
+    max-width: 400px;
   }
 }
