@@ -445,13 +445,11 @@ select,
 body.sin-volver .btn-secondary {
   display: none !important;
 }
-
-@media (min-width: 1200px) {
+@media (min-width: 1920px) {
   #indicadorResumen {
-    right: auto !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    bottom: 40px !important;
-    max-width: 400px;
+    max-width: 250px !important;
+    padding: 1rem !important;
+    font-size: 0.85rem !important;
   }
 }
+
