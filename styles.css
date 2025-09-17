@@ -284,7 +284,7 @@ select,
 } */
 
 .cuadro:hover {
-  transform: scale(1.1);
+  transform: scale(1.03);
   line-height: 50px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
