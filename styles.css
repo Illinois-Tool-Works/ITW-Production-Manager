@@ -200,7 +200,7 @@ h1 {
 .comentario-visible2 {
   display: block;
   width: 100%;               /* ocupa todo el ancho de la columna */
-  max-width: 100%;           /* asegura que no se desborde */
+  max-width: 300px;           /* asegura que no se desborde */
   min-height: 60px;          /* altura mínima para mantener estructura */
   max-height: 150px;         /* altura máxima antes de activar scroll */
   padding: 0.5rem;
@@ -246,7 +246,7 @@ h1 {
 select,
 .comentario-input {
   width: 100%;
-  max-width: 100%;
+  max-width: 300px;
   box-sizing: border-box;
   overflow-wrap: break-word;
   white-space: nowrap;
