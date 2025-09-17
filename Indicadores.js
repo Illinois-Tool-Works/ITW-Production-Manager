@@ -454,6 +454,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+document.querySelectorAll(".indicador").forEach(indicador => {
+  const select = indicador.querySelector("select");
+  const cuadro = indicador.querySelector(".cuadro");
+
+  if (select && cuadro) {
+    select.addEventListener("focus", () => {
+      cuadro.classList.add("hover-desactivado");
+    });
+
+    select.addEventListener("blur", () => {
+      cuadro.classList.remove("hover-desactivado");
+    });
+  }
+});
+
 // window.desbloquearIndicador = async function (indicadorId) {
 //   const usuarioId = prompt("ID de usuario:");
 //   const contraseña = prompt("Contraseña:");
