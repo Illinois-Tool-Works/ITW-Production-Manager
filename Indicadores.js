@@ -685,6 +685,7 @@ const mapaIndicadores = {
   123: "Área 2",
   118: "Área 2",
   97: "Área 2",
+  114: "Área 2",
   87: "Área 2",
   88: "Área 2",
   89: "Área 2",
