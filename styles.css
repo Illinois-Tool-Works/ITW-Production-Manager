@@ -283,11 +283,6 @@ select,
   font-size: 20px; 
 } */
 
-.cuadro.hover-desactivado:hover {
-  transform: none;
-  box-shadow: none;
-  cursor: default;
-}
 .cuadro:hover {
   transform: scale(1.01);
   line-height: 50px;
