@@ -1028,7 +1028,29 @@
            </div>
     </div> 
 </div>
-
+<div style="height: 360px;"></div>
+           <div class="grupo-indicadores grupo-produccion mb-4 p-3 mt-5 rounded "> 
+             <div  id="indicador89" class="indicador mb-1" >
+   <div class="comentario-visible2 oculto">Sin estado</div>
+   <div class="grupo-horizontal">
+    <select class="oculto" disabled onchange="cambiarColor(this, 'indicador89') ">
+      <option value="gris">No plan</option>
+      <option value="rojo">Paro</option>
+      <option value="verde">Corriendo</option>
+      <option value="azul">Cambio de molde</option>
+    </select>
+    <span class="cuadro" data-indicador="indicador89">89</span>
+    <div class="comentario-visible oculto">Sin comentario</div>
+    <input type="text"
+           class="comentario-input oculto"
+           data-indicador="indicador89"
+           placeholder="Comentario..."
+           onkeydown="enviarComentario(event, this)"
+           enterkeyhint="send"
+           disabled>
+           </div>
+    </div> 
+  </div>
 
 
       </div>
