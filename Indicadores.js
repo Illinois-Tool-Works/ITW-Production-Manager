@@ -881,6 +881,7 @@ export async function identificarDispositivo() {
 }
 
 export async function asignarNombre() {
+  console.log("Botón clickeado");
   const nuevoNombre = prompt("Ingresa un nombre para este dispositivo:");
   if (!nuevoNombre) return;
 
