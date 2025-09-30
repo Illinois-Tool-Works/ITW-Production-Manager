@@ -850,9 +850,9 @@ onValue(indicadoresRef, (snapshot) => {
 });
 
 ////////////////////////////////
-// identificador.js
+// Indicadores.js
 
-async function generarFingerprint() {
+export async function generarFingerprint() {
   const raw = JSON.stringify({
     userAgent: navigator.userAgent,
     platform: navigator.platform,
@@ -867,7 +867,7 @@ async function generarFingerprint() {
   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function identificarDispositivo() {
+export async function identificarDispositivo() {
   const fingerprint = await generarFingerprint();
   let nombre = localStorage.getItem(`nombre-${fingerprint}`);
 
@@ -876,17 +876,17 @@ async function identificarDispositivo() {
     localStorage.setItem(`nombre-${fingerprint}`, nombre);
   }
 
-  document.getElementById("nombre").textContent = nombre;
+  const nombreSpan = document.getElementById("nombre");
+  if (nombreSpan) nombreSpan.textContent = nombre;
 }
 
-function asignarNombre() {
+export async function asignarNombre() {
   const nuevoNombre = prompt("Ingresa un nombre para este dispositivo:");
   if (!nuevoNombre) return;
 
-  generarFingerprint().then(fp => {
-    localStorage.setItem(`nombre-${fp}`, nuevoNombre);
-    document.getElementById("nombre").textContent = nuevoNombre;
-  });
-}
+  const fingerprint = await generarFingerprint();
+  localStorage.setItem(`nombre-${fingerprint}`, nuevoNombre);
 
-identificarDispositivo();
+  const nombreSpan = document.getElementById("nombre");
+  if (nombreSpan) nombreSpan.textContent = nuevoNombre;
+}
