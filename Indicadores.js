@@ -849,3 +849,44 @@ onValue(indicadoresRef, (snapshot) => {
   renderConteo(conteo, areaActual);
 });
 
+////////////////////////////////
+// identificador.js
+
+async function generarFingerprint() {
+  const raw = JSON.stringify({
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    screen: {
+      width: screen.width,
+      height: screen.height
+    },
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  });
+
+  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function identificarDispositivo() {
+  const fingerprint = await generarFingerprint();
+  let nombre = localStorage.getItem(`nombre-${fingerprint}`);
+
+  if (!nombre) {
+    nombre = "Dispositivo_" + fingerprint.slice(0, 6);
+    localStorage.setItem(`nombre-${fingerprint}`, nombre);
+  }
+
+  document.getElementById("nombre").textContent = nombre;
+}
+
+function asignarNombre() {
+  const nuevoNombre = prompt("Ingresa un nombre para este dispositivo:");
+  if (!nuevoNombre) return;
+
+  generarFingerprint().then(fp => {
+    localStorage.setItem(`nombre-${fp}`, nuevoNombre);
+    document.getElementById("nombre").textContent = nuevoNombre;
+  });
+}
+
+identificarDispositivo();
