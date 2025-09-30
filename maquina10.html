@@ -8,6 +8,7 @@
   <h1>Bienvenido, <span id="nombre">Dispositivo desconocido</span></h1>
   <button id="asignarBtn">Asignar nombre personalizado</button>
 
+  <!-- Solo este bloque importa y ejecuta el módulo -->
   <script type="module">
     import { identificarDispositivo, asignarNombre } from './Indicadores.js';
 
@@ -15,5 +16,4 @@
     document.getElementById("asignarBtn").addEventListener("click", asignarNombre);
   </script>
 </body>
-<script type="module" src="Indicadores.js"></script>
 </html>
