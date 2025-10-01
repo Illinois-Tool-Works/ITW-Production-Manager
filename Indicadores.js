@@ -866,7 +866,30 @@ export async function generarFingerprint() {
   const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
+export async function verificarSesion() {
+  const fingerprint = await generarFingerprint();
+  const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
+  const clave = cookieClave?.split('=')[1];
 
+  if (!clave) return false;
+
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  return snapshot.exists();
+}
+
+export async function iniciarSesion() {
+  const clave = prompt("Ingresa tu clave de acceso:");
+  if (!clave) return false;
+
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  if (!snapshot.exists()) {
+    alert("Clave inválida");
+    return false;
+  }
+
+  document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
+  return true;
+}
 export async function identificarDispositivo() {
   const fingerprint = await generarFingerprint();
   let nombre = localStorage.getItem(`nombre-${fingerprint}`);
@@ -881,7 +904,6 @@ export async function identificarDispositivo() {
 }
 
 export async function asignarNombre() {
-  console.log("Botón clickeado");
   const nuevoNombre = prompt("Ingresa un nombre para este dispositivo:");
   if (!nuevoNombre) return;
 

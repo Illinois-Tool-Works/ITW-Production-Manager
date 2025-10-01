@@ -3,31 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>Identificador de Dispositivo</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 2rem;
-    }
-    #nombre {
-      font-weight: bold;
-      color: #2a7;
-    }
-    button {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-    }
-  </style>
 </head>
 <body>
   <h1>Bienvenido, <span id="nombre">Dispositivo desconocido</span></h1>
   <button id="asignarBtn">Asignar nombre personalizado</button>
 
   <script type="module">
-    import { identificarDispositivo, asignarNombre } from './Indicadores.js';
+    import {
+      identificarDispositivo,
+      asignarNombre,
+      verificarSesion,
+      iniciarSesion
+    } from './Indicadores.js';
 
-    document.addEventListener("DOMContentLoaded", () => {
-      identificarDispositivo();
+    document.addEventListener("DOMContentLoaded", async () => {
+      const acceso = await verificarSesion();
+      if (!acceso) {
+        const ok = await iniciarSesion();
+        if (!ok) return;
+      }
+
+      await identificarDispositivo();
       document.getElementById("asignarBtn").addEventListener("click", asignarNombre);
     });
   </script>
