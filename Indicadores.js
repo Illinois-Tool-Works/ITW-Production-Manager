@@ -793,6 +793,8 @@ function contarEstados(indicadores, mapa, areaActual) {
 // Render adaptativo
 function renderConteo({ total, porArea }, areaActual) {
   const container = document.getElementById("conteoEstados");
+  if (!container) return; // Silencioso si no existe
+  
   container.innerHTML = "";
 
   // Encabezado
