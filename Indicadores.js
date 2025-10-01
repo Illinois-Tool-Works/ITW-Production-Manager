@@ -309,7 +309,10 @@ document.addEventListener("DOMContentLoaded", () => {
   eliminarBtn.className = "btn btn-danger mt-0.9 ms-2";
   eliminarBtn.textContent = "Eliminar registro";
   eliminarBtn.style.display = "none";
-  document.querySelector(".button-group").appendChild(eliminarBtn);
+const buttonGroup = document.querySelector(".button-group");
+if (buttonGroup) {
+  buttonGroup.appendChild(eliminarBtn);
+}
 
   activarBtn.addEventListener("click", async () => {
     if (!edicionActiva) {
