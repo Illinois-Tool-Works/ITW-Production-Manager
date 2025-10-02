@@ -23,6 +23,8 @@ function cambiarColor(select, id) {
     cuadro.className = `cuadro ${color}`;
   }
 }
+// Exponer al global
+window.cambiarColor = cambiarColor;
 
 
 
