@@ -313,6 +313,7 @@ const buttonGroup = document.querySelector(".button-group");
 if (buttonGroup) {
   buttonGroup.appendChild(eliminarBtn);
 }
+if (activarBtn) {
 
   activarBtn.addEventListener("click", async () => {
     if (!edicionActiva) {
@@ -456,6 +457,7 @@ if (buttonGroup) {
       }
     });
   });
+}
 });
 
 
