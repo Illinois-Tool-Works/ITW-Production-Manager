@@ -10,6 +10,7 @@
       <button id="btnRegistro" class="btn btn-primary" style="display: none;" disabled>Registrar</button>
   <h1>Bienvenido, <span id="nombre">Dispositivo desconocido</span></h1>
   
+   <div id="indicadores"  class="indicadores d-flex flex-column gap-3">
   <div class="grupo-indicadores grupo-produccion mb-4 p-3 mt-5 rounded "> 
   <div  id="indicador10" class="indicador mb-1" >
    <div class="comentario-visible2">Sin estado</div>
@@ -31,6 +32,7 @@
            </div>
     </div>
   </div>
+   </div>
   <script type="module">
     import { verificarSesion, iniciarSesion } from './Indicadores.js';
 
