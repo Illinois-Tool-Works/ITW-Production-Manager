@@ -14,8 +14,11 @@
 
 
 
-  window.sesionPorClaveActiva = false;
-
+  window.sesionActiva = {
+  metodo: null,        // "usuario" o "clave"
+  id: null,            // usuarioId o clave
+  nombre: null         // nombre visible
+};
 
 
 function cambiarColor(select, id) {
@@ -75,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
-  const usuario = input?.dataset?.usuario || "Desconocido";
+ const usuario = window.sesionActiva?.nombre || "Desconocido";
 
   const fecha = new Date().toLocaleString('es-MX', {
     day: '2-digit',
@@ -158,7 +161,7 @@ window.enviarComentario = async function (event, input) {
   if (!comentario) return;
 
   const indicadorId = input.dataset.indicador;
-  const usuario = input.dataset.usuario || "desconocido";
+  const usuario = window.sesionActiva?.nombre || "Desconocido";
   const timestamp = new Date().toISOString();
 
   const indicador = document.getElementById(indicadorId);
@@ -200,7 +203,7 @@ function guardarComentario(inputElement) {
     console.warn("Falta data-indicador en el input");
     return;
   }
-  const usuario = inputElement.dataset.usuario || "desconocido";
+  const usuario = window.sesionActiva?.nombre || "Desconocido";
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
@@ -296,7 +299,7 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
   });
   
 }
-if (!window.sesionPorClaveActiva) {
+
 document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Identificador único por ventana
   const tabId = Date.now().toString();
@@ -333,6 +336,13 @@ if (activarBtn) {
         alert("Credenciales incorrectas. Comentarios bloqueados.");
         return;
       }
+      // ✅ Aquí creas el objeto de sesión
+    window.sesionActiva = {
+      metodo: "usuario",
+      id: usuarioId,
+      nombre: nombre
+    };
+
 
       nombreUsuario = nombre;
       localStorage.setItem("controlActivo", tabId);
@@ -467,8 +477,6 @@ if (activarBtn) {
   });
 }
 });
-
-}
 
 
 // window.desbloquearIndicador = async function (indicadorId) {
@@ -886,8 +894,6 @@ export async function generarFingerprint() {
 
 
 export async function verificarSesion() {
-  window.sesionPorClaveActiva = true;
-
   const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
   const clave = cookieClave?.split('=')[1];
   if (!clave) return false;
@@ -905,7 +911,6 @@ export async function verificarSesion() {
 
 
 export async function iniciarSesion() {
-  window.sesionPorClaveActiva = true;
   const clave = prompt("Ingresa tu clave de acceso:");
   if (!clave) return false;
 
@@ -919,6 +924,12 @@ export async function iniciarSesion() {
   const datos = snapshot.val();
   const nombre = datos.nombre || "Sin nombre";
   document.getElementById("nombre").textContent = nombre;
+// ✅ Aquí creas el objeto de sesión
+window.sesionActiva = {
+  metodo: "clave",
+  id: clave,
+  nombre: nombre
+};
 
   activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
