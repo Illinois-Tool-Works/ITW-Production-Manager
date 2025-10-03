@@ -861,136 +861,136 @@ onValue(indicadoresRef, (snapshot) => {
 ////////////////////////////////
 // Indicadores.js
 
-export async function generarFingerprint() {
-  const raw = JSON.stringify({
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    screen: {
-      width: screen.width,
-      height: screen.height
-    },
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-  });
+// export async function generarFingerprint() {
+//   const raw = JSON.stringify({
+//     userAgent: navigator.userAgent,
+//     platform: navigator.platform,
+//     screen: {
+//       width: screen.width,
+//       height: screen.height
+//     },
+//     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+//   });
 
-  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
-  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-
-export async function verificarSesion() {
-  const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
-  const clave = cookieClave?.split('=')[1];
-  if (!clave) return false;
-
-  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-  if (!snapshot.exists()) return false;
-
-  const datos = snapshot.val();
-  const nombre = datos.nombre || "Sin nombre";
-  document.getElementById("nombre").textContent = nombre;
-
-  activarGuardadoPorClave(nombre); // ← activa el guardado automático
-  return true;
-}
+//   const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+//   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
+// }
 
 
-export async function iniciarSesion() {
-  const clave = prompt("Ingresa tu clave de acceso:");
-  if (!clave) return false;
+// export async function verificarSesion() {
+//   const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
+//   const clave = cookieClave?.split('=')[1];
+//   if (!clave) return false;
 
-  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-  if (!snapshot.exists()) {
-    alert("Clave inválida");
-    return false;
-  }
+//   const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+//   if (!snapshot.exists()) return false;
 
-  document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
-  const datos = snapshot.val();
-  const nombre = datos.nombre || "Sin nombre";
-  document.getElementById("nombre").textContent = nombre;
+//   const datos = snapshot.val();
+//   const nombre = datos.nombre || "Sin nombre";
+//   document.getElementById("nombre").textContent = nombre;
 
-  activarGuardadoPorClave(nombre); // ← activa el guardado automático
-  return true;
-}
+//   activarGuardadoPorClave(nombre); // ← activa el guardado automático
+//   return true;
+// }
 
-function activarGuardadoPorClave(nombreDesdeClave) {
-  const estadosColor = {
-    gris: "No plan",
-    rojo: "Paro",
-    verde: "Corriendo",
-    azul: "Cambio de molde"
-  };
 
-  function obtenerFecha() {
-    return new Date().toLocaleString('es-MX', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  }
+// export async function iniciarSesion() {
+//   const clave = prompt("Ingresa tu clave de acceso:");
+//   if (!clave) return false;
 
-  // 🟢 Guardado por SELECT
-  document.querySelectorAll(".indicador select").forEach(select => {
-    select.addEventListener("change", async () => {
-      const id = select.closest(".indicador")?.id;
-      if (!id) return;
+//   const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+//   if (!snapshot.exists()) {
+//     alert("Clave inválida");
+//     return false;
+//   }
 
-      const valor = select.value;
-      const comentarioInput = select.closest(".indicador").querySelector(".comentario-input");
-      const comentario = comentarioInput?.value || "";
-      const fecha = obtenerFecha();
-      const estado = estadosColor[valor] || valor;
+//   document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
+//   const datos = snapshot.val();
+//   const nombre = datos.nombre || "Sin nombre";
+//   document.getElementById("nombre").textContent = nombre;
 
-      await set(ref(db, `indicadores/${id}`), valor);
+//   activarGuardadoPorClave(nombre); // ← activa el guardado automático
+//   return true;
+// }
 
-      await set(ref(db, `comentariosIndicadores/${id}`), {
-        estado,
-        comentario,
-        usuario: nombreDesdeClave,
-        fecha
-      });
+// function activarGuardadoPorClave(nombreDesdeClave) {
+//   const estadosColor = {
+//     gris: "No plan",
+//     rojo: "Paro",
+//     verde: "Corriendo",
+//     azul: "Cambio de molde"
+//   };
 
-      await push(ref(db, `registro/${id}`), {
-        estado,
-        comentario,
-        usuario: nombreDesdeClave,
-        fecha
-      });
+//   function obtenerFecha() {
+//     return new Date().toLocaleString('es-MX', {
+//       day: '2-digit',
+//       month: '2-digit',
+//       year: 'numeric',
+//       hour: '2-digit',
+//       minute: '2-digit',
+//       second: '2-digit'
+//     });
+//   }
 
-      cambiarColor(select, id);
-    });
-  });
+//   // 🟢 Guardado por SELECT
+//   document.querySelectorAll(".indicador select").forEach(select => {
+//     select.addEventListener("change", async () => {
+//       const id = select.closest(".indicador")?.id;
+//       if (!id) return;
 
-  // 🟠 Guardado por INPUT
-  document.querySelectorAll(".comentario-input").forEach(input => {
-    input.addEventListener("keydown", async (e) => {
-      if (e.key !== "Enter") return;
+//       const valor = select.value;
+//       const comentarioInput = select.closest(".indicador").querySelector(".comentario-input");
+//       const comentario = comentarioInput?.value || "";
+//       const fecha = obtenerFecha();
+//       const estado = estadosColor[valor] || valor;
 
-      const id = input.dataset.indicador;
-      const comentario = input.value;
-      const select = document.getElementById(id)?.querySelector("select");
-      const valor = select?.value || "gris";
-      const fecha = obtenerFecha();
-      const estado = estadosColor[valor] || valor;
+//       await set(ref(db, `indicadores/${id}`), valor);
 
-      await set(ref(db, `comentarios/${id}`), {
-        estado,
-        comentario,
-        usuario: nombreDesdeClave,
-        fecha
-      });
+//       await set(ref(db, `comentariosIndicadores/${id}`), {
+//         estado,
+//         comentario,
+//         usuario: nombreDesdeClave,
+//         fecha
+//       });
 
-      await push(ref(db, `registro/${id}`), {
-        estado,
-        comentario,
-        usuario: nombreDesdeClave,
-        fecha
-      });
+//       await push(ref(db, `registro/${id}`), {
+//         estado,
+//         comentario,
+//         usuario: nombreDesdeClave,
+//         fecha
+//       });
 
-      cambiarColor(select, id);
-    });
-  });
-}
+//       cambiarColor(select, id);
+//     });
+//   });
+
+//   // 🟠 Guardado por INPUT
+//   document.querySelectorAll(".comentario-input").forEach(input => {
+//     input.addEventListener("keydown", async (e) => {
+//       if (e.key !== "Enter") return;
+
+//       const id = input.dataset.indicador;
+//       const comentario = input.value;
+//       const select = document.getElementById(id)?.querySelector("select");
+//       const valor = select?.value || "gris";
+//       const fecha = obtenerFecha();
+//       const estado = estadosColor[valor] || valor;
+
+//       await set(ref(db, `comentarios/${id}`), {
+//         estado,
+//         comentario,
+//         usuario: nombreDesdeClave,
+//         fecha
+//       });
+
+//       await push(ref(db, `registro/${id}`), {
+//         estado,
+//         comentario,
+//         usuario: nombreDesdeClave,
+//         fecha
+//       });
+
+//       cambiarColor(select, id);
+//     });
+//   });
+// }
