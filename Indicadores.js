@@ -45,6 +45,16 @@ function inicializarIndicadores(estados) {
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
 
+
+
+//////////
+window.sesionPorClaveActiva = false;
+//////////
+
+
+
+if (!window.sesionPorClaveActiva) {
+
 document.addEventListener("DOMContentLoaded", () => {
   // Selecciona todos los contenedores de columnas
   const columnas = document.querySelectorAll('.indicadores');
@@ -135,7 +145,7 @@ document.querySelectorAll(".indicador").forEach(indicador => {
     // comentarioVisible2.classList.remove("oculto");
   });
 });
-
+}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function enviarComentario(event, inputElement) {
   if (event.key === 'Enter' && !event.shiftKey) {
@@ -890,6 +900,7 @@ export async function verificarSesion() {
   document.getElementById("nombre").textContent = nombre;
 
   activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  window.sesionPorClaveActiva = true;
   return true;
 }
 
@@ -910,6 +921,7 @@ export async function iniciarSesion() {
   document.getElementById("nombre").textContent = nombre;
 
   activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  window.sesionPorClaveActiva = true;
   return true;
 }
 
