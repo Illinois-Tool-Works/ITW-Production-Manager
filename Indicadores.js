@@ -905,7 +905,7 @@ export async function verificarSesion() {
   const nombre = datos.nombre || "Sin nombre";
   document.getElementById("nombre").textContent = nombre;
 
-  activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  // activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
 }
 
@@ -920,19 +920,21 @@ export async function iniciarSesion() {
     return false;
   }
 
-  document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
-  const datos = snapshot.val();
-  const nombre = datos.nombre || "Sin nombre";
-  document.getElementById("nombre").textContent = nombre;
-// ✅ Aquí creas el objeto de sesión
+ document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
+const datos = snapshot.val();
+const nombre = datos.nombre || "Sin nombre";
+document.getElementById("nombre").textContent = nombre;
+
+// ✅ Aquí creas el objeto de sesión unificado
 window.sesionActiva = {
-  metodo: "clave",
-  id: clave,
-  nombre: nombre
+  metodo: "clave",     // ← indica que fue acceso por clave
+  id: clave,           // ← identificador técnico (clave)
+  nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
 };
 
-  activarGuardadoPorClave(nombre); // ← activa el guardado automático
-  return true;
+// activarGuardadoPorClave(nombre); // ← activa el guardado automático
+return true;
+
 }
 
 // function activarGuardadoPorClave(nombreDesdeClave) {
