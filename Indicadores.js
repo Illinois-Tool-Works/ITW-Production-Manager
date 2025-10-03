@@ -12,6 +12,12 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+
+
+  window.sesionPorClaveActiva = false;
+
+
+
 function cambiarColor(select, id) {
       //  select.disabled = true;
       console.log("Indicadores.js conectado correctamente");
@@ -44,16 +50,6 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
-
-
-
-//////////
-window.sesionPorClaveActiva = false;
-//////////
-
-
-
-if (!window.sesionPorClaveActiva) {
 
 document.addEventListener("DOMContentLoaded", () => {
   // Selecciona todos los contenedores de columnas
@@ -145,7 +141,7 @@ document.querySelectorAll(".indicador").forEach(indicador => {
     // comentarioVisible2.classList.remove("oculto");
   });
 });
-}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function enviarComentario(event, inputElement) {
   if (event.key === 'Enter' && !event.shiftKey) {
@@ -300,7 +296,7 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
   });
   
 }
-
+if (!window.sesionPorClaveActiva) {
 document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Identificador único por ventana
   const tabId = Date.now().toString();
@@ -471,6 +467,8 @@ if (activarBtn) {
   });
 }
 });
+
+}
 
 
 // window.desbloquearIndicador = async function (indicadorId) {
@@ -888,6 +886,8 @@ export async function generarFingerprint() {
 
 
 export async function verificarSesion() {
+  window.sesionPorClaveActiva = true;
+
   const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
   const clave = cookieClave?.split('=')[1];
   if (!clave) return false;
@@ -900,12 +900,12 @@ export async function verificarSesion() {
   document.getElementById("nombre").textContent = nombre;
 
   activarGuardadoPorClave(nombre); // ← activa el guardado automático
-  window.sesionPorClaveActiva = true;
   return true;
 }
 
 
 export async function iniciarSesion() {
+  window.sesionPorClaveActiva = true;
   const clave = prompt("Ingresa tu clave de acceso:");
   if (!clave) return false;
 
@@ -921,7 +921,6 @@ export async function iniciarSesion() {
   document.getElementById("nombre").textContent = nombre;
 
   activarGuardadoPorClave(nombre); // ← activa el guardado automático
-  window.sesionPorClaveActiva = true;
   return true;
 }
 
