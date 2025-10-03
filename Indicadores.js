@@ -78,7 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
- const usuario = window.sesionActiva?.nombre || "Desconocido";
+const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
+
 
   const fecha = new Date().toLocaleString('es-MX', {
     day: '2-digit',
@@ -161,7 +162,8 @@ window.enviarComentario = async function (event, input) {
   if (!comentario) return;
 
   const indicadorId = input.dataset.indicador;
-  const usuario = window.sesionActiva?.nombre || "Desconocido";
+  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
+
   const timestamp = new Date().toISOString();
 
   const indicador = document.getElementById(indicadorId);
@@ -203,7 +205,8 @@ function guardarComentario(inputElement) {
     console.warn("Falta data-indicador en el input");
     return;
   }
-  const usuario = window.sesionActiva?.nombre || "Desconocido";
+  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
+
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
   const timestamp = new Date().toISOString();
@@ -478,6 +481,67 @@ if (activarBtn) {
 }
 });
 
+// Indicadores.js
+
+export async function generarFingerprint() {
+  const raw = JSON.stringify({
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    screen: {
+      width: screen.width,
+      height: screen.height
+    },
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  });
+
+  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+
+export async function verificarSesion() {
+  const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
+  const clave = cookieClave?.split('=')[1];
+  if (!clave) return false;
+
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  if (!snapshot.exists()) return false;
+
+  const datos = snapshot.val();
+  const nombre = datos.nombre || "Sin nombre";
+  document.getElementById("nombre").textContent = nombre;
+
+  // activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  return true;
+}
+
+
+export async function iniciarSesion() {
+  const clave = prompt("Ingresa tu clave de acceso:");
+  if (!clave) return false;
+
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  if (!snapshot.exists()) {
+    alert("Clave inválida");
+    return false;
+  }
+
+ document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
+const datos = snapshot.val();
+const nombre = datos.nombre || "Sin nombre";
+document.getElementById("nombre").textContent = nombre;
+
+// ✅ Aquí creas el objeto de sesión unificado
+window.sesionActiva = {
+  metodo: "clave",     // ← indica que fue acceso por clave
+  id: clave,           // ← identificador técnico (clave)
+  nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
+};
+
+// activarGuardadoPorClave(nombre); // ← activa el guardado automático
+return true;
+
+}
 
 // window.desbloquearIndicador = async function (indicadorId) {
 //   const usuarioId = prompt("ID de usuario:");
@@ -875,67 +939,6 @@ onValue(indicadoresRef, (snapshot) => {
 });
 
 ////////////////////////////////
-// Indicadores.js
-
-export async function generarFingerprint() {
-  const raw = JSON.stringify({
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    screen: {
-      width: screen.width,
-      height: screen.height
-    },
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-  });
-
-  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
-  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-
-export async function verificarSesion() {
-  const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
-  const clave = cookieClave?.split('=')[1];
-  if (!clave) return false;
-
-  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-  if (!snapshot.exists()) return false;
-
-  const datos = snapshot.val();
-  const nombre = datos.nombre || "Sin nombre";
-  document.getElementById("nombre").textContent = nombre;
-
-  // activarGuardadoPorClave(nombre); // ← activa el guardado automático
-  return true;
-}
-
-
-export async function iniciarSesion() {
-  const clave = prompt("Ingresa tu clave de acceso:");
-  if (!clave) return false;
-
-  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-  if (!snapshot.exists()) {
-    alert("Clave inválida");
-    return false;
-  }
-
- document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
-const datos = snapshot.val();
-const nombre = datos.nombre || "Sin nombre";
-document.getElementById("nombre").textContent = nombre;
-
-// ✅ Aquí creas el objeto de sesión unificado
-window.sesionActiva = {
-  metodo: "clave",     // ← indica que fue acceso por clave
-  id: clave,           // ← identificador técnico (clave)
-  nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
-};
-
-// activarGuardadoPorClave(nombre); // ← activa el guardado automático
-return true;
-
-}
 
 // function activarGuardadoPorClave(nombreDesdeClave) {
 //   const estadosColor = {
