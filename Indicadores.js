@@ -861,57 +861,57 @@ onValue(indicadoresRef, (snapshot) => {
 ////////////////////////////////
 // Indicadores.js
 
-// export async function generarFingerprint() {
-//   const raw = JSON.stringify({
-//     userAgent: navigator.userAgent,
-//     platform: navigator.platform,
-//     screen: {
-//       width: screen.width,
-//       height: screen.height
-//     },
-//     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-//   });
+export async function generarFingerprint() {
+  const raw = JSON.stringify({
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    screen: {
+      width: screen.width,
+      height: screen.height
+    },
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  });
 
-//   const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
-//   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
-// }
-
-
-// export async function verificarSesion() {
-//   const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
-//   const clave = cookieClave?.split('=')[1];
-//   if (!clave) return false;
-
-//   const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-//   if (!snapshot.exists()) return false;
-
-//   const datos = snapshot.val();
-//   const nombre = datos.nombre || "Sin nombre";
-//   document.getElementById("nombre").textContent = nombre;
-
-//   activarGuardadoPorClave(nombre); // ← activa el guardado automático
-//   return true;
-// }
+  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 
-// export async function iniciarSesion() {
-//   const clave = prompt("Ingresa tu clave de acceso:");
-//   if (!clave) return false;
+export async function verificarSesion() {
+  const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
+  const clave = cookieClave?.split('=')[1];
+  if (!clave) return false;
 
-//   const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-//   if (!snapshot.exists()) {
-//     alert("Clave inválida");
-//     return false;
-//   }
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  if (!snapshot.exists()) return false;
 
-//   document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
-//   const datos = snapshot.val();
-//   const nombre = datos.nombre || "Sin nombre";
-//   document.getElementById("nombre").textContent = nombre;
+  const datos = snapshot.val();
+  const nombre = datos.nombre || "Sin nombre";
+  document.getElementById("nombre").textContent = nombre;
 
-//   activarGuardadoPorClave(nombre); // ← activa el guardado automático
-//   return true;
-// }
+  activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  return true;
+}
+
+
+export async function iniciarSesion() {
+  const clave = prompt("Ingresa tu clave de acceso:");
+  if (!clave) return false;
+
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  if (!snapshot.exists()) {
+    alert("Clave inválida");
+    return false;
+  }
+
+  document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
+  const datos = snapshot.val();
+  const nombre = datos.nombre || "Sin nombre";
+  document.getElementById("nombre").textContent = nombre;
+
+  activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  return true;
+}
 
 // function activarGuardadoPorClave(nombreDesdeClave) {
 //   const estadosColor = {
