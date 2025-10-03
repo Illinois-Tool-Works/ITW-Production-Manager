@@ -510,6 +510,7 @@ export async function verificarSesion() {
   const datos = snapshot.val();
   const nombre = datos.nombre || "Sin nombre";
   document.getElementById("nombre").textContent = nombre;
+  activarCamposPorClave();
 
   // activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
@@ -537,7 +538,7 @@ window.sesionActiva = {
   id: clave,           // ← identificador técnico (clave)
   nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
 };
-
+activarCamposPorClave();
 // activarGuardadoPorClave(nombre); // ← activa el guardado automático
 return true;
 
@@ -1021,3 +1022,13 @@ onValue(indicadoresRef, (snapshot) => {
 //     });
 //   });
 // }
+function activarCamposPorClave() {
+  document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
+    el.disabled = false;
+
+    // Si es un input de comentario, firma con el nombre
+    if (el.classList.contains("comentario-input")) {
+      el.dataset.usuario = window.sesionActiva?.nombre || "Desconocido";
+    }
+  });
+}
