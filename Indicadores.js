@@ -876,6 +876,7 @@ export async function generarFingerprint() {
   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+
 export async function verificarSesion() {
   const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
   const clave = cookieClave?.split('=')[1];
@@ -887,6 +888,8 @@ export async function verificarSesion() {
   const datos = snapshot.val();
   const nombre = datos.nombre || "Sin nombre";
   document.getElementById("nombre").textContent = nombre;
+
+  activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
 }
 
@@ -905,5 +908,89 @@ export async function iniciarSesion() {
   const datos = snapshot.val();
   const nombre = datos.nombre || "Sin nombre";
   document.getElementById("nombre").textContent = nombre;
+
+  activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
+}
+
+function activarGuardadoPorClave(nombreDesdeClave) {
+  const estadosColor = {
+    gris: "No plan",
+    rojo: "Paro",
+    verde: "Corriendo",
+    azul: "Cambio de molde"
+  };
+
+  function obtenerFecha() {
+    return new Date().toLocaleString('es-MX', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  }
+
+  // 🟢 Guardado por SELECT
+  document.querySelectorAll(".indicador select").forEach(select => {
+    select.addEventListener("change", async () => {
+      const id = select.closest(".indicador")?.id;
+      if (!id) return;
+
+      const valor = select.value;
+      const comentarioInput = select.closest(".indicador").querySelector(".comentario-input");
+      const comentario = comentarioInput?.value || "";
+      const fecha = obtenerFecha();
+      const estado = estadosColor[valor] || valor;
+
+      await set(ref(db, `indicadores/${id}`), valor);
+
+      await set(ref(db, `comentariosIndicadores/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
+
+      await push(ref(db, `registro/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
+
+      cambiarColor(select, id);
+    });
+  });
+
+  // 🟠 Guardado por INPUT
+  document.querySelectorAll(".comentario-input").forEach(input => {
+    input.addEventListener("keydown", async (e) => {
+      if (e.key !== "Enter") return;
+
+      const id = input.dataset.indicador;
+      const comentario = input.value;
+      const select = document.getElementById(id)?.querySelector("select");
+      const valor = select?.value || "gris";
+      const fecha = obtenerFecha();
+      const estado = estadosColor[valor] || valor;
+
+      await set(ref(db, `comentarios/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
+
+      await push(ref(db, `registro/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
+
+      cambiarColor(select, id);
+    });
+  });
 }
