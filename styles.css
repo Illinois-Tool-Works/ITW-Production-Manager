@@ -469,3 +469,20 @@ body.sin-volver .btn-secondary {
 }
 
 
+#contenedorPrincipal {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  box-sizing: border-box;
+  background-color: #f8f9fa; /* opcional: fondo suave */
+}
+
+#contenedorPrincipal > * {
+  margin-bottom: 1rem;
+}
+
+#indicadores {
+  flex-grow: 1;
+  overflow-y: auto;
+}
