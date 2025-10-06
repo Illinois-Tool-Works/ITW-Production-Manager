@@ -34,7 +34,7 @@ function cambiarColor(select, id) {
 }
 // Exponer al global
 window.cambiarColor = cambiarColor;
-window.firebaseLecturasActivas = {}; // mapa por ruta
+
 
 
 
@@ -53,56 +53,6 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
-////////////////////
-
-export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
-  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
-  sessionStorage.setItem("tabId", tabId);
-
-  let refNodo;
-  let unsubscribe;
-
-  const conectarFirebase = () => {
-    console.log(`[DelegarFirebase] 🟢 Pestaña activa. Conectando a Firebase: ${ruta}`);
-    refNodo = ref(db, ruta);
-    unsubscribe = onValue(refNodo, (snapshot) => {
-      const datos = snapshot.val();
-      if (!datos) return;
-      localStorage.setItem(claveLocal, JSON.stringify(datos));
-      callback(datos);
-    });
-  };
-
-  const desconectarFirebase = () => {
-    if (unsubscribe) {
-      console.log(`[DelegarFirebase] 🔴 Pestaña inactiva. Desconectando de Firebase: ${ruta}`);
-      unsubscribe();
-      unsubscribe = null;
-    }
-  };
-
-  // 🔍 Detectar visibilidad de la pestaña
-  const manejarVisibilidad = () => {
-    if (document.visibilityState === "visible") {
-      conectarFirebase();
-    } else {
-      desconectarFirebase();
-    }
-  };
-
-  document.addEventListener("visibilitychange", manejarVisibilidad);
-
-  // 🧠 Activar lectura si la pestaña ya está visible
-  if (document.visibilityState === "visible") {
-    conectarFirebase();
-  }
-
-  // 🧹 Limpiar al cerrar
-  window.addEventListener("unload", () => {
-    desconectarFirebase();
-  });
-}
-///////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
   // Selecciona todos los contenedores de columnas
@@ -128,14 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
- const nombreDOM = document.getElementById("nombre")?.textContent?.trim();
- const usuario = window.sesionActiva?.nombre || (nombreDOM && nombreDOM !== "") ? nombreDOM : null;
-
-  if (!usuario) {
-  console.warn("⚠️ Usuario no definido. No se registrará en Firebase.");
-  return;
- }
-
+const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
 
 
   const fecha = new Date().toLocaleString('es-MX', {
@@ -176,36 +119,30 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
- // 🔄 Lectura delegada usando tu función
-  delegarLecturaFirebase({
-    ruta: 'indicadores',
-    claveLocal: 'estadosIndicadores',
-    callback: (estados) => {
-      selects.forEach(select => {
-        const id = select.closest('.indicador')?.id;
-        if (id && estados[id]) {
-          select.value = estados[id];
-          cambiarColor(select, id);
-        }
-      });
-    }
-  });
+  onValue(ref(db, 'indicadores'), (snapshot) => {
+    const estados = snapshot.val();
+    if (!estados) return;
 
+    selects.forEach(select => {
+      const id = select.closest('.indicador')?.id;
+      if (id && estados[id]) {
+        select.value = estados[id];
+        cambiarColor(select, id);
+      }
+    });
+  });
 });
 document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-  function aplicarComentario(datos) {
+  const refComentario = ref(db, `comentariosIndicadores/${id}`);
+  onValue(refComentario, (snapshot) => {
+    const datos = snapshot.val();
     if (!datos || !comentarioVisible2) return;
+
     comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
     // comentarioVisible2.classList.remove("oculto");
-  }
-
-  delegarLecturaFirebase({
-    ruta: `comentariosIndicadores/${id}`,
-    claveLocal: `comentarioIndicador_${id}`,
-    callback: aplicarComentario
   });
 });
 
@@ -225,14 +162,7 @@ window.enviarComentario = async function (event, input) {
   if (!comentario) return;
 
   const indicadorId = input.dataset.indicador;
-  const nombreDOM = document.getElementById("nombre")?.textContent?.trim();
-const usuario = window.sesionActiva?.nombre || (nombreDOM && nombreDOM !== "") ? nombreDOM : null;
-
-if (!usuario) {
-  console.warn("⚠️ Usuario no definido. No se registrará en Firebase.");
-  return;
-}
-
+  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
 
   const timestamp = new Date().toISOString();
 
@@ -275,14 +205,7 @@ function guardarComentario(inputElement) {
     console.warn("Falta data-indicador en el input");
     return;
   }
-  const nombreDOM = document.getElementById("nombre")?.textContent?.trim();
-const usuario = window.sesionActiva?.nombre || (nombreDOM && nombreDOM !== "") ? nombreDOM : null;
-
-if (!usuario) {
-  console.warn("⚠️ Usuario no definido. No se registrará en Firebase.");
-  return;
-}
-
+  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
 
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
@@ -331,30 +254,24 @@ window.enviarComentario = enviarComentario;
 
 ///////////////////////////mensaje y guardado/////////////////////////////////////////////////////
 
-export function cargarComentario(indicadorId) {
+function cargarComentario(indicadorId) {
   const indicador = document.getElementById(indicadorId);
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
-  function aplicarComentario(data) {
-    if (!data) return;
+  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
+  onValue(comentarioRef, snapshot => {
+    const data = snapshot.val();
+    const autor = data?.usuario;
+    const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
+  dateStyle: "medium",
+  timeStyle: "short"
+}
+);
 
-    const autor = data.usuario || "Desconocido";
-    const fechaFormateada = new Date(data.fecha).toLocaleString("es-MX", {
-      dateStyle: "medium",
-      timeStyle: "short"
-    });
-
-    comentarioBox.textContent = `"${data.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
-  }
-
-  delegarLecturaFirebase({
-    ruta: `comentarios/${indicadorId}`,
-    claveLocal: `comentario_${indicadorId}`,
-    callback: aplicarComentario
+comentarioBox.textContent = `"${data?.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
   });
 }
-
 for (let i = 1; i < 140; i++) {
   cargarComentario(`indicador${i}`);
 }
@@ -566,72 +483,66 @@ if (activarBtn) {
 
 // Indicadores.js
 
-// export async function generarFingerprint() {
-//   const raw = JSON.stringify({
-//     userAgent: navigator.userAgent,
-//     platform: navigator.platform,
-//     screen: {
-//       width: screen.width,
-//       height: screen.height
-//     },
-//     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-//   });
+export async function generarFingerprint() {
+  const raw = JSON.stringify({
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    screen: {
+      width: screen.width,
+      height: screen.height
+    },
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  });
 
-//   const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
-//   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
-// }
-
-
-// export async function verificarSesion() {
-//   const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
-//   const clave = cookieClave?.split('=')[1];
-//   if (!clave) return false;
-
-//   const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-//   if (!snapshot.exists()) return false;
-
-//   const datos = snapshot.val();
-//   const nombre = datos.nombre || "Sin nombre";
-//   document.getElementById("nombre").textContent = nombre;
-//   activarCamposPorClave();
-
-//   // activarGuardadoPorClave(nombre); // ← activa el guardado automático
-//   return true;
-// }
+  const buffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(raw));
+  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 
-// export async function iniciarSesion() {
-//   const clave = prompt("Ingresa tu clave de acceso:");
-//   if (!clave) return false;
+export async function verificarSesion() {
+  const cookieClave = document.cookie.split('; ').find(row => row.startsWith('clave='));
+  const clave = cookieClave?.split('=')[1];
+  if (!clave) return false;
 
-//   const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
-//   if (!snapshot.exists()) {
-//     alert("Clave inválida");
-//     return false;
-//   }
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  if (!snapshot.exists()) return false;
 
-//  document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
-// const datos = snapshot.val();
-// const nombre = datos.nombre || "Sin nombre";
-// document.getElementById("nombre").textContent = nombre;
+  const datos = snapshot.val();
+  const nombre = datos.nombre || "Sin nombre";
+  document.getElementById("nombre").textContent = nombre;
+  activarCamposPorClave();
 
-// // ✅ Aquí creas el objeto de sesión unificado
-// window.sesionActiva = {
-//   metodo: "clave",     // ← indica que fue acceso por clave
-//   id: clave,           // ← identificador técnico (clave)
-//   nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
-// };
-// activarCamposPorClave();
-// // activarGuardadoPorClave(nombre); // ← activa el guardado automático
-// return true;
-
-// }
+  // activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  return true;
+}
 
 
+export async function iniciarSesion() {
+  const clave = prompt("Ingresa tu clave de acceso:");
+  if (!clave) return false;
 
+  const snapshot = await get(child(ref(db), `clavesValidas/${clave}`));
+  if (!snapshot.exists()) {
+    alert("Clave inválida");
+    return false;
+  }
 
+ document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
+const datos = snapshot.val();
+const nombre = datos.nombre || "Sin nombre";
+document.getElementById("nombre").textContent = nombre;
 
+// ✅ Aquí creas el objeto de sesión unificado
+window.sesionActiva = {
+  metodo: "clave",     // ← indica que fue acceso por clave
+  id: clave,           // ← identificador técnico (clave)
+  nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
+};
+activarCamposPorClave();
+// activarGuardadoPorClave(nombre); // ← activa el guardado automático
+return true;
 
+}
 // window.desbloquearIndicador = async function (indicadorId) {
 //   const usuarioId = prompt("ID de usuario:");
 //   const contraseña = prompt("Contraseña:");
@@ -1016,19 +927,15 @@ function colorBootstrap(estado) {
     default: return "dark";
   }
 }
-
-
 // 🔄 Escucha en tiempo real desde Firebase
 const indicadoresRef = ref(db, "indicadores");
 
-delegarLecturaFirebase({
-  ruta: 'indicadores',
-  claveLocal: 'conteoIndicadores',
-  callback: (indicadores) => {
-    if (!indicadores) return;
-    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
-    renderConteo(conteo, areaActual);
-  }
+onValue(indicadoresRef, (snapshot) => {
+  const indicadores = snapshot.val();
+  if (!indicadores) return;
+
+  const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+  renderConteo(conteo, areaActual);
 });
 
 ////////////////////////////////
@@ -1114,13 +1021,13 @@ delegarLecturaFirebase({
 //     });
 //   });
 // }
-// function activarCamposPorClave() {
-//   document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
-//     el.disabled = false;
+function activarCamposPorClave() {
+  document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
+    el.disabled = false;
 
-//     // Si es un input de comentario, firma con el nombre
-//     if (el.classList.contains("comentario-input")) {
-//       el.dataset.usuario = window.sesionActiva?.nombre || "Desconocido";
-//     }
-//   });
-// }
+    // Si es un input de comentario, firma con el nombre
+    if (el.classList.contains("comentario-input")) {
+      el.dataset.usuario = window.sesionActiva?.nombre || "Desconocido";
+    }
+  });
+}
