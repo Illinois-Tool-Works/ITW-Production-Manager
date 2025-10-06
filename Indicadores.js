@@ -543,6 +543,7 @@ activarCamposPorClave();
 return true;
 
 }
+
 // window.desbloquearIndicador = async function (indicadorId) {
 //   const usuarioId = prompt("ID de usuario:");
 //   const contraseña = prompt("Contraseña:");
