@@ -340,17 +340,23 @@ if (activarBtn) {
         return;
       }
       // ✅ Aquí creas el objeto de sesión
-    window.sesionActiva = {
-      metodo: "usuario",
-      id: usuarioId,
-      nombre: nombre
-    };
+   // 🔒 Verificar si otra pestaña ya tiene el control
+const controlExistente = localStorage.getItem("controlActivo");
+if (controlExistente && controlExistente !== tabId) {
+  alert("Otra pestaña ya tiene el control. No se puede activar edición aquí.");
+  return;
+}
 
+// ✅ Activar sesión
+window.sesionActiva = {
+  metodo: "usuario",
+  id: usuarioId,
+  nombre: nombre
+};
 
-      nombreUsuario = nombre;
-      localStorage.setItem("controlActivo", tabId);
-
-      if (localStorage.getItem("controlActivo") !== tabId) return;
+nombreUsuario = nombre;
+localStorage.setItem("controlActivo", tabId);
+edicionActiva = true;
 
       edicionActiva = true;
 
