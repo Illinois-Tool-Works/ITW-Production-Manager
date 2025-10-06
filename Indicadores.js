@@ -56,47 +56,50 @@ import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-d
 ////////////////////
 
 export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
-  const refNodo = ref(db, ruta);
+  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+  sessionStorage.setItem("tabId", tabId);
 
-  const conectar = () => {
-    if (window.firebaseLecturasActivas[ruta]) return; // ya está conectado
+  let refNodo;
+  let unsubscribe;
 
-    console.log(`[DelegarFirebase] 🟢 Conectando a Firebase: ${ruta}`);
-    const unsubscribe = onValue(refNodo, (snapshot) => {
+  const conectarFirebase = () => {
+    console.log(`[DelegarFirebase] 🟢 Pestaña activa. Conectando a Firebase: ${ruta}`);
+    refNodo = ref(db, ruta);
+    unsubscribe = onValue(refNodo, (snapshot) => {
       const datos = snapshot.val();
       if (!datos) return;
       localStorage.setItem(claveLocal, JSON.stringify(datos));
       callback(datos);
     });
-
-    window.firebaseLecturasActivas[ruta] = unsubscribe;
   };
 
-  const desconectar = () => {
-    const unsubscribe = window.firebaseLecturasActivas[ruta];
+  const desconectarFirebase = () => {
     if (unsubscribe) {
-      console.log(`[DelegarFirebase] 🔴 Desconectando de Firebase: ${ruta}`);
+      console.log(`[DelegarFirebase] 🔴 Pestaña inactiva. Desconectando de Firebase: ${ruta}`);
       unsubscribe();
-      delete window.firebaseLecturasActivas[ruta];
+      unsubscribe = null;
     }
   };
 
+  // 🔍 Detectar visibilidad de la pestaña
   const manejarVisibilidad = () => {
     if (document.visibilityState === "visible") {
-      conectar();
+      conectarFirebase();
     } else {
-      desconectar();
+      desconectarFirebase();
     }
   };
 
   document.addEventListener("visibilitychange", manejarVisibilidad);
 
+  // 🧠 Activar lectura si la pestaña ya está visible
   if (document.visibilityState === "visible") {
-    conectar();
+    conectarFirebase();
   }
 
+  // 🧹 Limpiar al cerrar
   window.addEventListener("unload", () => {
-    desconectar();
+    desconectarFirebase();
   });
 }
 ///////////////////
