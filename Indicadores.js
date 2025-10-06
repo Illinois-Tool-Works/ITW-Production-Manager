@@ -128,7 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
-const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
+ const nombreDOM = document.getElementById("nombre")?.textContent?.trim();
+ const usuario = window.sesionActiva?.nombre || (nombreDOM && nombreDOM !== "") ? nombreDOM : null;
+
+  if (!usuario) {
+  console.warn("⚠️ Usuario no definido. No se registrará en Firebase.");
+  return;
+ }
+
 
 
   const fecha = new Date().toLocaleString('es-MX', {
@@ -218,7 +225,14 @@ window.enviarComentario = async function (event, input) {
   if (!comentario) return;
 
   const indicadorId = input.dataset.indicador;
-  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
+  const nombreDOM = document.getElementById("nombre")?.textContent?.trim();
+const usuario = window.sesionActiva?.nombre || (nombreDOM && nombreDOM !== "") ? nombreDOM : null;
+
+if (!usuario) {
+  console.warn("⚠️ Usuario no definido. No se registrará en Firebase.");
+  return;
+}
+
 
   const timestamp = new Date().toISOString();
 
@@ -261,7 +275,14 @@ function guardarComentario(inputElement) {
     console.warn("Falta data-indicador en el input");
     return;
   }
-  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
+  const nombreDOM = document.getElementById("nombre")?.textContent?.trim();
+const usuario = window.sesionActiva?.nombre || (nombreDOM && nombreDOM !== "") ? nombreDOM : null;
+
+if (!usuario) {
+  console.warn("⚠️ Usuario no definido. No se registrará en Firebase.");
+  return;
+}
+
 
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
@@ -402,11 +423,11 @@ if (activarBtn) {
         return;
       }
       // ✅ Aquí creas el objeto de sesión
-    // window.sesionActiva = {
-    //   metodo: "usuario",
-    //   id: usuarioId,
-    //   nombre: nombre
-    // };
+    window.sesionActiva = {
+      metodo: "usuario",
+      id: usuarioId,
+      nombre: nombre
+    };
 
 
       nombreUsuario = nombre;
