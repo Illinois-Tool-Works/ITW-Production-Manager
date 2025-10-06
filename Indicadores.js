@@ -119,9 +119,23 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
-  onValue(ref(db, 'indicadores'), (snapshot) => {
+ const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+sessionStorage.setItem("tabId", tabId);
+
+const controlClave = "controlIndicadores";
+const claveLocal = "estadosIndicadores";
+let refNodo;
+let unsubscribe;
+
+function conectarLecturaIndicadores() {
+  if (unsubscribe) return;
+
+  refNodo = ref(db, "indicadores");
+  unsubscribe = onValue(refNodo, (snapshot) => {
     const estados = snapshot.val();
     if (!estados) return;
+
+    localStorage.setItem(claveLocal, JSON.stringify(estados));
 
     selects.forEach(select => {
       const id = select.closest('.indicador')?.id;
@@ -131,6 +145,59 @@ const registroRef = ref(db, `registro/${id}`);
       }
     });
   });
+
+  localStorage.setItem(controlClave, tabId);
+}
+
+function desconectarLecturaIndicadores() {
+  if (unsubscribe) {
+    unsubscribe();
+    unsubscribe = null;
+  }
+}
+
+function usarCacheIndicadores() {
+  const guardado = localStorage.getItem(claveLocal);
+  if (!guardado) return;
+
+  const estados = JSON.parse(guardado);
+  selects.forEach(select => {
+    const id = select.closest('.indicador')?.id;
+    if (id && estados[id]) {
+      select.value = estados[id];
+      cambiarColor(select, id);
+    }
+  });
+}
+
+function verificarControlIndicadores() {
+  const actual = localStorage.getItem(controlClave);
+  if (!actual || actual === tabId) {
+    conectarLecturaIndicadores();
+  } else {
+    usarCacheIndicadores();
+  }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    verificarControlIndicadores();
+  } else {
+    desconectarLecturaIndicadores();
+  }
+});
+
+window.addEventListener("beforeunload", () => {
+  if (localStorage.getItem(controlClave) === tabId) {
+    localStorage.removeItem(controlClave);
+  }
+  desconectarLecturaIndicadores();
+});
+
+// Activar al inicio si pestaña está visible
+if (document.visibilityState === "visible") {
+  verificarControlIndicadores();
+}
 });
 document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
