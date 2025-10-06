@@ -509,31 +509,10 @@ export async function verificarSesion() {
 
   const datos = snapshot.val();
   const nombre = datos.nombre || "Sin nombre";
-
-  // 🔒 Verificar control de pestaña antes de activar sesión
-  const tabId = sessionStorage.getItem("tabId");
-  const controlActivo = localStorage.getItem("controlActivo");
-
-  if (!controlActivo) {
-    localStorage.setItem("controlActivo", tabId);
-  }
-
-  if (localStorage.getItem("controlActivo") !== tabId) {
-    console.log("⛔ Otra pestaña tiene el control. Sesión por clave no activada.");
-    return false;
-  }
-
-  // ✅ Activar sesión solo si esta pestaña tiene el control
-  window.sesionActiva = {
-    metodo: "clave",
-    id: clave,
-    nombre: nombre
-  };
-
   document.getElementById("nombre").textContent = nombre;
   activarCamposPorClave();
-  // activarGuardadoPorClave(nombre);
 
+  // activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
 }
 
