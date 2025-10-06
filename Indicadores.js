@@ -55,86 +55,121 @@ import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-d
 
 ////////////////////
 
-function verificarYReclamarControl(tabId) {
-  const controlActual = localStorage.getItem("controlActivo");
-
-  // Si el control está vacío o huérfano, reclamarlo
-  if (!controlActual || controlActual === "null" || controlActual === "undefined") {
-    console.log("🛠 Control huérfano detectado. Esta pestaña tomará el control.");
-    localStorage.setItem("controlActivo", tabId);
-    location.reload(); // Recarga para activar lectura
-  }
-}
-export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
+export function delegarLecturaFirebase2({ ruta }) {
   const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
 
+  const logEstado = (msg) => console.log(`[DelegarFirebase] ${msg}`);
+
+  // 🔒 Asignar control si está libre
   if (!localStorage.getItem("controlActivo")) {
     localStorage.setItem("controlActivo", tabId);
+    logEstado(`🟢 Esta pestaña tomó el control para: ${ruta}`);
   }
 
   let tieneControl = localStorage.getItem("controlActivo") === tabId;
 
-  if (tieneControl) {
-    console.log("✅ Esta pestaña tiene el control. Se conecta a:", ruta);
-    const refNodo = ref(db, ruta);
-    const unsubscribe = onValue(refNodo, (snapshot) => {
-      const datos = snapshot.val();
-      if (!datos) return;
-      localStorage.setItem(claveLocal, JSON.stringify(datos));
-      callback(datos);
-    });
+  logEstado(`🧭 Tab ID: ${tabId}`);
+  logEstado(`🎮 Control activo: ${localStorage.getItem("controlActivo")}`);
+  logEstado(`📌 ¿Tengo el control?: ${tieneControl}`);
 
-    window.addEventListener("beforeunload", () => {
-      if (localStorage.getItem("controlActivo") === tabId) {
-        localStorage.removeItem("controlActivo");
-      }
-      unsubscribe();
-    });
-  } else {
-    console.log("🚫 Esta pestaña NO tiene el control. Escucha por storage:", ruta);
-    const guardado = localStorage.getItem(claveLocal);
-    if (guardado) callback(JSON.parse(guardado));
-
-    window.addEventListener("storage", (e) => {
-      if (e.key === claveLocal) {
-        const nuevos = JSON.parse(e.newValue);
-        callback(nuevos);
-      }
-
-      // 🧠 Si el control queda libre, tomarlo y recargar 123
-      if (e.key === "controlActivo" && e.newValue === null) {
-        console.log("🔁 Control liberado. Esta pestaña tomará el control.");
-        localStorage.setItem("controlActivo", tabId);
-        location.reload(); // Recarga para activar lectura
-      }
-    });
-  }
- // 🕒 Recuperación activa si el control está huérfano y esta pestaña no lo tiene
- if (!tieneControl) {
-  setTimeout(() => {
-    const controlActual = localStorage.getItem("controlActivo");
-
-    if (!controlActual || controlActual === "null" || controlActual === "undefined") {
-      console.log("🛠 Control huérfano detectado. Esta pestaña tomará el control.");
-      localStorage.setItem("controlActivo", tabId);
-      location.reload(); // Recarga para activar lectura
+  // 🧹 Liberar control al cerrar
+  window.addEventListener("beforeunload", () => {
+    if (localStorage.getItem("controlActivo") === tabId) {
+      localStorage.removeItem("controlActivo");
+      logEstado(`❌ Esta pestaña liberó el control`);
     }
-  }, 1000);
-}
-}
+  });
 
-const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
-sessionStorage.setItem("tabId", tabId);
+  // 🔁 Detectar liberación y reclamar control
+  window.addEventListener("storage", (e) => {
+    if (e.key === "controlActivo" && e.newValue === null) {
+      localStorage.setItem("controlActivo", tabId);
+      logEstado(`🔁 Esta pestaña reclamó el control para: ${ruta}`);
+    }
+  });
 
-if (!localStorage.getItem("controlActivo")) {
-  localStorage.setItem("controlActivo", tabId);
+  // 🕒 Verificación activa cada 2 segundos
+  setInterval(() => {
+    const actual = localStorage.getItem("controlActivo");
+    if (!actual || actual === "null" || actual === "undefined") {
+      localStorage.setItem("controlActivo", tabId);
+      logEstado(`🛠 Control huérfano detectado. Esta pestaña lo tomó para: ${ruta}`);
+    }
+  }, 2000);
 }
+delegarLecturaFirebase2({ ruta: 'indicadores' });
 
-const tieneControl = localStorage.getItem("controlActivo") === tabId;
-console.log("🧭 Tab ID:", tabId);
-console.log("🎮 Control activo:", localStorage.getItem("controlActivo"));
-console.log("📌 ¿Esta pestaña tiene el control?", tieneControl);
+// export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
+//   const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+//   sessionStorage.setItem("tabId", tabId);
+
+//   if (!localStorage.getItem("controlActivo")) {
+//     localStorage.setItem("controlActivo", tabId);
+//   }
+
+//   let tieneControl = localStorage.getItem("controlActivo") === tabId;
+
+//   if (tieneControl) {
+//     console.log("✅ Esta pestaña tiene el control. Se conecta a:", ruta);
+//     const refNodo = ref(db, ruta);
+//     const unsubscribe = onValue(refNodo, (snapshot) => {
+//       const datos = snapshot.val();
+//       if (!datos) return;
+//       localStorage.setItem(claveLocal, JSON.stringify(datos));
+//       callback(datos);
+//     });
+
+//     window.addEventListener("beforeunload", () => {
+//       if (localStorage.getItem("controlActivo") === tabId) {
+//         localStorage.removeItem("controlActivo");
+//       }
+//       unsubscribe();
+//     });
+//   } else {
+//     console.log("🚫 Esta pestaña NO tiene el control. Escucha por storage:", ruta);
+//     const guardado = localStorage.getItem(claveLocal);
+//     if (guardado) callback(JSON.parse(guardado));
+
+//     window.addEventListener("storage", (e) => {
+//       if (e.key === claveLocal) {
+//         const nuevos = JSON.parse(e.newValue);
+//         callback(nuevos);
+//       }
+
+//       // 🧠 Si el control queda libre, tomarlo y recargar 123
+//       if (e.key === "controlActivo" && e.newValue === null) {
+//         console.log("🔁 Control liberado. Esta pestaña tomará el control.");
+//         localStorage.setItem("controlActivo", tabId);
+//         location.reload(); // Recarga para activar lectura
+//       }
+//     });
+//   }
+//  // 🕒 Recuperación activa si el control está huérfano y esta pestaña no lo tiene
+// if (!tieneControl) {
+//   setTimeout(() => {
+//     const controlActual = localStorage.getItem("controlActivo");
+
+//     if (!controlActual || controlActual === "null" || controlActual === "undefined") {
+//       console.log("🛠 Control huérfano detectado. Esta pestaña tomará el control.");
+//       localStorage.setItem("controlActivo", tabId);
+//       location.reload(); // Recarga para activar lectura
+//     }
+//   }, 1000);
+// }
+// }
+
+// const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+// sessionStorage.setItem("tabId", tabId);
+
+// if (!localStorage.getItem("controlActivo")) {
+//   localStorage.setItem("controlActivo", tabId);
+// }
+
+// const tieneControl = localStorage.getItem("controlActivo") === tabId;
+// console.log("🧭 Tab ID:", tabId);
+// console.log("🎮 Control activo:", localStorage.getItem("controlActivo"));
+// console.log("📌 ¿Esta pestaña tiene el control?", tieneControl);
 
 ///////////////////
 
