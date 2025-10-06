@@ -53,6 +53,52 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 
+////////////////////
+
+export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
+  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+  sessionStorage.setItem("tabId", tabId);
+
+  // 🔒 Asignar control si nadie lo tiene
+  if (!localStorage.getItem("controlActivo")) {
+    localStorage.setItem("controlActivo", tabId);
+  }
+
+  const tieneControl = localStorage.getItem("controlActivo") === tabId;
+
+  // 🔄 Si esta pestaña tiene el control, lee desde Firebase
+  if (tieneControl) {
+    const refNodo = ref(db, ruta);
+    onValue(refNodo, (snapshot) => {
+      const datos = snapshot.val();
+      if (!datos) return;
+
+      localStorage.setItem(claveLocal, JSON.stringify(datos));
+      callback(datos);
+    });
+  } else {
+    // 🔄 Si no tiene el control, usar lo último guardado
+    const guardado = localStorage.getItem(claveLocal);
+    if (guardado) callback(JSON.parse(guardado));
+
+    // 📡 Escuchar actualizaciones desde la pestaña activa
+    window.addEventListener("storage", (e) => {
+      if (e.key === claveLocal) {
+        const nuevos = JSON.parse(e.newValue);
+        callback(nuevos);
+      }
+    });
+  }
+
+  // 🧹 Limpiar control si esta pestaña se cierra
+  window.addEventListener("beforeunload", () => {
+    if (localStorage.getItem("controlActivo") === tabId) {
+      localStorage.removeItem("controlActivo");
+    }
+  });
+}
+
+///////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
   // Selecciona todos los contenedores de columnas
@@ -119,83 +165,34 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
-  // 🔹 Función para aplicar los estados a los selects
-function aplicarEstados(estados) {
-  if (!estados) return;
-
-  selects.forEach(select => {
-    const id = select.closest('.indicador')?.id;
-    if (id && estados[id]) {
-      select.value = estados[id];
-      cambiarColor(select, id);
+ // 🔄 Lectura delegada usando tu función
+  delegarLecturaFirebase({
+    ruta: 'indicadores',
+    claveLocal: 'estadosIndicadores',
+    callback: (estados) => {
+      selects.forEach(select => {
+        const id = select.closest('.indicador')?.id;
+        if (id && estados[id]) {
+          select.value = estados[id];
+          cambiarColor(select, id);
+        }
+      });
     }
   });
-}
 
-// 🔹 Identificador único por pestaña
-const tabId = sessionStorage.getItem("tabId");
-const tieneControl = localStorage.getItem("controlActivo") === tabId;
-
-// 🔄 Lectura delegada
-if (tieneControl) {
-  onValue(ref(db, 'indicadores'), (snapshot) => {
-    const estados = snapshot.val();
-    if (!estados) return;
-
-    localStorage.setItem("estadosIndicadores", JSON.stringify(estados));
-    aplicarEstados(estados);
-  });
-} else {
-  const guardados = localStorage.getItem("estadosIndicadores");
-  if (guardados) {
-    aplicarEstados(JSON.parse(guardados));
-  }
-
-  window.addEventListener("storage", (e) => {
-    if (e.key === "estadosIndicadores") {
-      const nuevos = JSON.parse(e.newValue);
-      aplicarEstados(nuevos);
-    }
-  });
-}
 });
-const tabId = sessionStorage.getItem("tabId");
-const tieneControl = localStorage.getItem("controlActivo") === tabId;
-
 document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-  function aplicarComentario(datos) {
+  const refComentario = ref(db, `comentariosIndicadores/${id}`);
+  onValue(refComentario, (snapshot) => {
+    const datos = snapshot.val();
     if (!datos || !comentarioVisible2) return;
+
     comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
     // comentarioVisible2.classList.remove("oculto");
-  }
-
-  if (tieneControl) {
-    const refComentario = ref(db, `comentariosIndicadores/${id}`);
-    onValue(refComentario, (snapshot) => {
-      const datos = snapshot.val();
-      aplicarComentario(datos);
-
-      // Compartir con otras pestañas
-      const clave = `comentarioIndicador_${id}`;
-      localStorage.setItem(clave, JSON.stringify(datos));
-    });
-  } else {
-    // Leer lo último disponible
-    const clave = `comentarioIndicador_${id}`;
-    const guardado = localStorage.getItem(clave);
-    if (guardado) aplicarComentario(JSON.parse(guardado));
-
-    // Escuchar actualizaciones
-    window.addEventListener("storage", (e) => {
-      if (e.key === clave) {
-        const nuevos = JSON.parse(e.newValue);
-        aplicarComentario(nuevos);
-      }
-    });
-  }
+  });
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
