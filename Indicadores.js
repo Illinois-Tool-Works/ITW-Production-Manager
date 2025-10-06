@@ -386,18 +386,88 @@ function cargarComentario(indicadorId) {
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
-  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-  onValue(comentarioRef, snapshot => {
-    const data = snapshot.val();
-    const autor = data?.usuario;
-    const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
-  dateStyle: "medium",
-  timeStyle: "short"
-}
-);
+  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+  sessionStorage.setItem("tabId", tabId);
 
-comentarioBox.textContent = `"${data?.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
+  const ruta = `comentarios/${indicadorId}`;
+  const claveLocal = `comentario_${indicadorId}`;
+  const controlClave = `controlComentario_${indicadorId}`;
+  let refNodo;
+  let unsubscribe;
+
+  function conectarComentario() {
+    if (unsubscribe) return;
+
+    refNodo = ref(db, ruta);
+    unsubscribe = onValue(refNodo, snapshot => {
+      const data = snapshot.val();
+      if (!data || !comentarioBox) return;
+
+      localStorage.setItem(claveLocal, JSON.stringify(data));
+
+      const autor = data.usuario || "Desconocido";
+      const fechaFormateada = new Date(data.fecha).toLocaleString("es-MX", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+
+      comentarioBox.textContent = `"${data.texto || "Sin comentario"}", ${autor}, ${fechaFormateada}`;
+    });
+
+    localStorage.setItem(controlClave, tabId);
+  }
+
+  function desconectarComentario() {
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
+  }
+
+  function usarCacheComentario() {
+    const guardado = localStorage.getItem(claveLocal);
+    if (!guardado || !comentarioBox) return;
+
+    const data = JSON.parse(guardado);
+    const autor = data.usuario || "Desconocido";
+    const fechaFormateada = new Date(data.fecha).toLocaleString("es-MX", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+
+    comentarioBox.textContent = `"${data.texto || "Sin comentario"}", ${autor}, ${fechaFormateada}`;
+  }
+
+  function verificarControlComentario() {
+    const actual = localStorage.getItem(controlClave);
+    if (!actual || actual === tabId) {
+      conectarComentario();
+    } else {
+      usarCacheComentario();
+    }
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      verificarControlComentario();
+    } else {
+      desconectarComentario();
+    }
   });
+
+  window.addEventListener("beforeunload", () => {
+    if (localStorage.getItem(controlClave) === tabId) {
+      localStorage.removeItem(controlClave);
+    }
+    desconectarComentario();
+  });
+
+  // Activar al inicio si pestaña está visible
+  if (document.visibilityState === "visible") {
+    verificarControlComentario();
+  } else {
+    usarCacheComentario();
+  }
 }
 for (let i = 1; i < 140; i++) {
   cargarComentario(`indicador${i}`);
