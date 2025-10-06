@@ -55,6 +55,16 @@ import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-d
 
 ////////////////////
 
+function verificarYReclamarControl(tabId) {
+  const controlActual = localStorage.getItem("controlActivo");
+
+  // Si el control está vacío o huérfano, reclamarlo
+  if (!controlActual || controlActual === "null" || controlActual === "undefined") {
+    console.log("🛠 Control huérfano detectado. Esta pestaña tomará el control.");
+    localStorage.setItem("controlActivo", tabId);
+    location.reload(); // Recarga para activar lectura
+  }
+}
 export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
   const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
@@ -100,17 +110,18 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
       }
     });
   }
-  // 🕒 Recuperación activa si el control está huérfano
-setTimeout(() => {
-  const controlActual = localStorage.getItem("controlActivo");
-  const pestañas = performance.getEntriesByType("navigation").length;
+ // 🕒 Recuperación activa si el control está huérfano y esta pestaña no lo tiene
+ if (!tieneControl) {
+  setTimeout(() => {
+    const controlActual = localStorage.getItem("controlActivo");
 
-  if (!controlActual || controlActual === "null") {
-    console.log("🛠 Control huérfano detectado. Esta pestaña tomará el control.");
-    localStorage.setItem("controlActivo", tabId);
-    location.reload(); // Recarga para activar lectura
-  }
-}, 1000);
+    if (!controlActual || controlActual === "null" || controlActual === "undefined") {
+      console.log("🛠 Control huérfano detectado. Esta pestaña tomará el control.");
+      localStorage.setItem("controlActivo", tabId);
+      location.reload(); // Recarga para activar lectura
+    }
+  }, 1000);
+}
 }
 
 const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
