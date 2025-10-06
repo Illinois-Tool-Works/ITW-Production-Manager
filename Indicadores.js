@@ -928,72 +928,15 @@ function colorBootstrap(estado) {
   }
 }
 // 🔄 Escucha en tiempo real desde Firebase
-const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
-sessionStorage.setItem("tabId", tabId);
-
-const claveLocal = "estadosIndicadores";
-const controlClave = "controlIndicadores";
-let refNodo;
-let unsubscribe;
-
 const indicadoresRef = ref(db, "indicadores");
 
-function conectarFirebase() {
-  if (unsubscribe) return;
+onValue(indicadoresRef, (snapshot) => {
+  const indicadores = snapshot.val();
+  if (!indicadores) return;
 
-  refNodo = ref(db, "indicadores");
-  unsubscribe = onValue(refNodo, (snapshot) => {
-    const indicadores = snapshot.val();
-    if (!indicadores) return;
-
-    localStorage.setItem(claveLocal, JSON.stringify(indicadores));
-    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
-    renderConteo(conteo, areaActual);
-  });
-
-  localStorage.setItem(controlClave, tabId);
-}
-
-function desconectarFirebase() {
-  if (unsubscribe) {
-    unsubscribe();
-    unsubscribe = null;
-  }
-}
-
-function verificarControl() {
-  const actual = localStorage.getItem(controlClave);
-  if (!actual || actual === tabId) {
-    conectarFirebase();
-  } else {
-    const guardado = localStorage.getItem(claveLocal);
-    if (guardado) {
-      const indicadores = JSON.parse(guardado);
-      const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
-      renderConteo(conteo, areaActual);
-    }
-  }
-}
-
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") {
-    verificarControl();
-  } else {
-    desconectarFirebase();
-  }
+  const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+  renderConteo(conteo, areaActual);
 });
-
-window.addEventListener("beforeunload", () => {
-  if (localStorage.getItem(controlClave) === tabId) {
-    localStorage.removeItem(controlClave);
-  }
-  desconectarFirebase();
-});
-
-// Activar al inicio si pestaña está visible
-if (document.visibilityState === "visible") {
-  verificarControl();
-}
 
 ////////////////////////////////
 
