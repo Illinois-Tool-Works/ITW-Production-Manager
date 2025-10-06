@@ -998,17 +998,17 @@ function colorBootstrap(estado) {
 
 
 // 🔄 Escucha en tiempo real desde Firebase
-const indicadoresRef = ref(db, "indicadores");
+// const indicadoresRef = ref(db, "indicadores");
 
-delegarLecturaFirebase({
-  ruta: 'indicadores',
-  claveLocal: 'conteoIndicadores',
-  callback: (indicadores) => {
-    if (!indicadores) return;
-    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
-    renderConteo(conteo, areaActual);
-  }
-});
+// delegarLecturaFirebase({
+//   ruta: 'indicadores',
+//   claveLocal: 'conteoIndicadores',
+//   callback: (indicadores) => {
+//     if (!indicadores) return;
+//     const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+//     renderConteo(conteo, areaActual);
+//   }
+// });
 
 ////////////////////////////////
 
