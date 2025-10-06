@@ -159,7 +159,6 @@ if (tieneControl) {
   });
 }
 });
-
 const tabId = sessionStorage.getItem("tabId");
 const tieneControl = localStorage.getItem("controlActivo") === tabId;
 
@@ -986,33 +985,16 @@ function colorBootstrap(estado) {
     default: return "dark";
   }
 }
+// 🔄 Escucha en tiempo real desde Firebase
+const indicadoresRef = ref(db, "indicadores");
 
-function aplicarConteo(indicadores) {
+onValue(indicadoresRef, (snapshot) => {
+  const indicadores = snapshot.val();
   if (!indicadores) return;
+
   const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
   renderConteo(conteo, areaActual);
-}
-
-if (tieneControl) {
-  const indicadoresRef = ref(db, "indicadores");
-  onValue(indicadoresRef, (snapshot) => {
-    const indicadores = snapshot.val();
-    if (!indicadores) return;
-
-    localStorage.setItem("conteoIndicadores", JSON.stringify(indicadores));
-    aplicarConteo(indicadores);
-  });
-} else {
-  const guardados = localStorage.getItem("conteoIndicadores");
-  if (guardados) aplicarConteo(JSON.parse(guardados));
-
-  window.addEventListener("storage", (e) => {
-    if (e.key === "conteoIndicadores") {
-      const nuevos = JSON.parse(e.newValue);
-      aplicarConteo(nuevos);
-    }
-  });
-}
+});
 
 ////////////////////////////////
 
