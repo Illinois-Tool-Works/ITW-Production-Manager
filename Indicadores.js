@@ -928,14 +928,49 @@ function colorBootstrap(estado) {
   }
 }
 // 🔄 Escucha en tiempo real desde Firebase
-const indicadoresRef = ref(db, "indicadores");
+const ruta = "indicadores";
+const claveLocal = "estadosIndicadores";
 
-onValue(indicadoresRef, (snapshot) => {
-  const indicadores = snapshot.val();
-  if (!indicadores) return;
+function conectarConteoIndicadores() {
+  const refNodo = ref(db, ruta);
+  const unsubscribe = onValue(refNodo, (snapshot) => {
+    const indicadores = snapshot.val();
+    if (!indicadores) return;
 
+    localStorage.setItem(claveLocal, JSON.stringify(indicadores));
+
+    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+    renderConteo(conteo, areaActual);
+  });
+
+  window.addEventListener("unload", () => {
+    unsubscribe();
+  });
+}
+
+function usarCacheIndicadores() {
+  const guardado = localStorage.getItem(claveLocal);
+  if (!guardado) return;
+
+  const indicadores = JSON.parse(guardado);
   const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
   renderConteo(conteo, areaActual);
+}
+
+// 🔍 Activar solo si pestaña está visible
+if (document.visibilityState === "visible") {
+  conectarConteoIndicadores();
+} else {
+  usarCacheIndicadores();
+}
+
+// 🔁 Cambiar dinámicamente si el usuario cambia de pestaña
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    conectarConteoIndicadores();
+  } else {
+    usarCacheIndicadores();
+  }
 });
 
 ////////////////////////////////
