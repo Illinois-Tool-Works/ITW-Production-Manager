@@ -199,18 +199,78 @@ if (document.visibilityState === "visible") {
   verificarControlIndicadores();
 }
 });
+const tabId = sessionStorage.getItem("tabId");
+
 document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-  const refComentario = ref(db, `comentariosIndicadores/${id}`);
-  onValue(refComentario, (snapshot) => {
-    const datos = snapshot.val();
-    if (!datos || !comentarioVisible2) return;
+  const ruta = `comentariosIndicadores/${id}`;
+  const claveLocal = `comentarioIndicador_${id}`;
+  const controlClave = `controlComentario_${id}`;
+  let refNodo;
+  let unsubscribe;
 
+  function conectarComentario() {
+    if (unsubscribe) return;
+
+    refNodo = ref(db, ruta);
+    unsubscribe = onValue(refNodo, (snapshot) => {
+      const datos = snapshot.val();
+      if (!datos || !comentarioVisible2) return;
+
+      localStorage.setItem(claveLocal, JSON.stringify(datos));
+      comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
+    });
+
+    localStorage.setItem(controlClave, tabId);
+  }
+
+  function desconectarComentario() {
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
+  }
+
+  function usarCacheComentario() {
+    const guardado = localStorage.getItem(claveLocal);
+    if (!guardado || !comentarioVisible2) return;
+
+    const datos = JSON.parse(guardado);
     comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-    // comentarioVisible2.classList.remove("oculto");
+  }
+
+  function verificarControlComentario() {
+    const actual = localStorage.getItem(controlClave);
+    if (!actual || actual === tabId) {
+      conectarComentario();
+    } else {
+      usarCacheComentario();
+    }
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      verificarControlComentario();
+    } else {
+      desconectarComentario();
+    }
   });
+
+  window.addEventListener("beforeunload", () => {
+    if (localStorage.getItem(controlClave) === tabId) {
+      localStorage.removeItem(controlClave);
+    }
+    desconectarComentario();
+  });
+
+  // Activar al inicio si pestaña está visible
+  if (document.visibilityState === "visible") {
+    verificarControlComentario();
+  } else {
+    usarCacheComentario();
+  }
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
