@@ -59,15 +59,14 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
   const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
 
-  // 🔒 Asegurar que alguna pestaña tenga el control
   if (!localStorage.getItem("controlActivo")) {
     localStorage.setItem("controlActivo", tabId);
   }
 
   let tieneControl = localStorage.getItem("controlActivo") === tabId;
 
-  // 🧠 Si esta pestaña tiene el control, conectar a Firebase
   if (tieneControl) {
+    console.log("✅ Esta pestaña tiene el control. Se conecta a:", ruta);
     const refNodo = ref(db, ruta);
     const unsubscribe = onValue(refNodo, (snapshot) => {
       const datos = snapshot.val();
@@ -76,29 +75,28 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
       callback(datos);
     });
 
-    // 🧹 Si la pestaña se cierra, liberar el control
     window.addEventListener("beforeunload", () => {
       if (localStorage.getItem("controlActivo") === tabId) {
         localStorage.removeItem("controlActivo");
       }
-      unsubscribe(); // Detener la conexión
+      unsubscribe();
     });
   } else {
-    // 🔄 Leer datos compartidos
+    console.log("🚫 Esta pestaña NO tiene el control. Escucha por storage:", ruta);
     const guardado = localStorage.getItem(claveLocal);
     if (guardado) callback(JSON.parse(guardado));
 
-    // 📡 Escuchar actualizaciones
     window.addEventListener("storage", (e) => {
       if (e.key === claveLocal) {
         const nuevos = JSON.parse(e.newValue);
         callback(nuevos);
       }
 
-      // 🧠 Si la pestaña activa se cerró, tomar el control
+      // 🧠 Si el control queda libre, tomarlo y recargar
       if (e.key === "controlActivo" && e.newValue === null) {
+        console.log("🔁 Control liberado. Esta pestaña tomará el control.");
         localStorage.setItem("controlActivo", tabId);
-        location.reload(); // Reiniciar para activar lectura
+        location.reload(); // Recarga para activar lectura
       }
     });
   }
