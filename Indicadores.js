@@ -991,6 +991,8 @@ function colorBootstrap(estado) {
     default: return "dark";
   }
 }
+
+
 // 🔄 Escucha en tiempo real desde Firebase
 const indicadoresRef = ref(db, "indicadores");
 
