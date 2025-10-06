@@ -878,63 +878,103 @@ function contarEstados(indicadores, mapa, areaActual) {
 
 // 🎨 Render en el contenedor fijo
 // Render adaptativo
+function renderConteo({ total, porArea }, areaActual) {
+  const container = document.getElementById("conteoEstados");
+  if (!container) return; // Silencioso si no existe
+  
+  container.innerHTML = "";
 
+  // Encabezado
+  const header = document.createElement("div");
+  header.className = "fw-bold mb-1";
+  header.textContent = areaActual ? `${areaActual}:` : "Total:";
+  container.appendChild(header);
+
+  // Totales
+  for (const estado in total) {
+    const badge = document.createElement("span");
+    badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
+    badge.textContent = `${total[estado]}`;
+    container.appendChild(badge);
+  }
+
+
+ // Desglose por área (solo en página principal)
+  if (!areaActual) {
+    for (const area in porArea) {
+      const areaHeader = document.createElement("div");
+      areaHeader.className = "fw-bold mt-3 mb-1";
+      areaHeader.textContent = `${area}:`;
+      container.appendChild(areaHeader);
+
+      for (const estado in porArea[area]) {
+        const badge = document.createElement("span");
+        badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
+        badge.textContent = `${porArea[area][estado]}`;
+        container.appendChild(badge);
+      }
+    }
+  }
+
+}
+
+function colorBootstrap(estado) {
+  switch (estado) {
+    case "verde": return "success";
+    case "rojo": return "danger";
+    case "azul": return "primary";
+    case "gris": return "secondary";
+    default: return "dark";
+  }
+}
+// 🔄 Escucha en tiempo real desde Firebase
 const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
 sessionStorage.setItem("tabId", tabId);
 
-const ruta = "indicadores";
 const claveLocal = "estadosIndicadores";
+const controlClave = "controlIndicadores";
 let refNodo;
 let unsubscribe;
 
-function conectarFirebase() {
-  if (unsubscribe) return; // Ya está conectado
+const indicadoresRef = ref(db, "indicadores");
 
-  console.log(`[Indicadores] 🟢 Esta pestaña (${tabId}) conecta a Firebase`);
-  refNodo = ref(db, ruta);
+function conectarFirebase() {
+  if (unsubscribe) return;
+
+  refNodo = ref(db, "indicadores");
   unsubscribe = onValue(refNodo, (snapshot) => {
-    const datos = snapshot.val();
-    if (!datos) return;
-    localStorage.setItem(claveLocal, JSON.stringify(datos));
-    const conteo = contarEstados(datos, mapaIndicadores, areaActual);
+    const indicadores = snapshot.val();
+    if (!indicadores) return;
+
+    localStorage.setItem(claveLocal, JSON.stringify(indicadores));
+    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
     renderConteo(conteo, areaActual);
   });
 
-  localStorage.setItem("controlIndicadores", tabId);
+  localStorage.setItem(controlClave, tabId);
 }
 
 function desconectarFirebase() {
   if (unsubscribe) {
-    console.log(`[Indicadores] 🔴 Esta pestaña (${tabId}) desconecta de Firebase`);
     unsubscribe();
     unsubscribe = null;
   }
 }
 
 function verificarControl() {
-  const actual = localStorage.getItem("controlIndicadores");
-
-  if (!actual || actual === "null" || actual === "undefined") {
-    localStorage.setItem("controlIndicadores", tabId);
-    conectarFirebase();
-  } else if (actual === tabId) {
+  const actual = localStorage.getItem(controlClave);
+  if (!actual || actual === tabId) {
     conectarFirebase();
   } else {
     const guardado = localStorage.getItem(claveLocal);
     if (guardado) {
-      const datos = JSON.parse(guardado);
-      const conteo = contarEstados(datos, mapaIndicadores, areaActual);
+      const indicadores = JSON.parse(guardado);
+      const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
       renderConteo(conteo, areaActual);
     }
   }
 }
 
-// 🔍 Activar solo si pestaña está visible
-if (document.visibilityState === "visible") {
-  verificarControl();
-}
-
-// 🔁 Detectar cambio de visibilidad
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     verificarControl();
@@ -943,13 +983,18 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-// 🧹 Liberar control al cerrar
-window.addEventListener("unload", () => {
-  if (localStorage.getItem("controlIndicadores") === tabId) {
-    localStorage.removeItem("controlIndicadores");
+window.addEventListener("beforeunload", () => {
+  if (localStorage.getItem(controlClave) === tabId) {
+    localStorage.removeItem(controlClave);
   }
   desconectarFirebase();
 });
+
+// Activar al inicio si pestaña está visible
+if (document.visibilityState === "visible") {
+  verificarControl();
+}
+
 ////////////////////////////////
 
 // function activarGuardadoPorClave(nombreDesdeClave) {
