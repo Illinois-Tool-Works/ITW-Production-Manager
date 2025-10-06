@@ -104,6 +104,18 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
   }
 }
 
+const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+sessionStorage.setItem("tabId", tabId);
+
+if (!localStorage.getItem("controlActivo")) {
+  localStorage.setItem("controlActivo", tabId);
+}
+
+const tieneControl = localStorage.getItem("controlActivo") === tabId;
+console.log("🧭 Tab ID:", tabId);
+console.log("🎮 Control activo:", localStorage.getItem("controlActivo"));
+console.log("📌 ¿Esta pestaña tiene el control?", tieneControl);
+
 ///////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
