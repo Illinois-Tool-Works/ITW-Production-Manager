@@ -92,7 +92,7 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
         callback(nuevos);
       }
 
-      // 🧠 Si el control queda libre, tomarlo y recargar
+      // 🧠 Si el control queda libre, tomarlo y recargar 123
       if (e.key === "controlActivo" && e.newValue === null) {
         console.log("🔁 Control liberado. Esta pestaña tomará el control.");
         localStorage.setItem("controlActivo", tabId);
