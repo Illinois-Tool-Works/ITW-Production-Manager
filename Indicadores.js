@@ -119,31 +119,84 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
+  // 🔹 Función para aplicar los estados a los selects
+function aplicarEstados(estados) {
+  if (!estados) return;
+
+  selects.forEach(select => {
+    const id = select.closest('.indicador')?.id;
+    if (id && estados[id]) {
+      select.value = estados[id];
+      cambiarColor(select, id);
+    }
+  });
+}
+
+// 🔹 Identificador único por pestaña
+const tabId = sessionStorage.getItem("tabId");
+const tieneControl = localStorage.getItem("controlActivo") === tabId;
+
+// 🔄 Lectura delegada
+if (tieneControl) {
   onValue(ref(db, 'indicadores'), (snapshot) => {
     const estados = snapshot.val();
     if (!estados) return;
 
-    selects.forEach(select => {
-      const id = select.closest('.indicador')?.id;
-      if (id && estados[id]) {
-        select.value = estados[id];
-        cambiarColor(select, id);
-      }
-    });
+    localStorage.setItem("estadosIndicadores", JSON.stringify(estados));
+    aplicarEstados(estados);
   });
+} else {
+  const guardados = localStorage.getItem("estadosIndicadores");
+  if (guardados) {
+    aplicarEstados(JSON.parse(guardados));
+  }
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === "estadosIndicadores") {
+      const nuevos = JSON.parse(e.newValue);
+      aplicarEstados(nuevos);
+    }
+  });
+}
 });
+
+const tabId = sessionStorage.getItem("tabId");
+const tieneControl = localStorage.getItem("controlActivo") === tabId;
+
 document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-  const refComentario = ref(db, `comentariosIndicadores/${id}`);
-  onValue(refComentario, (snapshot) => {
-    const datos = snapshot.val();
+  function aplicarComentario(datos) {
     if (!datos || !comentarioVisible2) return;
-
     comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
     // comentarioVisible2.classList.remove("oculto");
-  });
+  }
+
+  if (tieneControl) {
+    const refComentario = ref(db, `comentariosIndicadores/${id}`);
+    onValue(refComentario, (snapshot) => {
+      const datos = snapshot.val();
+      aplicarComentario(datos);
+
+      // Compartir con otras pestañas
+      const clave = `comentarioIndicador_${id}`;
+      localStorage.setItem(clave, JSON.stringify(datos));
+    });
+  } else {
+    // Leer lo último disponible
+    const clave = `comentarioIndicador_${id}`;
+    const guardado = localStorage.getItem(clave);
+    if (guardado) aplicarComentario(JSON.parse(guardado));
+
+    // Escuchar actualizaciones
+    window.addEventListener("storage", (e) => {
+      if (e.key === clave) {
+        const nuevos = JSON.parse(e.newValue);
+        aplicarComentario(nuevos);
+      }
+    });
+  }
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -933,16 +986,33 @@ function colorBootstrap(estado) {
     default: return "dark";
   }
 }
-// 🔄 Escucha en tiempo real desde Firebase
-const indicadoresRef = ref(db, "indicadores");
 
-onValue(indicadoresRef, (snapshot) => {
-  const indicadores = snapshot.val();
+function aplicarConteo(indicadores) {
   if (!indicadores) return;
-
   const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
   renderConteo(conteo, areaActual);
-});
+}
+
+if (tieneControl) {
+  const indicadoresRef = ref(db, "indicadores");
+  onValue(indicadoresRef, (snapshot) => {
+    const indicadores = snapshot.val();
+    if (!indicadores) return;
+
+    localStorage.setItem("conteoIndicadores", JSON.stringify(indicadores));
+    aplicarConteo(indicadores);
+  });
+} else {
+  const guardados = localStorage.getItem("conteoIndicadores");
+  if (guardados) aplicarConteo(JSON.parse(guardados));
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === "conteoIndicadores") {
+      const nuevos = JSON.parse(e.newValue);
+      aplicarConteo(nuevos);
+    }
+  });
+}
 
 ////////////////////////////////
 
