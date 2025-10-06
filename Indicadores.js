@@ -59,43 +59,49 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
   const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
 
-  // 🔒 Asignar control si nadie lo tiene
+  // 🔒 Asegurar que alguna pestaña tenga el control
   if (!localStorage.getItem("controlActivo")) {
     localStorage.setItem("controlActivo", tabId);
   }
 
-  const tieneControl = localStorage.getItem("controlActivo") === tabId;
+  let tieneControl = localStorage.getItem("controlActivo") === tabId;
 
-  // 🔄 Si esta pestaña tiene el control, lee desde Firebase
+  // 🧠 Si esta pestaña tiene el control, conectar a Firebase
   if (tieneControl) {
     const refNodo = ref(db, ruta);
-    onValue(refNodo, (snapshot) => {
+    const unsubscribe = onValue(refNodo, (snapshot) => {
       const datos = snapshot.val();
       if (!datos) return;
-
       localStorage.setItem(claveLocal, JSON.stringify(datos));
       callback(datos);
     });
+
+    // 🧹 Si la pestaña se cierra, liberar el control
+    window.addEventListener("beforeunload", () => {
+      if (localStorage.getItem("controlActivo") === tabId) {
+        localStorage.removeItem("controlActivo");
+      }
+      unsubscribe(); // Detener la conexión
+    });
   } else {
-    // 🔄 Si no tiene el control, usar lo último guardado
+    // 🔄 Leer datos compartidos
     const guardado = localStorage.getItem(claveLocal);
     if (guardado) callback(JSON.parse(guardado));
 
-    // 📡 Escuchar actualizaciones desde la pestaña activa
+    // 📡 Escuchar actualizaciones
     window.addEventListener("storage", (e) => {
       if (e.key === claveLocal) {
         const nuevos = JSON.parse(e.newValue);
         callback(nuevos);
       }
+
+      // 🧠 Si la pestaña activa se cerró, tomar el control
+      if (e.key === "controlActivo" && e.newValue === null) {
+        localStorage.setItem("controlActivo", tabId);
+        location.reload(); // Reiniciar para activar lectura
+      }
     });
   }
-
-  // 🧹 Limpiar control si esta pestaña se cierra
-  window.addEventListener("beforeunload", () => {
-    if (localStorage.getItem("controlActivo") === tabId) {
-      localStorage.removeItem("controlActivo");
-    }
-  });
 }
 
 ///////////////////
