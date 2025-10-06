@@ -59,71 +59,49 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
   const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
 
-  const log = (msg) => console.log(`[DelegarFirebase] ${msg}`);
+  let refNodo;
+  let unsubscribe;
 
-  // 🔒 Asignar control si está libre
-  const controlActual = localStorage.getItem("controlActivo");
-  if (!controlActual || controlActual === "null" || controlActual === "undefined") {
-    localStorage.setItem("controlActivo", tabId);
-    log(`🟢 Esta pestaña tomó el control para: ${ruta}`);
-  }
-
-  let tieneControl = localStorage.getItem("controlActivo") === tabId;
-
-  log(`🧭 Tab ID: ${tabId}`);
-  log(`🎮 Control activo: ${localStorage.getItem("controlActivo")}`);
-  log(`📌 ¿Tengo el control?: ${tieneControl}`);
-
-  if (tieneControl) {
-    log(`✅ Esta pestaña tiene el control. Se conecta a: ${ruta}`);
-    const refNodo = ref(db, ruta);
-    const unsubscribe = onValue(refNodo, (snapshot) => {
+  const conectarFirebase = () => {
+    console.log(`[DelegarFirebase] 🟢 Pestaña activa. Conectando a Firebase: ${ruta}`);
+    refNodo = ref(db, ruta);
+    unsubscribe = onValue(refNodo, (snapshot) => {
       const datos = snapshot.val();
       if (!datos) return;
       localStorage.setItem(claveLocal, JSON.stringify(datos));
       callback(datos);
     });
+  };
 
-    // 🧹 Liberar control al cerrar
-    window.addEventListener("unload", () => {
-      if (localStorage.getItem("controlActivo") === tabId) {
-        localStorage.removeItem("controlActivo");
-        log(`❌ Esta pestaña liberó el control`);
-      }
+  const desconectarFirebase = () => {
+    if (unsubscribe) {
+      console.log(`[DelegarFirebase] 🔴 Pestaña inactiva. Desconectando de Firebase: ${ruta}`);
       unsubscribe();
-    });
-  } else {
-    log(`🚫 Esta pestaña NO tiene el control. Escucha por storage: ${ruta}`);
-    const guardado = localStorage.getItem(claveLocal);
-    if (guardado) callback(JSON.parse(guardado));
+      unsubscribe = null;
+    }
+  };
 
-    window.addEventListener("storage", (e) => {
-      if (e.key === claveLocal) {
-        const nuevos = JSON.parse(e.newValue);
-        callback(nuevos);
-      }
+  // 🔍 Detectar visibilidad de la pestaña
+  const manejarVisibilidad = () => {
+    if (document.visibilityState === "visible") {
+      conectarFirebase();
+    } else {
+      desconectarFirebase();
+    }
+  };
 
-      // 🔁 Detectar liberación y reclamar control
-      if (e.key === "controlActivo" && e.newValue === null) {
-        localStorage.setItem("controlActivo", tabId);
-        log(`🔁 Esta pestaña reclamó el control para: ${ruta}`);
-        location.reload(); // Recarga para activar lectura
-      }
-    });
+  document.addEventListener("visibilitychange", manejarVisibilidad);
 
-    // 🕒 Verificación activa cada 2 segundos
-    const verificador = setInterval(() => {
-      const actual = localStorage.getItem("controlActivo");
-      if (!actual || actual === "null" || actual === "undefined") {
-        localStorage.setItem("controlActivo", tabId);
-        log(`🛠 Control huérfano detectado. Esta pestaña lo tomó para: ${ruta}`);
-        clearInterval(verificador);
-        location.reload(); // Recarga para activar lectura
-      }
-    }, 2000);
+  // 🧠 Activar lectura si la pestaña ya está visible
+  if (document.visibilityState === "visible") {
+    conectarFirebase();
   }
-}
 
+  // 🧹 Limpiar al cerrar
+  window.addEventListener("unload", () => {
+    desconectarFirebase();
+  });
+}
 ///////////////////
 
 document.addEventListener("DOMContentLoaded", () => {
