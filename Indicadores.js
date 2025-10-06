@@ -119,23 +119,9 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
- const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
-sessionStorage.setItem("tabId", tabId);
-
-const controlClave = "controlIndicadores";
-const claveLocal = "estadosIndicadores";
-let refNodo;
-let unsubscribe;
-
-function conectarLecturaIndicadores() {
-  if (unsubscribe) return;
-
-  refNodo = ref(db, "indicadores");
-  unsubscribe = onValue(refNodo, (snapshot) => {
+  onValue(ref(db, 'indicadores'), (snapshot) => {
     const estados = snapshot.val();
     if (!estados) return;
-
-    localStorage.setItem(claveLocal, JSON.stringify(estados));
 
     selects.forEach(select => {
       const id = select.closest('.indicador')?.id;
@@ -145,132 +131,19 @@ function conectarLecturaIndicadores() {
       }
     });
   });
-
-  localStorage.setItem(controlClave, tabId);
-}
-
-function desconectarLecturaIndicadores() {
-  if (unsubscribe) {
-    unsubscribe();
-    unsubscribe = null;
-  }
-}
-
-function usarCacheIndicadores() {
-  const guardado = localStorage.getItem(claveLocal);
-  if (!guardado) return;
-
-  const estados = JSON.parse(guardado);
-  selects.forEach(select => {
-    const id = select.closest('.indicador')?.id;
-    if (id && estados[id]) {
-      select.value = estados[id];
-      cambiarColor(select, id);
-    }
-  });
-}
-
-function verificarControlIndicadores() {
-  const actual = localStorage.getItem(controlClave);
-  if (!actual || actual === tabId) {
-    conectarLecturaIndicadores();
-  } else {
-    usarCacheIndicadores();
-  }
-}
-
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") {
-    verificarControlIndicadores();
-  } else {
-    desconectarLecturaIndicadores();
-  }
 });
-
-window.addEventListener("beforeunload", () => {
-  if (localStorage.getItem(controlClave) === tabId) {
-    localStorage.removeItem(controlClave);
-  }
-  desconectarLecturaIndicadores();
-});
-
-// Activar al inicio si pestaña está visible
-if (document.visibilityState === "visible") {
-  verificarControlIndicadores();
-}
-});
-const tabId = sessionStorage.getItem("tabId");
-
 document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-  const ruta = `comentariosIndicadores/${id}`;
-  const claveLocal = `comentarioIndicador_${id}`;
-  const controlClave = `controlComentario_${id}`;
-  let refNodo;
-  let unsubscribe;
+  const refComentario = ref(db, `comentariosIndicadores/${id}`);
+  onValue(refComentario, (snapshot) => {
+    const datos = snapshot.val();
+    if (!datos || !comentarioVisible2) return;
 
-  function conectarComentario() {
-    if (unsubscribe) return;
-
-    refNodo = ref(db, ruta);
-    unsubscribe = onValue(refNodo, (snapshot) => {
-      const datos = snapshot.val();
-      if (!datos || !comentarioVisible2) return;
-
-      localStorage.setItem(claveLocal, JSON.stringify(datos));
-      comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-    });
-
-    localStorage.setItem(controlClave, tabId);
-  }
-
-  function desconectarComentario() {
-    if (unsubscribe) {
-      unsubscribe();
-      unsubscribe = null;
-    }
-  }
-
-  function usarCacheComentario() {
-    const guardado = localStorage.getItem(claveLocal);
-    if (!guardado || !comentarioVisible2) return;
-
-    const datos = JSON.parse(guardado);
     comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-  }
-
-  function verificarControlComentario() {
-    const actual = localStorage.getItem(controlClave);
-    if (!actual || actual === tabId) {
-      conectarComentario();
-    } else {
-      usarCacheComentario();
-    }
-  }
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      verificarControlComentario();
-    } else {
-      desconectarComentario();
-    }
+    // comentarioVisible2.classList.remove("oculto");
   });
-
-  window.addEventListener("beforeunload", () => {
-    if (localStorage.getItem(controlClave) === tabId) {
-      localStorage.removeItem(controlClave);
-    }
-    desconectarComentario();
-  });
-
-  // Activar al inicio si pestaña está visible
-  if (document.visibilityState === "visible") {
-    verificarControlComentario();
-  } else {
-    usarCacheComentario();
-  }
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -386,88 +259,18 @@ function cargarComentario(indicadorId) {
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
-  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
-  sessionStorage.setItem("tabId", tabId);
+  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
+  onValue(comentarioRef, snapshot => {
+    const data = snapshot.val();
+    const autor = data?.usuario;
+    const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
+  dateStyle: "medium",
+  timeStyle: "short"
+}
+);
 
-  const ruta = `comentarios/${indicadorId}`;
-  const claveLocal = `comentario_${indicadorId}`;
-  const controlClave = `controlComentario_${indicadorId}`;
-  let refNodo;
-  let unsubscribe;
-
-  function conectarComentario() {
-    if (unsubscribe) return;
-
-    refNodo = ref(db, ruta);
-    unsubscribe = onValue(refNodo, snapshot => {
-      const data = snapshot.val();
-      if (!data || !comentarioBox) return;
-
-      localStorage.setItem(claveLocal, JSON.stringify(data));
-
-      const autor = data.usuario || "Desconocido";
-      const fechaFormateada = new Date(data.fecha).toLocaleString("es-MX", {
-        dateStyle: "medium",
-        timeStyle: "short"
-      });
-
-      comentarioBox.textContent = `"${data.texto || "Sin comentario"}", ${autor}, ${fechaFormateada}`;
-    });
-
-    localStorage.setItem(controlClave, tabId);
-  }
-
-  function desconectarComentario() {
-    if (unsubscribe) {
-      unsubscribe();
-      unsubscribe = null;
-    }
-  }
-
-  function usarCacheComentario() {
-    const guardado = localStorage.getItem(claveLocal);
-    if (!guardado || !comentarioBox) return;
-
-    const data = JSON.parse(guardado);
-    const autor = data.usuario || "Desconocido";
-    const fechaFormateada = new Date(data.fecha).toLocaleString("es-MX", {
-      dateStyle: "medium",
-      timeStyle: "short"
-    });
-
-    comentarioBox.textContent = `"${data.texto || "Sin comentario"}", ${autor}, ${fechaFormateada}`;
-  }
-
-  function verificarControlComentario() {
-    const actual = localStorage.getItem(controlClave);
-    if (!actual || actual === tabId) {
-      conectarComentario();
-    } else {
-      usarCacheComentario();
-    }
-  }
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      verificarControlComentario();
-    } else {
-      desconectarComentario();
-    }
+comentarioBox.textContent = `"${data?.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
   });
-
-  window.addEventListener("beforeunload", () => {
-    if (localStorage.getItem(controlClave) === tabId) {
-      localStorage.removeItem(controlClave);
-    }
-    desconectarComentario();
-  });
-
-  // Activar al inicio si pestaña está visible
-  if (document.visibilityState === "visible") {
-    verificarControlComentario();
-  } else {
-    usarCacheComentario();
-  }
 }
 for (let i = 1; i < 140; i++) {
   cargarComentario(`indicador${i}`);
