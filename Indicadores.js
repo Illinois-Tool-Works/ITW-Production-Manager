@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
-const usuario = window.sesionActiva?.nombre || "Desconocido";
+const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
 
 
   const fecha = new Date().toLocaleString('es-MX', {
@@ -218,7 +218,7 @@ window.enviarComentario = async function (event, input) {
   if (!comentario) return;
 
   const indicadorId = input.dataset.indicador;
-  const usuario = window.sesionActiva?.nombre || "Desconocido";
+  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
 
   const timestamp = new Date().toISOString();
 
@@ -261,7 +261,7 @@ function guardarComentario(inputElement) {
     console.warn("Falta data-indicador en el input");
     return;
   }
-  const usuario = window.sesionActiva?.nombre || "Desconocido";
+  const usuario = window.sesionActiva?.nombre || document.getElementById("nombre")?.textContent || "Desconocido";
 
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
