@@ -34,7 +34,7 @@ function cambiarColor(select, id) {
 }
 // Exponer al global
 window.cambiarColor = cambiarColor;
-
+window.firebaseLecturasActivas = {}; // mapa por ruta
 
 
 
@@ -56,50 +56,47 @@ import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-d
 ////////////////////
 
 export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
-  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
-  sessionStorage.setItem("tabId", tabId);
+  const refNodo = ref(db, ruta);
 
-  let refNodo;
-  let unsubscribe;
+  const conectar = () => {
+    if (window.firebaseLecturasActivas[ruta]) return; // ya está conectado
 
-  const conectarFirebase = () => {
-    console.log(`[DelegarFirebase] 🟢 Pestaña activa. Conectando a Firebase: ${ruta}`);
-    refNodo = ref(db, ruta);
-    unsubscribe = onValue(refNodo, (snapshot) => {
+    console.log(`[DelegarFirebase] 🟢 Conectando a Firebase: ${ruta}`);
+    const unsubscribe = onValue(refNodo, (snapshot) => {
       const datos = snapshot.val();
       if (!datos) return;
       localStorage.setItem(claveLocal, JSON.stringify(datos));
       callback(datos);
     });
+
+    window.firebaseLecturasActivas[ruta] = unsubscribe;
   };
 
-  const desconectarFirebase = () => {
+  const desconectar = () => {
+    const unsubscribe = window.firebaseLecturasActivas[ruta];
     if (unsubscribe) {
-      console.log(`[DelegarFirebase] 🔴 Pestaña inactiva. Desconectando de Firebase: ${ruta}`);
+      console.log(`[DelegarFirebase] 🔴 Desconectando de Firebase: ${ruta}`);
       unsubscribe();
-      unsubscribe = null;
+      delete window.firebaseLecturasActivas[ruta];
     }
   };
 
-  // 🔍 Detectar visibilidad de la pestaña
   const manejarVisibilidad = () => {
     if (document.visibilityState === "visible") {
-      conectarFirebase();
+      conectar();
     } else {
-      desconectarFirebase();
+      desconectar();
     }
   };
 
   document.addEventListener("visibilitychange", manejarVisibilidad);
 
-  // 🧠 Activar lectura si la pestaña ya está visible
   if (document.visibilityState === "visible") {
-    conectarFirebase();
+    conectar();
   }
 
-  // 🧹 Limpiar al cerrar
   window.addEventListener("unload", () => {
-    desconectarFirebase();
+    desconectar();
   });
 }
 ///////////////////
@@ -1019,17 +1016,17 @@ function colorBootstrap(estado) {
 
 
 // 🔄 Escucha en tiempo real desde Firebase
-// const indicadoresRef = ref(db, "indicadores");
+const indicadoresRef = ref(db, "indicadores");
 
-// delegarLecturaFirebase({
-//   ruta: 'indicadores',
-//   claveLocal: 'conteoIndicadores',
-//   callback: (indicadores) => {
-//     if (!indicadores) return;
-//     const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
-//     renderConteo(conteo, areaActual);
-//   }
-// });
+delegarLecturaFirebase({
+  ruta: 'indicadores',
+  claveLocal: 'conteoIndicadores',
+  callback: (indicadores) => {
+    if (!indicadores) return;
+    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+    renderConteo(conteo, areaActual);
+  }
+});
 
 ////////////////////////////////
 
