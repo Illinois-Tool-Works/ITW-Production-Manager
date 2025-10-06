@@ -306,24 +306,30 @@ window.enviarComentario = enviarComentario;
 
 ///////////////////////////mensaje y guardado/////////////////////////////////////////////////////
 
-function cargarComentario(indicadorId) {
+export function cargarComentario(indicadorId) {
   const indicador = document.getElementById(indicadorId);
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
-  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-  onValue(comentarioRef, snapshot => {
-    const data = snapshot.val();
-    const autor = data?.usuario;
-    const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
-  dateStyle: "medium",
-  timeStyle: "short"
-}
-);
+  function aplicarComentario(data) {
+    if (!data) return;
 
-comentarioBox.textContent = `"${data?.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
+    const autor = data.usuario || "Desconocido";
+    const fechaFormateada = new Date(data.fecha).toLocaleString("es-MX", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    });
+
+    comentarioBox.textContent = `"${data.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
+  }
+
+  delegarLecturaFirebase({
+    ruta: `comentarios/${indicadorId}`,
+    claveLocal: `comentario_${indicadorId}`,
+    callback: aplicarComentario
   });
 }
+
 for (let i = 1; i < 140; i++) {
   cargarComentario(`indicador${i}`);
 }
