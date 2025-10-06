@@ -100,6 +100,17 @@ export function delegarLecturaFirebase({ ruta, claveLocal, callback }) {
       }
     });
   }
+  // 🕒 Recuperación activa si el control está huérfano
+setTimeout(() => {
+  const controlActual = localStorage.getItem("controlActivo");
+  const pestañas = performance.getEntriesByType("navigation").length;
+
+  if (!controlActual || controlActual === "null") {
+    console.log("🛠 Control huérfano detectado. Esta pestaña tomará el control.");
+    localStorage.setItem("controlActivo", tabId);
+    location.reload(); // Recarga para activar lectura
+  }
+}, 1000);
 }
 
 const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
