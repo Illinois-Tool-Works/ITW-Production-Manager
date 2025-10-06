@@ -308,6 +308,47 @@ document.addEventListener("DOMContentLoaded", () => {
   const tabId = Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
 
+// 🔹 Control exclusivo por pestaña para sesiones por clave
+function activarSesionPorClave(clave, nombre) {
+  if (!clave || !nombre) return;
+
+  // Si nadie tiene el control, esta pestaña lo toma
+  if (!localStorage.getItem("controlActivo")) {
+    localStorage.setItem("controlActivo", tabId);
+  }
+
+  // Solo activar si esta pestaña tiene el control
+  if (localStorage.getItem("controlActivo") === tabId) {
+    window.sesionActiva = {
+      metodo: "clave",
+      id: clave,
+      nombre: nombre
+    };
+    document.getElementById("nombre").textContent = nombre;
+    activarCamposPorClave();
+    // activarGuardadoPorClave(nombre); // ← si lo usas
+  } else {
+    console.log("⛔ Otra pestaña tiene el control. Sesión por clave no activada.");
+  }
+}
+
+// 🔹 Escuchar si otra pestaña toma el control
+window.addEventListener("storage", (e) => {
+  if (e.key === "controlActivo" && e.newValue !== tabId) {
+    if (window.sesionActiva?.metodo === "clave") {
+      window.sesionActiva = null;
+      console.log("🔒 Control transferido a otra pestaña. Sesión por clave desactivada.");
+    }
+  }
+});
+
+// 🔹 Limpiar control al cerrar esta pestaña
+window.addEventListener("beforeunload", () => {
+  if (localStorage.getItem("controlActivo") === tabId) {
+    localStorage.removeItem("controlActivo");
+  }
+});
+
   let edicionActiva = false;
   let nombreUsuario = null;
 
@@ -509,8 +550,8 @@ export async function verificarSesion() {
 
   const datos = snapshot.val();
   const nombre = datos.nombre || "Sin nombre";
-  document.getElementById("nombre").textContent = nombre;
-  activarCamposPorClave();
+ activarSesionPorClave(clave, nombre);
+
 
   // activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
@@ -530,7 +571,7 @@ export async function iniciarSesion() {
  document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
 const datos = snapshot.val();
 const nombre = datos.nombre || "Sin nombre";
-document.getElementById("nombre").textContent = nombre;
+activarSesionPorClave(clave, nombre);
 
 // ✅ Aquí creas el objeto de sesión unificado
 window.sesionActiva = {
@@ -538,7 +579,7 @@ window.sesionActiva = {
   id: clave,           // ← identificador técnico (clave)
   nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
 };
-activarCamposPorClave();
+// activarCamposPorClave();
 // activarGuardadoPorClave(nombre); // ← activa el guardado automático
 return true;
 
