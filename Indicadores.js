@@ -878,6 +878,10 @@ function contarEstados(indicadores, mapa, areaActual) {
 
 // 🎨 Render en el contenedor fijo
 // Render adaptativo
+
+const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+sessionStorage.setItem("tabId", tabId);
+
 function renderConteo({ total, porArea }, areaActual) {
   const container = document.getElementById("conteoEstados");
   if (!container) return; // Silencioso si no existe
@@ -928,48 +932,60 @@ function colorBootstrap(estado) {
   }
 }
 // 🔄 Escucha en tiempo real desde Firebase
-const ruta = "indicadores";
 const claveLocal = "estadosIndicadores";
+const ruta = "indicadores";
 
-function conectarConteoIndicadores() {
+function leerDesdeFirebase() {
   const refNodo = ref(db, ruta);
   const unsubscribe = onValue(refNodo, (snapshot) => {
-    const indicadores = snapshot.val();
-    if (!indicadores) return;
-
-    localStorage.setItem(claveLocal, JSON.stringify(indicadores));
-
-    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+    const datos = snapshot.val();
+    if (!datos) return;
+    localStorage.setItem(claveLocal, JSON.stringify(datos));
+    const conteo = contarEstados(datos, mapaIndicadores, areaActual);
     renderConteo(conteo, areaActual);
   });
 
   window.addEventListener("unload", () => {
+    if (localStorage.getItem("lectorActivo") === tabId) {
+      localStorage.removeItem("lectorActivo");
+    }
     unsubscribe();
   });
 }
 
-function usarCacheIndicadores() {
+function usarCache() {
   const guardado = localStorage.getItem(claveLocal);
   if (!guardado) return;
-
-  const indicadores = JSON.parse(guardado);
-  const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+  const datos = JSON.parse(guardado);
+  const conteo = contarEstados(datos, mapaIndicadores, areaActual);
   renderConteo(conteo, areaActual);
+}
+
+// 🔁 Verificar si esta pestaña debe leer
+function verificarControl() {
+  const lector = localStorage.getItem("lectorActivo");
+
+  if (!lector || lector === "null" || lector === "undefined") {
+    localStorage.setItem("lectorActivo", tabId);
+    leerDesdeFirebase();
+  } else if (lector === tabId) {
+    leerDesdeFirebase();
+  } else {
+    usarCache();
+  }
 }
 
 // 🔍 Activar solo si pestaña está visible
 if (document.visibilityState === "visible") {
-  conectarConteoIndicadores();
+  verificarControl();
 } else {
-  usarCacheIndicadores();
+  usarCache();
 }
 
-// 🔁 Cambiar dinámicamente si el usuario cambia de pestaña
+// 🔁 Detectar cambio de visibilidad
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
-    conectarConteoIndicadores();
-  } else {
-    usarCacheIndicadores();
+    verificarControl();
   }
 });
 
