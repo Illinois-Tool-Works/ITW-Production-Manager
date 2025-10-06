@@ -882,62 +882,17 @@ function contarEstados(indicadores, mapa, areaActual) {
 const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
 sessionStorage.setItem("tabId", tabId);
 
-function renderConteo({ total, porArea }, areaActual) {
-  const container = document.getElementById("conteoEstados");
-  if (!container) return; // Silencioso si no existe
-  
-  container.innerHTML = "";
-
-  // Encabezado
-  const header = document.createElement("div");
-  header.className = "fw-bold mb-1";
-  header.textContent = areaActual ? `${areaActual}:` : "Total:";
-  container.appendChild(header);
-
-  // Totales
-  for (const estado in total) {
-    const badge = document.createElement("span");
-    badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
-    badge.textContent = `${total[estado]}`;
-    container.appendChild(badge);
-  }
-
-
- // Desglose por área (solo en página principal)
-  if (!areaActual) {
-    for (const area in porArea) {
-      const areaHeader = document.createElement("div");
-      areaHeader.className = "fw-bold mt-3 mb-1";
-      areaHeader.textContent = `${area}:`;
-      container.appendChild(areaHeader);
-
-      for (const estado in porArea[area]) {
-        const badge = document.createElement("span");
-        badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
-        badge.textContent = `${porArea[area][estado]}`;
-        container.appendChild(badge);
-      }
-    }
-  }
-
-}
-
-function colorBootstrap(estado) {
-  switch (estado) {
-    case "verde": return "success";
-    case "rojo": return "danger";
-    case "azul": return "primary";
-    case "gris": return "secondary";
-    default: return "dark";
-  }
-}
-// 🔄 Escucha en tiempo real desde Firebase
-const claveLocal = "estadosIndicadores";
 const ruta = "indicadores";
+const claveLocal = "estadosIndicadores";
+let refNodo;
+let unsubscribe;
 
-function leerDesdeFirebase() {
-  const refNodo = ref(db, ruta);
-  const unsubscribe = onValue(refNodo, (snapshot) => {
+function conectarFirebase() {
+  if (unsubscribe) return; // Ya está conectado
+
+  console.log(`[Indicadores] 🟢 Esta pestaña (${tabId}) conecta a Firebase`);
+  refNodo = ref(db, ruta);
+  unsubscribe = onValue(refNodo, (snapshot) => {
     const datos = snapshot.val();
     if (!datos) return;
     localStorage.setItem(claveLocal, JSON.stringify(datos));
@@ -945,50 +900,56 @@ function leerDesdeFirebase() {
     renderConteo(conteo, areaActual);
   });
 
-  window.addEventListener("unload", () => {
-    if (localStorage.getItem("lectorActivo") === tabId) {
-      localStorage.removeItem("lectorActivo");
-    }
+  localStorage.setItem("controlIndicadores", tabId);
+}
+
+function desconectarFirebase() {
+  if (unsubscribe) {
+    console.log(`[Indicadores] 🔴 Esta pestaña (${tabId}) desconecta de Firebase`);
     unsubscribe();
-  });
+    unsubscribe = null;
+  }
 }
 
-function usarCache() {
-  const guardado = localStorage.getItem(claveLocal);
-  if (!guardado) return;
-  const datos = JSON.parse(guardado);
-  const conteo = contarEstados(datos, mapaIndicadores, areaActual);
-  renderConteo(conteo, areaActual);
-}
-
-// 🔁 Verificar si esta pestaña debe leer
 function verificarControl() {
-  const lector = localStorage.getItem("lectorActivo");
+  const actual = localStorage.getItem("controlIndicadores");
 
-  if (!lector || lector === "null" || lector === "undefined") {
-    localStorage.setItem("lectorActivo", tabId);
-    leerDesdeFirebase();
-  } else if (lector === tabId) {
-    leerDesdeFirebase();
+  if (!actual || actual === "null" || actual === "undefined") {
+    localStorage.setItem("controlIndicadores", tabId);
+    conectarFirebase();
+  } else if (actual === tabId) {
+    conectarFirebase();
   } else {
-    usarCache();
+    const guardado = localStorage.getItem(claveLocal);
+    if (guardado) {
+      const datos = JSON.parse(guardado);
+      const conteo = contarEstados(datos, mapaIndicadores, areaActual);
+      renderConteo(conteo, areaActual);
+    }
   }
 }
 
 // 🔍 Activar solo si pestaña está visible
 if (document.visibilityState === "visible") {
   verificarControl();
-} else {
-  usarCache();
 }
 
 // 🔁 Detectar cambio de visibilidad
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     verificarControl();
+  } else {
+    desconectarFirebase();
   }
 });
 
+// 🧹 Liberar control al cerrar
+window.addEventListener("unload", () => {
+  if (localStorage.getItem("controlIndicadores") === tabId) {
+    localStorage.removeItem("controlIndicadores");
+  }
+  desconectarFirebase();
+});
 ////////////////////////////////
 
 // function activarGuardadoPorClave(nombreDesdeClave) {
