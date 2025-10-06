@@ -185,13 +185,16 @@ document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
 
-  const refComentario = ref(db, `comentariosIndicadores/${id}`);
-  onValue(refComentario, (snapshot) => {
-    const datos = snapshot.val();
+  function aplicarComentario(datos) {
     if (!datos || !comentarioVisible2) return;
-
     comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
     // comentarioVisible2.classList.remove("oculto");
+  }
+
+  delegarLecturaFirebase({
+    ruta: `comentariosIndicadores/${id}`,
+    claveLocal: `comentarioIndicador_${id}`,
+    callback: aplicarComentario
   });
 });
 
