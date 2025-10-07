@@ -53,7 +53,79 @@ function inicializarIndicadores(estados) {
 }
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+//////////
+function lecturaExclusivaFirebase({
+  ruta,
+  claveLocal,
+  controlClave,
+  callback
+}) {
+  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
+  sessionStorage.setItem("tabId", tabId);
 
+  let refNodo;
+  let unsubscribe;
+
+  function conectar() {
+    if (unsubscribe) return;
+
+    refNodo = ref(db, ruta);
+    unsubscribe = onValue(refNodo, snapshot => {
+      const datos = snapshot.val();
+      if (!datos) return;
+
+      localStorage.setItem(claveLocal, JSON.stringify(datos));
+      callback(datos);
+    });
+
+    localStorage.setItem(controlClave, tabId);
+  }
+
+  function desconectar() {
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
+  }
+
+  function usarCache() {
+    const guardado = localStorage.getItem(claveLocal);
+    if (!guardado) return;
+    const datos = JSON.parse(guardado);
+    callback(datos);
+  }
+
+  function verificarControl() {
+    const actual = localStorage.getItem(controlClave);
+    if (!actual || actual === tabId) {
+      conectar();
+    } else {
+      usarCache();
+    }
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      verificarControl();
+    } else {
+      desconectar();
+    }
+  });
+
+  window.addEventListener("beforeunload", () => {
+    if (localStorage.getItem(controlClave) === tabId) {
+      localStorage.removeItem(controlClave);
+    }
+    desconectar();
+  });
+
+  if (document.visibilityState === "visible") {
+    verificarControl();
+  } else {
+    usarCache();
+  }
+}
+///////////
 
 document.addEventListener("DOMContentLoaded", () => {
   // Selecciona todos los contenedores de columnas
@@ -123,11 +195,12 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
-  onValue(ref(db, 'indicadores'), (snapshot) => {
+ lecturaExclusivaFirebase({
+  ruta: "indicadores",
+  claveLocal: "estadosIndicadores",
+  controlClave: "controlIndicadores",
+  callback: (estados) => {
     console.log("1");
-    const estados = snapshot.val();
-    if (!estados) return;
-
     selects.forEach(select => {
       const id = select.closest('.indicador')?.id;
       if (id && estados[id]) {
@@ -135,23 +208,25 @@ const registroRef = ref(db, `registro/${id}`);
         cambiarColor(select, id);
       }
     });
-  });
+  }
+});
 });
 document.querySelectorAll(".indicador").forEach(indicador => {
   const id = indicador.id;
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
+  if (!comentarioVisible2) return;
 
-  const refComentario = ref(db, `comentariosIndicadores/${id}`);
-  onValue(refComentario, (snapshot) => {
-     console.log("2");
-    const datos = snapshot.val();
-    if (!datos || !comentarioVisible2) return;
-
-    comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-    // comentarioVisible2.classList.remove("oculto");
+  lecturaExclusivaFirebase({
+    ruta: `comentariosIndicadores/${id}`,
+    claveLocal: `comentarioIndicador_${id}`,
+    controlClave: `controlComentarioIndicador_${id}`,
+    callback: (datos) => {
+      console.log("2");
+      if (!datos) return;
+      comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
+    }
   });
 });
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function enviarComentario(event, inputElement) {
   if (event.key === 'Enter' && !event.shiftKey) {
