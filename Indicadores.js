@@ -379,15 +379,15 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
 function validarUsuario(usuarioId, contraseñaIngresada) {
   return new Promise((resolve) => {
     const userRef = ref(db, `usuarios/${usuarioId}`);
-    onValue(userRef, (snapshot) => {
-       console.log("4");
-      const datos = snapshot.val();
-      if (!datos || datos.contraseña !== contraseñaIngresada) {
-        resolve(false);
-      } else {
-        resolve(datos.nombre); // Devuelve el nombre si es válido
-      }
-    }, { onlyOnce: true });
+    // onValue(userRef, (snapshot) => {
+    //    console.log("4");
+    //   const datos = snapshot.val();
+    //   if (!datos || datos.contraseña !== contraseñaIngresada) {
+    //     resolve(false);
+    //   } else {
+    //     resolve(datos.nombre); // Devuelve el nombre si es válido
+    //   }
+    // }, { onlyOnce: true });
   });
   
 }
