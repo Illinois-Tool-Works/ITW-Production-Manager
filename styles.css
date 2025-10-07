@@ -477,6 +477,7 @@ body.sin-volver .btn-secondary {
   box-sizing: border-box;
   background-color: #f8f9fa;   /* opcional: fondo suave */
   max-width: 100vw;            /* ← evita desbordes horizontales */
+  border-radius: 10%;
 }
 
 #contenedorPrincipal > * {
