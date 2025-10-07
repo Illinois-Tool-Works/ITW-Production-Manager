@@ -1021,8 +1021,9 @@ function colorBootstrap(estado) {
 }
 // 🔄 Escucha en tiempo real desde Firebase
 const indicadoresRef = ref(db, "indicadores");
-
+console.log("18")
 onValue(indicadoresRef, (snapshot) => {
+  console.log("19")
   const indicadores = snapshot.val();
   if (!indicadores) return;
 
