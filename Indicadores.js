@@ -46,6 +46,7 @@ function inicializarIndicadores(estados) {
   for (let i = 1; i <= 140; i++) {
     const id = `indicador${i}`;
     if (!estados || !estados[id]) {
+      console.log("1.1");
       set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
        console.log("5");
     }
@@ -375,20 +376,22 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
 
 /////////////////////
 
-function validarUsuario(usuarioId, contraseñaIngresada) {
-  return new Promise((resolve) => {
+async function validarUsuario(usuarioId, contraseñaIngresada) {
+  try {
     const userRef = ref(db, `usuarios/${usuarioId}`);
-    onValue(userRef, (snapshot) => {
-       console.log("4");
-      const datos = snapshot.val();
-      if (!datos || datos.contraseña !== contraseñaIngresada) {
-        resolve(false);
-      } else {
-        resolve(datos.nombre); // Devuelve el nombre si es válido
-      }
-    }, { onlyOnce: true });
-  });
-  
+    console.log("4");
+    const snapshot = await get(userRef);
+    const datos = snapshot.val();
+
+    if (!datos || datos.contraseña !== contraseñaIngresada) {
+      return false;
+    } else {
+      return datos.nombre; // Devuelve el nombre si es válido
+    }
+  } catch (error) {
+    console.error("❌ Error al validar usuario:", error);
+    return false;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
