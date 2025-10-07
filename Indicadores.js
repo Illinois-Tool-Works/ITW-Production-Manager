@@ -14,11 +14,11 @@
 
 
 
-  window.sesionActiva = {
-  metodo: null,        // "usuario" o "clave"
-  id: null,            // usuarioId o clave
-  nombre: null         // nombre visible
-};
+  // window.sesionActiva = {
+  // metodo: null,        // "usuario" o "clave"
+  // id: null,            // usuarioId o clave
+  // nombre: null         // nombre visible
+  // };
 
 
 function cambiarColor(select, id) {
