@@ -738,206 +738,206 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
 });
 
 ///////////////////////////////
-const mapaIndicadores = {
-  48: "Área 1",
-  49: "Área 1",
-  50: "Área 1",
-  51: "Área 1",
-  52: "Área 1",
-  53: "Área 1",
-  54: "Área 1",
-  55: "Área 1",
-  108: "Área 1",
-  42: "Área 1",
-  25: "Área 1",
-  36: "Área 1",
-  27: "Área 1",
-  103: "Área 1",
-  40: "Área 1",
-  35: "Área 1",
-  70: "Área 1",
-  44: "Área 1",
-  45: "Área 1",
-  33: "Área 1",
-  85: "Área 1",
-  39: "Área 1",
-  18: "Área 1",
-  32: "Área 1",
-  47: "Área 1",
-  46: "Área 1",
-  105: "Área 1",
-  43: "Área 1",
-  10: "Área 1",
-  9: "Área 1",
-  128: "Área 1",
-  129: "Área 1",
-  131: "Área 1",
-  123: "Área 2",
-  118: "Área 2",
-  97: "Área 2",
-  114: "Área 2",
-  87: "Área 2",
-  88: "Área 2",
-  89: "Área 2",
-  104: "Área 2",
-  101: "Área 2",
-  117: "Área 2",
-  124: "Área 2",
-  81: "Área 2",
-  99: "Área 2",
-  102: "Área 2",
-  91: "Área 2",
-  126: "Área 2",
-  90: "Área 2",
-  38: "Área 2",
-  74: "Área 2",
-  116: "Área 2",
-  106: "Área 2",
-  112: "Área 2",
-  119: "Área 2",
-  111: "Área 2",
-  113: "Área 2",
-  109: "Área 2",
-  110: "Área 2",
-  115: "Área 2",
-  86: "Área 2",
-  122: "Área 2",
-  75: "Área 2",
-  92: "Área 2",
-  121: "Área 2",
-  130: "Área 2",
-  127: "Área 2",
-  125: "Área 2",
-  73: "Área 2",
-  71: "Área 2",
-  72: "Área 2",
-  34: "Área 2",
-  93: "Área 2",
-  37: "Área 2",
-  94: "Área 2",
-  95: "Área 2",
-  100: "Área 2",
-  107: "Área 2",
-  98: "Área 2",
-  96: "Área 2",
-  // y así sucesivamente...
-};
-document.querySelectorAll(".indicador").forEach(indicador => {
-  indicador.addEventListener("click", () => {
-    const grupo = indicador.closest(".grupo-indicadores");
-    if (grupo) {
-      grupo.classList.add("reducido-derecha");
-    }
-  });
-});
-const estadosColor = {
-  gris: "No plan",
-  rojo: "Paro",
-  verde: "Corriendo",
-  azul: "Cambio de molde"
-};
+// const mapaIndicadores = {
+//   48: "Área 1",
+//   49: "Área 1",
+//   50: "Área 1",
+//   51: "Área 1",
+//   52: "Área 1",
+//   53: "Área 1",
+//   54: "Área 1",
+//   55: "Área 1",
+//   108: "Área 1",
+//   42: "Área 1",
+//   25: "Área 1",
+//   36: "Área 1",
+//   27: "Área 1",
+//   103: "Área 1",
+//   40: "Área 1",
+//   35: "Área 1",
+//   70: "Área 1",
+//   44: "Área 1",
+//   45: "Área 1",
+//   33: "Área 1",
+//   85: "Área 1",
+//   39: "Área 1",
+//   18: "Área 1",
+//   32: "Área 1",
+//   47: "Área 1",
+//   46: "Área 1",
+//   105: "Área 1",
+//   43: "Área 1",
+//   10: "Área 1",
+//   9: "Área 1",
+//   128: "Área 1",
+//   129: "Área 1",
+//   131: "Área 1",
+//   123: "Área 2",
+//   118: "Área 2",
+//   97: "Área 2",
+//   114: "Área 2",
+//   87: "Área 2",
+//   88: "Área 2",
+//   89: "Área 2",
+//   104: "Área 2",
+//   101: "Área 2",
+//   117: "Área 2",
+//   124: "Área 2",
+//   81: "Área 2",
+//   99: "Área 2",
+//   102: "Área 2",
+//   91: "Área 2",
+//   126: "Área 2",
+//   90: "Área 2",
+//   38: "Área 2",
+//   74: "Área 2",
+//   116: "Área 2",
+//   106: "Área 2",
+//   112: "Área 2",
+//   119: "Área 2",
+//   111: "Área 2",
+//   113: "Área 2",
+//   109: "Área 2",
+//   110: "Área 2",
+//   115: "Área 2",
+//   86: "Área 2",
+//   122: "Área 2",
+//   75: "Área 2",
+//   92: "Área 2",
+//   121: "Área 2",
+//   130: "Área 2",
+//   127: "Área 2",
+//   125: "Área 2",
+//   73: "Área 2",
+//   71: "Área 2",
+//   72: "Área 2",
+//   34: "Área 2",
+//   93: "Área 2",
+//   37: "Área 2",
+//   94: "Área 2",
+//   95: "Área 2",
+//   100: "Área 2",
+//   107: "Área 2",
+//   98: "Área 2",
+//   96: "Área 2",
+//   // y así sucesivamente...
+// };
+// document.querySelectorAll(".indicador").forEach(indicador => {
+//   indicador.addEventListener("click", () => {
+//     const grupo = indicador.closest(".grupo-indicadores");
+//     if (grupo) {
+//       grupo.classList.add("reducido-derecha");
+//     }
+//   });
+// });
+// const estadosColor = {
+//   gris: "No plan",
+//   rojo: "Paro",
+//   verde: "Corriendo",
+//   azul: "Cambio de molde"
+// };
 
-let areaActual = null;
+// let areaActual = null;
 
-// Si existe <body2>, úsalo para obtener el área
-const body2 = document.querySelector("body2");
-if (body2) {
-  areaActual = body2.dataset.area || null;
-}
+// // Si existe <body2>, úsalo para obtener el área
+// const body2 = document.querySelector("body2");
+// if (body2) {
+//   areaActual = body2.dataset.area || null;
+// }
 
-// Función para contar estados
-function contarEstados(indicadores, mapa, areaActual) {
-  const total = {};
-  const porArea = {};
+// // Función para contar estados
+// function contarEstados(indicadores, mapa, areaActual) {
+//   const total = {};
+//   const porArea = {};
 
-  for (const id in indicadores) {
-    const estado = indicadores[id];
-    const idNum = parseInt(id.replace("indicador", ""));
-    const area = mapa[idNum];
+//   for (const id in indicadores) {
+//     const estado = indicadores[id];
+//     const idNum = parseInt(id.replace("indicador", ""));
+//     const area = mapa[idNum];
 
-    if (!estado || !area) continue;
+//     if (!estado || !area) continue;
 
-    // Filtrar si estamos en una página de área específica
-    if (areaActual && area !== areaActual) continue;
+//     // Filtrar si estamos en una página de área específica
+//     if (areaActual && area !== areaActual) continue;
 
-    // Conteo total
-    total[estado] = (total[estado] || 0) + 1;
+//     // Conteo total
+//     total[estado] = (total[estado] || 0) + 1;
 
-    // Conteo por área (solo en página principal)
-    if (!areaActual) {
-      if (!porArea[area]) porArea[area] = {};
-      porArea[area][estado] = (porArea[area][estado] || 0) + 1;
-    }
-  }
-
-
-
-  return { total, porArea };
-}
+//     // Conteo por área (solo en página principal)
+//     if (!areaActual) {
+//       if (!porArea[area]) porArea[area] = {};
+//       porArea[area][estado] = (porArea[area][estado] || 0) + 1;
+//     }
+//   }
 
 
 
-// 🎨 Render en el contenedor fijo
-// Render adaptativo
-function renderConteo({ total, porArea }, areaActual) {
-  const container = document.getElementById("conteoEstados");
-  if (!container) return; // Silencioso si no existe
+//   return { total, porArea };
+// }
+
+
+
+// // 🎨 Render en el contenedor fijo
+// // Render adaptativo
+// function renderConteo({ total, porArea }, areaActual) {
+//   const container = document.getElementById("conteoEstados");
+//   if (!container) return; // Silencioso si no existe
   
-  container.innerHTML = "";
+//   container.innerHTML = "";
 
-  // Encabezado
-  const header = document.createElement("div");
-  header.className = "fw-bold mb-1";
-  header.textContent = areaActual ? `${areaActual}:` : "Total:";
-  container.appendChild(header);
+//   // Encabezado
+//   const header = document.createElement("div");
+//   header.className = "fw-bold mb-1";
+//   header.textContent = areaActual ? `${areaActual}:` : "Total:";
+//   container.appendChild(header);
 
-  // Totales
-  for (const estado in total) {
-    const badge = document.createElement("span");
-    badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
-    badge.textContent = `${total[estado]}`;
-    container.appendChild(badge);
-  }
+//   // Totales
+//   for (const estado in total) {
+//     const badge = document.createElement("span");
+//     badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
+//     badge.textContent = `${total[estado]}`;
+//     container.appendChild(badge);
+//   }
 
 
- // Desglose por área (solo en página principal)
-  if (!areaActual) {
-    for (const area in porArea) {
-      const areaHeader = document.createElement("div");
-      areaHeader.className = "fw-bold mt-3 mb-1";
-      areaHeader.textContent = `${area}:`;
-      container.appendChild(areaHeader);
+//  // Desglose por área (solo en página principal)
+//   if (!areaActual) {
+//     for (const area in porArea) {
+//       const areaHeader = document.createElement("div");
+//       areaHeader.className = "fw-bold mt-3 mb-1";
+//       areaHeader.textContent = `${area}:`;
+//       container.appendChild(areaHeader);
 
-      for (const estado in porArea[area]) {
-        const badge = document.createElement("span");
-        badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
-        badge.textContent = `${porArea[area][estado]}`;
-        container.appendChild(badge);
-      }
-    }
-  }
+//       for (const estado in porArea[area]) {
+//         const badge = document.createElement("span");
+//         badge.className = `badge me-2 mb-1 bg-${colorBootstrap(estado)} fs-6`;
+//         badge.textContent = `${porArea[area][estado]}`;
+//         container.appendChild(badge);
+//       }
+//     }
+//   }
 
-}
+// }
 
-function colorBootstrap(estado) {
-  switch (estado) {
-    case "verde": return "success";
-    case "rojo": return "danger";
-    case "azul": return "primary";
-    case "gris": return "secondary";
-    default: return "dark";
-  }
-}
-// 🔄 Escucha en tiempo real desde Firebase
-const indicadoresRef = ref(db, "indicadores");
+// function colorBootstrap(estado) {
+//   switch (estado) {
+//     case "verde": return "success";
+//     case "rojo": return "danger";
+//     case "azul": return "primary";
+//     case "gris": return "secondary";
+//     default: return "dark";
+//   }
+// }
+// // 🔄 Escucha en tiempo real desde Firebase
+// const indicadoresRef = ref(db, "indicadores");
 
-onValue(indicadoresRef, (snapshot) => {
-  const indicadores = snapshot.val();
-  if (!indicadores) return;
+// onValue(indicadoresRef, (snapshot) => {
+//   const indicadores = snapshot.val();
+//   if (!indicadores) return;
 
-  const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
-  renderConteo(conteo, areaActual);
-});
+//   const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+//   renderConteo(conteo, areaActual);
+// });
 
 ////////////////////////////////
 
