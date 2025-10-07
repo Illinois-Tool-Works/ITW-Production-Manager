@@ -402,6 +402,16 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("4.4");
   const tabId = Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
+  document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") {
+    const control = localStorage.getItem("controlActivo");
+    if (control === tabId) {
+      localStorage.removeItem("controlActivo");
+      console.log("🛑 Control revocado por visibilidad");
+    }
+  }
+});
+
 
   let edicionActiva = false;
   let nombreUsuario = null;
