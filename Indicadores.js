@@ -55,12 +55,7 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 //////////
-function lecturaExclusivaFirebase({
-  ruta,
-  claveLocal,
-  controlClave,
-  callback
-}) {
+function lecturaExclusivaFirebase({ ruta, claveLocal, controlClave, callback }) {
   const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
 
@@ -68,7 +63,7 @@ function lecturaExclusivaFirebase({
   let unsubscribe;
 
   function conectar() {
-    if (unsubscribe) return;
+    if (unsubscribe || document.visibilityState !== "visible") return;
 
     refNodo = ref(db, ruta);
     unsubscribe = onValue(refNodo, snapshot => {
@@ -80,12 +75,14 @@ function lecturaExclusivaFirebase({
     });
 
     localStorage.setItem(controlClave, tabId);
+    console.log("📡 Conectado a", ruta, "desde tabId", tabId);
   }
 
   function desconectar() {
     if (unsubscribe) {
       unsubscribe();
       unsubscribe = null;
+      console.log("🔌 Desconectado de", ruta, "en tabId", tabId);
     }
   }
 
@@ -98,7 +95,7 @@ function lecturaExclusivaFirebase({
 
   function verificarControl() {
     const actual = localStorage.getItem(controlClave);
-    if (!actual || actual === tabId) {
+    if ((!actual || actual === tabId) && document.visibilityState === "visible") {
       conectar();
     } else {
       usarCache();
@@ -120,6 +117,7 @@ function lecturaExclusivaFirebase({
     desconectar();
   });
 
+  // Inicialización
   if (document.visibilityState === "visible") {
     verificarControl();
   } else {
