@@ -344,18 +344,19 @@ function cargarComentario(indicadorId) {
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
-  const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-  onValue(comentarioRef, snapshot => {
-     console.log("3");
-    const data = snapshot.val();
-    const autor = data?.usuario;
-    const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
-  dateStyle: "medium",
-  timeStyle: "short"
-}
-);
-
-comentarioBox.textContent = `"${data?.texto || "Sin comentario"}" ,${autor} ,${fechaFormateada}`;
+  lecturaExclusivaFirebase({
+    ruta: `comentarios/${indicadorId}`,
+    claveLocal: `comentario_${indicadorId}`,
+    controlClave: `controlComentario_${indicadorId}`,
+    callback: (data) => {
+      console.log("3");
+      const autor = data?.usuario || "Desconocido";
+      const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+      comentarioBox.textContent = `"${data?.texto || "Sin comentario"}", ${autor}, ${fechaFormateada}`;
+    }
   });
 }
 for (let i = 1; i < 140; i++) {
