@@ -1020,15 +1020,16 @@ function colorBootstrap(estado) {
   }
 }
 // 🔄 Escucha en tiempo real desde Firebase
-const indicadoresRef = ref(db, "indicadores");
-console.log("18")
-onValue(indicadoresRef, (snapshot) => {
-  console.log("19")
-  const indicadores = snapshot.val();
-  if (!indicadores) return;
-
-  const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
-  renderConteo(conteo, areaActual);
+console.log("18");
+lecturaExclusivaFirebase({
+  ruta: "indicadores",
+  claveLocal: "conteoIndicadores",
+  controlClave: "controlConteoIndicadores",
+  callback: (indicadores) => {
+    console.log("19");
+    const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
+    renderConteo(conteo, areaActual);
+  }
 });
 
 ////////////////////////////////
