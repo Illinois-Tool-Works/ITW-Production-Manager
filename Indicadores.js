@@ -376,42 +376,26 @@ document.querySelectorAll('.cuadro').forEach(cuadro => {
 
 /////////////////////
 
-async function validarUsuario(usuarioId, contraseñaIngresada) {
-  try {
+function validarUsuario(usuarioId, contraseñaIngresada) {
+  return new Promise((resolve) => {
     const userRef = ref(db, `usuarios/${usuarioId}`);
-    console.log("4");
-    const snapshot = await get(userRef);
-    const datos = snapshot.val();
-
-    if (!datos || datos.contraseña !== contraseñaIngresada) {
-      console.log("4.1");
-      return false;
-    } else {
-      console.log("4.2");
-      return datos.nombre; // Devuelve el nombre si es válido
-    }
-  } catch (error) {
-    console.log("4.3");
-    console.error("❌ Error al validar usuario:", error);
-    return false;
-  }
+    onValue(userRef, (snapshot) => {
+       console.log("4");
+      const datos = snapshot.val();
+      if (!datos || datos.contraseña !== contraseñaIngresada) {
+        resolve(false);
+      } else {
+        resolve(datos.nombre); // Devuelve el nombre si es válido
+      }
+    }, { onlyOnce: true });
+  });
+  
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Identificador único por ventana
-  console.log("4.4");
   const tabId = Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
-  document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState !== "visible") {
-    const control = localStorage.getItem("controlActivo");
-    if (control === tabId) {
-      localStorage.removeItem("controlActivo");
-      console.log("🛑 Control revocado por visibilidad");
-    }
-  }
-});
-
 
   let edicionActiva = false;
   let nombreUsuario = null;
@@ -430,25 +414,20 @@ document.addEventListener("DOMContentLoaded", () => {
   eliminarBtn.style.display = "none";
 const buttonGroup = document.querySelector(".button-group");
 if (buttonGroup) {
-  console.log("4.5");
   buttonGroup.appendChild(eliminarBtn);
 }
 if (activarBtn) {
-console.log("4.6");
+
   activarBtn.addEventListener("click", async () => {
-    console.log("4.7");
     if (!edicionActiva) {
-      console.log("4.8");
       const usuarioId = prompt("ID de usuario:");
       const contraseña = prompt("Contraseña:");
 
       const nombre = await validarUsuario(usuarioId, contraseña);
       if (!nombre) {
-        console.log("4.9");
         alert("Credenciales incorrectas. Comentarios bloqueados.");
         return;
       }
-      console.log("4.10");
       // ✅ Aquí creas el objeto de sesión
     window.sesionActiva = {
       metodo: "usuario",
@@ -461,7 +440,7 @@ console.log("4.6");
       localStorage.setItem("controlActivo", tabId);
 
       if (localStorage.getItem("controlActivo") !== tabId) return;
-console.log("4.11");
+
       edicionActiva = true;
 
       activarBtn.classList.add("activo");
@@ -475,15 +454,12 @@ console.log("4.11");
       eliminarBtn.style.display = nombre.trim().toLowerCase() === "luis" ? "inline-block" : "none";
 
       document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
-        console.log("4.12");
         el.disabled = false;
         if (el.classList.contains("comentario-input")) {
-          console.log("4.13");
           el.dataset.usuario = nombreUsuario;
         }
       });
     } else {
-      console.log("4.14");
       edicionActiva = false;
       nombreUsuario = null;
       localStorage.removeItem("controlActivo");
@@ -505,9 +481,7 @@ console.log("4.11");
 
   // 🔹 Escuchar si otra ventana toma el control
   window.addEventListener("storage", (e) => {
-    console.log("4.15");
     if (e.key === "controlActivo" && e.newValue !== tabId) {
-      console.log("4.16");
       edicionActiva = false;
       nombreUsuario = null;
 
@@ -527,7 +501,7 @@ console.log("4.11");
   });
 
   // 🔹 Limpiar control si esta ventana se cierra
-  window.addEventListener("beforeunload", () => {console.log("4.17");
+  window.addEventListener("beforeunload", () => {
     if (localStorage.getItem("controlActivo") === tabId) {
       localStorage.removeItem("controlActivo");
     }
@@ -535,7 +509,6 @@ console.log("4.11");
 
   // 🔹 Lógica de eliminación con confirmación
   if (!eliminarBtn.dataset.listenerAgregado) {
-    console.log("4.18");
     eliminarBtn.addEventListener("click", async () => {
       const confirmacion = confirm("¿Estás seguro de que quieres borrar el registro?");
       if (!confirmacion) return;
