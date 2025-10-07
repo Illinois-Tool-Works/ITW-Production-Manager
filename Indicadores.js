@@ -47,6 +47,7 @@ function inicializarIndicadores(estados) {
     const id = `indicador${i}`;
     if (!estados || !estados[id]) {
       set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
+       console.log("5");
     }
   }
 }
@@ -75,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🔄 Guardar solo el valor en la ruta principal
   set(ref(db, `indicadores/${id}`), valor);
+   console.log("6");
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
@@ -100,12 +102,14 @@ const usuario = window.sesionActiva?.nombre || "Desconocido"; //|| document.getE
   const estado = estadosColor[valor] || valor;
 
   const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
+   console.log("8");
   set(comentarioRef, {
     estado,
     usuario,
     fecha
   });
 const registroRef = ref(db, `registro/${id}`);
+ console.log("9");
   push(registroRef, {
     estado,
     usuario,
@@ -120,6 +124,7 @@ const registroRef = ref(db, `registro/${id}`);
 
   // 🔄 Lectura en tiempo real desde Firebase
   onValue(ref(db, 'indicadores'), (snapshot) => {
+    console.log("1");
     const estados = snapshot.val();
     if (!estados) return;
 
@@ -138,6 +143,7 @@ document.querySelectorAll(".indicador").forEach(indicador => {
 
   const refComentario = ref(db, `comentariosIndicadores/${id}`);
   onValue(refComentario, (snapshot) => {
+     console.log("2");
     const datos = snapshot.val();
     if (!datos || !comentarioVisible2) return;
 
@@ -177,12 +183,14 @@ window.enviarComentario = async function (event, input) {
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
+   console.log("10");
   await update(indicadorRef, {
     texto: comentario,
     usuario,
     fecha: timestamp
   });
   const registroRef = ref(db, `registro/area${area}/${indicadorId}`);
+   console.log("11");
    await push(registroRef, comentarioData);
 
 
@@ -223,6 +231,7 @@ function guardarComentario(inputElement) {
 
 
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
+   console.log("12");
   set(comentarioRef, {
     estado: estado,
     texto: comentario,
@@ -239,6 +248,7 @@ function guardarComentario(inputElement) {
   });
 
   const registroRef = push(ref(db, `registro/${indicadorId}`));
+   console.log("13");
   set(registroRef, {
     estado: estado,
     texto: comentario,
@@ -261,6 +271,7 @@ function cargarComentario(indicadorId) {
 
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
   onValue(comentarioRef, snapshot => {
+     console.log("3");
     const data = snapshot.val();
     const autor = data?.usuario;
     const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
@@ -292,6 +303,7 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
   return new Promise((resolve) => {
     const userRef = ref(db, `usuarios/${usuarioId}`);
     onValue(userRef, (snapshot) => {
+       console.log("4");
       const datos = snapshot.val();
       if (!datos || datos.contraseña !== contraseñaIngresada) {
         resolve(false);
@@ -426,6 +438,7 @@ if (activarBtn) {
 
       try {
         await remove(ref(db, 'registro'));
+         console.log("14");
         // await remove(ref(db, 'registroindicadores'));
         console.log("Registro eliminado correctamente.");
       } catch (error) {
@@ -574,6 +587,7 @@ if (activarBtn) {
 document.getElementById("btnRegistro").addEventListener("click", async () => {
   const db = getDatabase();
   const snapshot = await get(ref(db, 'registro'));
+   console.log("15");
   
   // Detectar área según el nombre de la página
 let areaActual = "Área desconocida";
@@ -712,9 +726,11 @@ window.enviarEstado = async function (selectElement) {
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
+   console.log("16");
   await update(indicadorRef, estadoData);
 
   const registroRef = ref(db, `registro/${indicadorId}`);
+   console.log("17");
   await push(registroRef, estadoData);
 
   selectElement.disabled = true;
