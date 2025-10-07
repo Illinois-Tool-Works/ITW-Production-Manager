@@ -196,6 +196,7 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
+  console.log("📡 Conectando a", ruta, "desde tabId", tabId);
  lecturaExclusivaFirebase({
   ruta: "indicadores",
   claveLocal: "estadosIndicadores",
@@ -217,6 +218,7 @@ document.querySelectorAll(".indicador").forEach(indicador => {
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
   if (!comentarioVisible2) return;
 
+  console.log("📡 Conectando a", ruta, "desde tabId", tabId);
   lecturaExclusivaFirebase({
     ruta: `comentariosIndicadores/${id}`,
     claveLocal: `comentarioIndicador_${id}`,
@@ -345,6 +347,7 @@ function cargarComentario(indicadorId) {
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
+  console.log("📡 Conectando a", ruta, "desde tabId", tabId);
   lecturaExclusivaFirebase({
     ruta: `comentarios/${indicadorId}`,
     claveLocal: `comentario_${indicadorId}`,
@@ -1025,6 +1028,7 @@ function colorBootstrap(estado) {
 }
 // 🔄 Escucha en tiempo real desde Firebase
 console.log("18");
+console.log("📡 Conectando a", ruta, "desde tabId", tabId);
 lecturaExclusivaFirebase({
   ruta: "indicadores",
   claveLocal: "conteoIndicadores",
