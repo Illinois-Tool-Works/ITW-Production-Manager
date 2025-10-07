@@ -196,7 +196,6 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
-  console.log("📡 Conectando a", ruta, "desde tabId", tabId);
  lecturaExclusivaFirebase({
   ruta: "indicadores",
   claveLocal: "estadosIndicadores",
@@ -218,7 +217,6 @@ document.querySelectorAll(".indicador").forEach(indicador => {
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
   if (!comentarioVisible2) return;
 
-  console.log("📡 Conectando a", ruta, "desde tabId", tabId);
   lecturaExclusivaFirebase({
     ruta: `comentariosIndicadores/${id}`,
     claveLocal: `comentarioIndicador_${id}`,
@@ -347,7 +345,6 @@ function cargarComentario(indicadorId) {
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
-  console.log("📡 Conectando a", ruta, "desde tabId", tabId);
   lecturaExclusivaFirebase({
     ruta: `comentarios/${indicadorId}`,
     claveLocal: `comentario_${indicadorId}`,
@@ -387,11 +384,14 @@ async function validarUsuario(usuarioId, contraseñaIngresada) {
     const datos = snapshot.val();
 
     if (!datos || datos.contraseña !== contraseñaIngresada) {
+      console.log("4.1");
       return false;
     } else {
+      console.log("4.2");
       return datos.nombre; // Devuelve el nombre si es válido
     }
   } catch (error) {
+    console.log("4.3");
     console.error("❌ Error al validar usuario:", error);
     return false;
   }
@@ -399,6 +399,7 @@ async function validarUsuario(usuarioId, contraseñaIngresada) {
 
 document.addEventListener("DOMContentLoaded", () => {
   // 🔹 Identificador único por ventana
+  console.log("4.4");
   const tabId = Date.now().toString();
   sessionStorage.setItem("tabId", tabId);
 
@@ -419,20 +420,25 @@ document.addEventListener("DOMContentLoaded", () => {
   eliminarBtn.style.display = "none";
 const buttonGroup = document.querySelector(".button-group");
 if (buttonGroup) {
+  console.log("4.5");
   buttonGroup.appendChild(eliminarBtn);
 }
 if (activarBtn) {
-
+console.log("4.6");
   activarBtn.addEventListener("click", async () => {
+    console.log("4.7");
     if (!edicionActiva) {
+      console.log("4.8");
       const usuarioId = prompt("ID de usuario:");
       const contraseña = prompt("Contraseña:");
 
       const nombre = await validarUsuario(usuarioId, contraseña);
       if (!nombre) {
+        console.log("4.9");
         alert("Credenciales incorrectas. Comentarios bloqueados.");
         return;
       }
+      console.log("4.10");
       // ✅ Aquí creas el objeto de sesión
     window.sesionActiva = {
       metodo: "usuario",
@@ -445,7 +451,7 @@ if (activarBtn) {
       localStorage.setItem("controlActivo", tabId);
 
       if (localStorage.getItem("controlActivo") !== tabId) return;
-
+console.log("4.11");
       edicionActiva = true;
 
       activarBtn.classList.add("activo");
@@ -459,12 +465,15 @@ if (activarBtn) {
       eliminarBtn.style.display = nombre.trim().toLowerCase() === "luis" ? "inline-block" : "none";
 
       document.querySelectorAll(".indicador select:not(.oculto), .indicador input:not(.oculto)").forEach(el => {
+        console.log("4.12");
         el.disabled = false;
         if (el.classList.contains("comentario-input")) {
+          console.log("4.13");
           el.dataset.usuario = nombreUsuario;
         }
       });
     } else {
+      console.log("4.14");
       edicionActiva = false;
       nombreUsuario = null;
       localStorage.removeItem("controlActivo");
@@ -486,7 +495,9 @@ if (activarBtn) {
 
   // 🔹 Escuchar si otra ventana toma el control
   window.addEventListener("storage", (e) => {
+    console.log("4.15");
     if (e.key === "controlActivo" && e.newValue !== tabId) {
+      console.log("4.16");
       edicionActiva = false;
       nombreUsuario = null;
 
@@ -506,7 +517,7 @@ if (activarBtn) {
   });
 
   // 🔹 Limpiar control si esta ventana se cierra
-  window.addEventListener("beforeunload", () => {
+  window.addEventListener("beforeunload", () => {console.log("4.17");
     if (localStorage.getItem("controlActivo") === tabId) {
       localStorage.removeItem("controlActivo");
     }
@@ -514,6 +525,7 @@ if (activarBtn) {
 
   // 🔹 Lógica de eliminación con confirmación
   if (!eliminarBtn.dataset.listenerAgregado) {
+    console.log("4.18");
     eliminarBtn.addEventListener("click", async () => {
       const confirmacion = confirm("¿Estás seguro de que quieres borrar el registro?");
       if (!confirmacion) return;
@@ -1028,7 +1040,6 @@ function colorBootstrap(estado) {
 }
 // 🔄 Escucha en tiempo real desde Firebase
 console.log("18");
-console.log("📡 Conectando a", ruta, "desde tabId", tabId);
 lecturaExclusivaFirebase({
   ruta: "indicadores",
   claveLocal: "conteoIndicadores",
