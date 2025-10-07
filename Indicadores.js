@@ -429,11 +429,11 @@ if (activarBtn) {
         return;
       }
       // ✅ Aquí creas el objeto de sesión
-    window.sesionActiva = {
-      metodo: "usuario",
-      id: usuarioId,
-      nombre: nombre
-    };
+    // window.sesionActiva = {
+    //   metodo: "usuario",
+    //   id: usuarioId,
+    //   nombre: nombre
+    // };
 
 
       nombreUsuario = nombre;
