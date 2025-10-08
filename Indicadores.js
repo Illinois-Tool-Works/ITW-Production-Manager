@@ -60,7 +60,7 @@ function lecturaSoloSiVisible({ ruta, callback }) {
   let unsubscribe;
 
   function conectar() {
-    if (unsubscribe || document.visibilityState !== "visible") return;
+    if (unsubscribe || !document.hasFocus()) return;
 
     refNodo = ref(db, ruta);
     unsubscribe = onValue(refNodo, snapshot => {
@@ -79,18 +79,20 @@ function lecturaSoloSiVisible({ ruta, callback }) {
     }
   }
 
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
+  function verificarEstado() {
+    if (document.visibilityState === "visible" && document.hasFocus()) {
       conectar();
     } else {
       desconectar();
     }
-  });
+  }
+
+  document.addEventListener("visibilitychange", verificarEstado);
+  window.addEventListener("focus", verificarEstado);
+  window.addEventListener("blur", verificarEstado);
 
   // Ejecutar al cargar
-  if (document.visibilityState === "visible") {
-    conectar();
-  }
+  verificarEstado();
 }
 ///////////
 
