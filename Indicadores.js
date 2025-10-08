@@ -55,10 +55,7 @@ function inicializarIndicadores(estados) {
 
 import { get, child } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 //////////
-function lecturaExclusivaFirebase({ ruta, claveLocal, controlClave, callback }) {
-  const tabId = sessionStorage.getItem("tabId") || Date.now().toString();
-  sessionStorage.setItem("tabId", tabId);
-
+function lecturaSoloSiVisible({ ruta, callback }) {
   let refNodo;
   let unsubscribe;
 
@@ -68,60 +65,31 @@ function lecturaExclusivaFirebase({ ruta, claveLocal, controlClave, callback }) 
     refNodo = ref(db, ruta);
     unsubscribe = onValue(refNodo, snapshot => {
       const datos = snapshot.val();
-      if (!datos) return;
-
-      localStorage.setItem(claveLocal, JSON.stringify(datos));
-      callback(datos);
+      if (datos) callback(datos);
     });
 
-    localStorage.setItem(controlClave, tabId);
-    console.log("📡 Conectado a", ruta, "desde tabId", tabId);
+    console.log("📡 Conectado a", ruta);
   }
 
   function desconectar() {
     if (unsubscribe) {
       unsubscribe();
       unsubscribe = null;
-      console.log("🔌 Desconectado de", ruta, "en tabId", tabId);
-    }
-  }
-
-  function usarCache() {
-    const guardado = localStorage.getItem(claveLocal);
-    if (!guardado) return;
-    const datos = JSON.parse(guardado);
-    callback(datos);
-  }
-
-  function verificarControl() {
-    const actual = localStorage.getItem(controlClave);
-    if ((!actual || actual === tabId) && document.visibilityState === "visible") {
-      conectar();
-    } else {
-      usarCache();
+      console.log("🔌 Desconectado de", ruta);
     }
   }
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
-      verificarControl();
+      conectar();
     } else {
       desconectar();
     }
   });
 
-  window.addEventListener("beforeunload", () => {
-    if (localStorage.getItem(controlClave) === tabId) {
-      localStorage.removeItem(controlClave);
-    }
-    desconectar();
-  });
-
-  // Inicialización
+  // Ejecutar al cargar
   if (document.visibilityState === "visible") {
-    verificarControl();
-  } else {
-    usarCache();
+    conectar();
   }
 }
 ///////////
@@ -194,10 +162,8 @@ const registroRef = ref(db, `registro/${id}`);
   });
 
   // 🔄 Lectura en tiempo real desde Firebase
- lecturaExclusivaFirebase({
+lecturaSoloSiVisible({
   ruta: "indicadores",
-  claveLocal: "estadosIndicadores",
-  controlClave: "controlIndicadores",
   callback: (estados) => {
     console.log("1");
     selects.forEach(select => {
@@ -215,16 +181,14 @@ document.querySelectorAll(".indicador").forEach(indicador => {
   const comentarioVisible2 = indicador.querySelector(".comentario-visible2");
   if (!comentarioVisible2) return;
 
-  lecturaExclusivaFirebase({
-    ruta: `comentariosIndicadores/${id}`,
-    claveLocal: `comentarioIndicador_${id}`,
-    controlClave: `controlComentarioIndicador_${id}`,
-    callback: (datos) => {
-      console.log("2");
-      if (!datos) return;
-      comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
-    }
-  });
+ lecturaSoloSiVisible({
+  ruta: `comentariosIndicadores/${id}`,
+  callback: (datos) => {
+    console.log("2");
+    if (!datos) return;
+    comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
+  }
+});
 });
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 function enviarComentario(event, inputElement) {
@@ -343,10 +307,8 @@ function cargarComentario(indicadorId) {
   const comentarioBox = indicador?.querySelector('.comentario-visible');
   if (!comentarioBox) return;
 
-  lecturaExclusivaFirebase({
+   lecturaSoloSiVisible({
     ruta: `comentarios/${indicadorId}`,
-    claveLocal: `comentario_${indicadorId}`,
-    controlClave: `controlComentario_${indicadorId}`,
     callback: (data) => {
       console.log("3");
       const autor = data?.usuario || "Desconocido";
@@ -357,6 +319,7 @@ function cargarComentario(indicadorId) {
       comentarioBox.textContent = `"${data?.texto || "Sin comentario"}", ${autor}, ${fechaFormateada}`;
     }
   });
+
 }
 for (let i = 1; i < 140; i++) {
   cargarComentario(`indicador${i}`);
@@ -1021,10 +984,8 @@ function colorBootstrap(estado) {
 }
 // 🔄 Escucha en tiempo real desde Firebase
 console.log("18");
-lecturaExclusivaFirebase({
+lecturaSoloSiVisible({
   ruta: "indicadores",
-  claveLocal: "conteoIndicadores",
-  controlClave: "controlConteoIndicadores",
   callback: (indicadores) => {
     console.log("19");
     const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
