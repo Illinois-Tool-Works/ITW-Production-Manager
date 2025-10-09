@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
-const usuario = window.sesionActiva?.nombre || "Desconocido" || document.getElementById("nombre")?.textContent;
+const usuario = window.sesionActiva?.nombre || "Desconocido";// || document.getElementById("nombre")?.textContent;
 
 
   const fecha = new Date().toLocaleString('es-MX', {
@@ -208,7 +208,7 @@ window.enviarComentario = async function (event, input) {
   if (!comentario) return;
 
   const indicadorId = input.dataset.indicador;
-  const usuario = window.sesionActiva?.nombre || "Desconocido" || document.getElementById("nombre")?.textContent;
+  const usuario = window.sesionActiva?.nombre || "Desconocido";// || document.getElementById("nombre")?.textContent;
 
   const timestamp = new Date().toISOString();
 
@@ -253,7 +253,7 @@ function guardarComentario(inputElement) {
     console.warn("Falta data-indicador en el input");
     return;
   }
-  const usuario = window.sesionActiva?.nombre || "Desconocido"|| document.getElementById("nombre")?.textContent;
+  const usuario = window.sesionActiva?.nombre || "Desconocido";//|| document.getElementById("nombre")?.textContent;
 
   const indicador = document.getElementById(indicadorId);
   const estado = indicador?.querySelector("select")?.value || "manual";
@@ -565,7 +565,7 @@ export async function verificarSesion() {
   document.getElementById("nombre").textContent = nombre;
   activarCamposPorClave();
 
-  activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  // activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
 }
 
@@ -592,7 +592,7 @@ window.sesionActiva = {
   nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
 };
 activarCamposPorClave();
-activarGuardadoPorClave(nombre); // ← activa el guardado automático
+// activarGuardadoPorClave(nombre); // ← activa el guardado automático
 return true;
 
 }
@@ -997,87 +997,87 @@ lecturaSoloSiVisible({
 
 ////////////////////////////////
 
-// function activarGuardadoPorClave(nombreDesdeClave) {
-//   const estadosColor = {
-//     gris: "No plan",
-//     rojo: "Paro",
-//     verde: "Corriendo",
-//     azul: "Cambio de molde"
-//   };
+function activarGuardadoPorClave(nombreDesdeClave) {
+  const estadosColor = {
+    gris: "No plan",
+    rojo: "Paro",
+    verde: "Corriendo",
+    azul: "Cambio de molde"
+  };
 
-//   function obtenerFecha() {
-//     return new Date().toLocaleString('es-MX', {
-//       day: '2-digit',
-//       month: '2-digit',
-//       year: 'numeric',
-//       hour: '2-digit',
-//       minute: '2-digit',
-//       second: '2-digit'
-//     });
-//   }
+  function obtenerFecha() {
+    return new Date().toLocaleString('es-MX', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  }
 
-//   // 🟢 Guardado por SELECT
-//   document.querySelectorAll(".indicador select").forEach(select => {
-//     select.addEventListener("change", async () => {
-//       const id = select.closest(".indicador")?.id;
-//       if (!id) return;
+  // 🟢 Guardado por SELECT
+  document.querySelectorAll(".indicador select").forEach(select => {
+    select.addEventListener("change", async () => {
+      const id = select.closest(".indicador")?.id;
+      if (!id) return;
 
-//       const valor = select.value;
-//       const comentarioInput = select.closest(".indicador").querySelector(".comentario-input");
-//       const comentario = comentarioInput?.value || "";
-//       const fecha = obtenerFecha();
-//       const estado = estadosColor[valor] || valor;
+      const valor = select.value;
+      const comentarioInput = select.closest(".indicador").querySelector(".comentario-input");
+      const comentario = comentarioInput?.value || "";
+      const fecha = obtenerFecha();
+      const estado = estadosColor[valor] || valor;
 
-//       await set(ref(db, `indicadores/${id}`), valor);
+      await set(ref(db, `indicadores/${id}`), valor);
 
-//       await set(ref(db, `comentariosIndicadores/${id}`), {
-//         estado,
-//         comentario,
-//         usuario: nombreDesdeClave,
-//         fecha
-//       });
+      await set(ref(db, `comentariosIndicadores/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
 
-//       await push(ref(db, `registro/${id}`), {
-//         estado,
-//         comentario,
-//         usuario: nombreDesdeClave,
-//         fecha
-//       });
+      await push(ref(db, `registro/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
 
-//       cambiarColor(select, id);
-//     });
-//   });
+      cambiarColor(select, id);
+    });
+  });
 
-//   // 🟠 Guardado por INPUT
-//   document.querySelectorAll(".comentario-input").forEach(input => {
-//     input.addEventListener("keydown", async (e) => {
-//       if (e.key !== "Enter") return;
+  // 🟠 Guardado por INPUT
+  document.querySelectorAll(".comentario-input").forEach(input => {
+    input.addEventListener("keydown", async (e) => {
+      if (e.key !== "Enter") return;
 
-//       const id = input.dataset.indicador;
-//       const comentario = input.value;
-//       const select = document.getElementById(id)?.querySelector("select");
-//       const valor = select?.value || "gris";
-//       const fecha = obtenerFecha();
-//       const estado = estadosColor[valor] || valor;
+      const id = input.dataset.indicador;
+      const comentario = input.value;
+      const select = document.getElementById(id)?.querySelector("select");
+      const valor = select?.value || "gris";
+      const fecha = obtenerFecha();
+      const estado = estadosColor[valor] || valor;
 
-//       await set(ref(db, `comentarios/${id}`), {
-//         estado,
-//         comentario,
-//         usuario: nombreDesdeClave,
-//         fecha
-//       });
+      await set(ref(db, `comentarios/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
 
-//       await push(ref(db, `registro/${id}`), {
-//         estado,
-//         comentario,
-//         usuario: nombreDesdeClave,
-//         fecha
-//       });
+      await push(ref(db, `registro/${id}`), {
+        estado,
+        comentario,
+        usuario: nombreDesdeClave,
+        fecha
+      });
 
-//       cambiarColor(select, id);
-//     });
-//   });
-// }
+      cambiarColor(select, id);
+    });
+  });
+}
 function activarCamposPorClave() {
   document.querySelectorAll(".indicador select, .indicador input").forEach(el => {
     el.disabled = false;
