@@ -370,7 +370,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   exportarBtn.style.display = "none";
   
+ if (backBtn) {
   backBtn.style.display = "inline-block";
+}
+
 
   eliminarBtn.id = "btnEliminar";
   eliminarBtn.className = "btn btn-danger mt-0.9 ms-2";
