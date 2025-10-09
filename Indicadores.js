@@ -366,9 +366,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const activarBtn = document.getElementById("activarEdicion");
   const exportarBtn = document.getElementById("btnRegistro");
   const backBtn = document.querySelector(".btn-secondary");
+if (backBtn) {
+  backBtn.remove(); // lo elimina del DOM solo si está presente
+}
+
   const eliminarBtn = document.createElement("button");
 
   exportarBtn.style.display = "none";
+  
   backBtn.style.display = "inline-block";
 
   eliminarBtn.id = "btnEliminar";
