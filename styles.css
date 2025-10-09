@@ -490,3 +490,11 @@ body.sin-volver .btn-secondary {
   align-items: center;
   flex: 1;
 }
+
+body3 {
+  background-image: url('assets/OIP.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
