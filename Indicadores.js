@@ -565,7 +565,7 @@ export async function verificarSesion() {
   document.getElementById("nombre").textContent = nombre;
   activarCamposPorClave();
 
-  // activarGuardadoPorClave(nombre); // ← activa el guardado automático
+  activarGuardadoPorClave(nombre); // ← activa el guardado automático
   return true;
 }
 
