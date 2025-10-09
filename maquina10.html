@@ -4,6 +4,25 @@
   <meta charset="UTF-8">
   <title>Identificador de Dispositivo</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+    body3 {
+      margin: 0;
+      min-height: 100vh;
+      background-image: url('assets/OIP.webp');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed; /* Opcional: mantiene el fondo fijo al hacer scroll */
+    }
+
+    /* Fallback para dispositivos que no cargan bien la imagen */
+    @media (max-width: 576px) {
+      body3 {
+        background-size: contain;
+        background-position: top;
+      }
+    }
+  </style>
 </head>
 <body3>
     <div id="contenedorPrincipal">
