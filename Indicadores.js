@@ -563,6 +563,11 @@ export async function verificarSesion() {
   const datos = snapshot.val();
   const nombre = datos.nombre || "Sin nombre";
   document.getElementById("nombre").textContent = nombre;
+  window.sesionActiva = {
+  metodo: "clave",     // ← indica que fue acceso por clave
+  id: clave,           // ← identificador técnico (clave)
+  nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
+};
   activarCamposPorClave();
 
   // activarGuardadoPorClave(nombre); // ← activa el guardado automático
@@ -580,13 +585,13 @@ export async function iniciarSesion() {
     return false;
   }
 
- document.cookie = `clave=${clave}; path=/; max-age=604800`; // 7 días
-const datos = snapshot.val();
-const nombre = datos.nombre || "Sin nombre";
-document.getElementById("nombre").textContent = nombre;
+ document.cookie = `clave=${clave}; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+ const datos = snapshot.val();
+ const nombre = datos.nombre || "Sin nombre";
+ document.getElementById("nombre").textContent = nombre;
 
 // ✅ Aquí creas el objeto de sesión unificado
-window.sesionActiva = {
+ window.sesionActiva = {
   metodo: "clave",     // ← indica que fue acceso por clave
   id: clave,           // ← identificador técnico (clave)
   nombre: nombre       // ← nombre visible (ej. "Supervisor Norte")
