@@ -957,6 +957,7 @@ function renderConteo({ total, porArea }, areaActual) {
 
 
  // Desglose por área (solo en página principal)
+ 
   if (!areaActual) {
     for (const area in porArea) {
       const areaHeader = document.createElement("div");
