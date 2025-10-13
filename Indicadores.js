@@ -23,7 +23,7 @@
 
 function cambiarColor(select, id) {
       //  select.disabled = true;
-      console.log("Indicadores.js conectado correctamente");
+      // console.log("Indicadores.js conectado correctamente");
 
   const color = select.value;
   const div = document.getElementById(id);
@@ -46,9 +46,9 @@ function inicializarIndicadores(estados) {
   for (let i = 1; i <= 140; i++) {
     const id = `indicador${i}`;
     if (!estados || !estados[id]) {
-      console.log("1.1");
+      // console.log("1.1");
       set(ref(db, `indicadores/${id}`), 'gris'); // Valor por defecto
-       console.log("5");
+      //  console.log("5");
     }
   }
 }
@@ -68,14 +68,14 @@ function lecturaSoloSiVisible({ ruta, callback }) {
       if (datos) callback(datos);
     });
 
-    console.log("📡 Conectado a", ruta);
+    // console.log("📡 Conectado a", ruta);
   }
 
   function desconectar() {
     if (unsubscribe) {
       unsubscribe();
       unsubscribe = null;
-      console.log("🔌 Desconectado de", ruta);
+      // console.log("🔌 Desconectado de", ruta);
     }
   }
 
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🔄 Guardar solo el valor en la ruta principal
   set(ref(db, `indicadores/${id}`), valor);
-   console.log("6");
+  //  console.log("6");
 
   // ✅ Guardar estado completo en ruta secundaria
   const input = select.closest('.indicador').querySelector('.comentario-input');
@@ -143,14 +143,14 @@ const usuario = window.sesionActiva?.nombre || "Desconocido" || document.getElem
   const estado = estadosColor[valor] || valor;
 
   const comentarioRef = ref(db, `comentariosIndicadores/${id}`);
-   console.log("8");
+  //  console.log("8");
   set(comentarioRef, {
     estado,
     usuario,
     fecha
   });
 const registroRef = ref(db, `registro/${id}`);
- console.log("9");
+//  console.log("9");
   push(registroRef, {
     estado,
     usuario,
@@ -167,7 +167,7 @@ const registroRef = ref(db, `registro/${id}`);
 lecturaSoloSiVisible({
   ruta: "indicadores",
   callback: (estados) => {
-    console.log("1");
+    // console.log("1");
     selects.forEach(select => {
       const id = select.closest('.indicador')?.id;
       if (id && estados[id]) {
@@ -186,7 +186,7 @@ document.querySelectorAll(".indicador").forEach(indicador => {
  lecturaSoloSiVisible({
   ruta: `comentariosIndicadores/${id}`,
   callback: (datos) => {
-    console.log("2");
+    // console.log("2");
     if (!datos) return;
     comentarioVisible2.textContent = `${datos.usuario} seleccionó "${datos.estado}" el ${datos.fecha}`;
   }
@@ -223,14 +223,14 @@ window.enviarComentario = async function (event, input) {
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
-   console.log("10");
+  //  console.log("10");
   await update(indicadorRef, {
     texto: comentario,
     usuario,
     fecha: timestamp
   });
   const registroRef = ref(db, `registro/area${area}/${indicadorId}`);
-   console.log("11");
+  //  console.log("11");
    await push(registroRef, comentarioData);
 
 
@@ -271,7 +271,7 @@ function guardarComentario(inputElement) {
 
 
   const comentarioRef = ref(db, `comentarios/${indicadorId}`);
-   console.log("12");
+  //  console.log("12");
   set(comentarioRef, {
     estado: estado,
     texto: comentario,
@@ -279,7 +279,7 @@ function guardarComentario(inputElement) {
     usuario: usuario 
   })
   .then(() => {
-    console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
+    // console.log(`Comentario actualizado en ${indicadorId}:`, comentario);
     inputElement.value = "";
   })
 
@@ -288,7 +288,7 @@ function guardarComentario(inputElement) {
   });
 
   const registroRef = push(ref(db, `registro/${indicadorId}`));
-   console.log("13");
+  //  console.log("13");
   set(registroRef, {
     estado: estado,
     texto: comentario,
@@ -312,7 +312,7 @@ function cargarComentario(indicadorId) {
    lecturaSoloSiVisible({
     ruta: `comentarios/${indicadorId}`,
     callback: (data) => {
-      console.log("3");
+      // console.log("3");
       const autor = data?.usuario || "Desconocido";
       const fechaFormateada = new Date(data?.fecha).toLocaleString("es-MX", {
         dateStyle: "medium",
@@ -343,7 +343,7 @@ function validarUsuario(usuarioId, contraseñaIngresada) {
   return new Promise((resolve) => {
     const userRef = ref(db, `usuarios/${usuarioId}`);
     onValue(userRef, (snapshot) => {
-       console.log("4");
+      //  console.log("4");
       const datos = snapshot.val();
       if (!datos || datos.contraseña !== contraseñaIngresada) {
         resolve(false);
@@ -482,7 +482,7 @@ if (activarBtn) {
 
       try {
         await remove(ref(db, 'registro'));
-         console.log("14");
+        //  console.log("14");
         // await remove(ref(db, 'registroindicadores'));
         console.log("Registro eliminado correctamente.");
       } catch (error) {
@@ -636,7 +636,7 @@ window.desbloquearIndicador = async function (indicadorId) {
 document.getElementById("btnRegistro").addEventListener("click", async () => {
   const db = getDatabase();
   const snapshot = await get(ref(db, 'registro'));
-   console.log("15");
+  //  console.log("15");
   
   // Detectar área según el nombre de la página
 let areaActual = "Área desconocida";
@@ -775,11 +775,11 @@ window.enviarEstado = async function (selectElement) {
   };
 
   const indicadorRef = ref(db, `indicadores/${indicadorId}`);
-   console.log("16");
+  //  console.log("16");
   await update(indicadorRef, estadoData);
 
   const registroRef = ref(db, `registro/${indicadorId}`);
-   console.log("17");
+  //  console.log("17");
   await push(registroRef, estadoData);
 
   selectElement.disabled = true;
@@ -995,11 +995,11 @@ function colorBootstrap(estado) {
   }
 }
 // 🔄 Escucha en tiempo real desde Firebase
-console.log("18");
+// console.log("18");
 lecturaSoloSiVisible({
   ruta: "indicadores",
   callback: (indicadores) => {
-    console.log("19");
+    // console.log("19");
     const conteo = contarEstados(indicadores, mapaIndicadores, areaActual);
     renderConteo(conteo, areaActual);
   }
