@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Maquina 73</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-image: url('assets/fondo\ metálico\ indus.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed; /* Opcional: mantiene el fondo fijo al hacer scroll */
+    }
+
+    /* Fallback para dispositivos que no cargan bien la imagen */
+    @media (max-width: 576px) {
+      body {
+        background-size: contain;
+        background-position: top;
+      }
+    }
+  </style>
+</head>
+<body>
+    <div id="contenedorPrincipal">
+  <!-- <button class="btn btn-secondary" style="display: none;" disabled>Volver</button> -->
+  <button id="btnRegistro" class="btn btn-primary" style="display: none;" disabled>Registrar</button>
+  <h1 style="text-align: center;">Bienvenido, <span id="nombre">Dispositivo desconocido</span></h1>
+
+  <div id="indicadores" class="indicadores d-flex flex-column gap-3">
+      <div id="indicador73" class="indicador mb-1">
+        <div class="comentario-visible2">Sin estado</div>
+        <div class="grupo-horizontal">
+          <select disabled onchange="cambiarColor(this, 'indicador73')">
+            <option value="gris">No plan</option>
+            <option value="rojo">Paro</option>
+            <option value="verde">Corriendo</option>
+            <option value="azul">Cambio de molde</option>
+          </select>
+          <div class="cuadro-wrapper">
+  <span class="cuadro " data-indicador="indicador73" >73</span>
+</div>
+
+          <div class="comentario-visible">Sin comentario</div>
+          <input type="text"
+                 class="comentario-input"
+                 data-indicador="indicador73"
+                 placeholder="Comentario..."
+                 onkeydown="enviarComentario(event, this)"
+                 enterkeyhint="send"
+                 disabled>
+      
+      </div>
+    </div>
+  </div>
+</div>
+  <script type="module">
+    import { verificarSesion, iniciarSesion } from './Indicadores.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const acceso = await verificarSesion();
+      if (!acceso) {
+        const ok = await iniciarSesion();
+        if (!ok) return;
+      }
+    });
+  </script>
+</body>
+</html>
